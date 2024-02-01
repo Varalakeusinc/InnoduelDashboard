@@ -1,5 +1,5 @@
 
-* How to run
+How to run
 
 Setup backend
 
