@@ -1,37 +1,19 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import { testService } from "./services/test";
-
-interface Test {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-}
+import Layout from "@/components/layout";
+import TestPage from "@/src/pages/test";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/home";
+import AuthenticationPage from "./pages/authentication";
 
 function App() {
-  const [testData, setTestData] = useState<Test[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const data: Test[] = await testService.getTestData();
-      setTestData(data);
-    }
-    fetchData();
-  }, []);
-
   return (
     <>
-      <h1>Hello world!</h1>
-      <div>
-        {testData && testData.length > 0 && testData.map((item: Test) => (
-          <div key={item.id}>
-            <h2>{item.title}</h2>
-            <p>{item.description}</p>
-            <p>{item.completed ? "Completed" : "Not completed"}</p>
-          </div>
-        ))}
-      </div>
+      <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/authentication" element={<AuthenticationPage />} />
+            <Route path="test" element={<TestPage />} />
+          </Routes>
+      </Layout>
     </>
   );
 }

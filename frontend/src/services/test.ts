@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import axios from "../lib/axios";
+import axios from "../../lib/axios";
 
 const getTestData = async () => {
     try {
