@@ -1,13 +1,27 @@
 import { AxiosResponse } from "axios";
-import axios from "../../lib/axios";
+import axios from "@/lib/axios";
+import { Test } from "../pages/test";
 
-const getTestData = async () => {
+/**
+ * Get test data
+ * @returns Promise<Test[]>
+ */
+async function getTestData(): Promise<Test[]> {
     try {
         const response: AxiosResponse = await axios.get(`/test`);
         return response.data;
     } catch (error) {
-        console.error(error);
-    }
-};
+        throw error;
+    } 
+}
 
-export const testService = { getTestData };
+async function getTestDataById(id: number): Promise<Test> {
+    try {
+        const response: AxiosResponse = await axios.get(`/test/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    } 
+}
+
+export const testService = { getTestData, getTestDataById };
