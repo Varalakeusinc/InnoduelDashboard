@@ -1,28 +1,34 @@
 import express, {
   type Application,
   type Request,
-  type Response,
-} from "express";
+  type Response
+} from 'express'
+import swaggerUi from 'swagger-ui-express'
+import yaml from 'yamljs'
 
-import cors from "cors";
-import { middleware } from "./utils/middleware";
+import cors from 'cors'
+import { middleware } from './utils/middleware'
 // import { logger } from './utils/logger'
-import testRoutes from "./routes/test";
+import testRoutes from './routes/test'
 
-const app: Application = express();
+const swaggerDocument = yaml.load('./swagger.yaml')
 
-app.use(cors());
-app.use(express.json());
-app.use(middleware.requestLogger);
+const app: Application = express()
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+app.use(cors())
+app.use(express.json())
+app.use(middleware.requestLogger)
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello World!')
+})
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Routes
-app.use("/test", testRoutes);
+app.use('/test', testRoutes)
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
-export default app;
+export default app
