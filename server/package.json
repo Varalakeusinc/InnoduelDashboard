@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
     "test:unit": "jest tests/unitTests",
     "test:integration": "jest tests/integrationTests",
     "test": "jest tests",

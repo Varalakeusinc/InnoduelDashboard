@@ -1,5 +1,5 @@
 import { logger } from './logger'
-import { Request, Response, NextFunction } from 'express'
+import { type Request, type Response, type NextFunction } from 'express'
 
 const requestLogger = (request: Request, response: Response, next: NextFunction) => {
   logger.info('Method:', request.method)
