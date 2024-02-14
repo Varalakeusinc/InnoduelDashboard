@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Sample Express API
+  description: This is a sample server for a Express application.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/
+    description: Development server
+paths:
+  /:
+    get:
+      summary: Root Endpoint
+      description: Returns a greeting to the caller
+      responses:
+        200:
+          description: Greeting message returned
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Hello World!
+  /test:
+    get:
+      summary: Get All Test Data
+      description: Retrieves a list of all test data items
+      responses:
+        200:
+          description: A JSON array of test data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TestData"
+        404:
+          description: Not found
+  /test/{id}:
+    get:
+      summary: Get Test Data by ID
+      description: Retrieves a single test data item by its ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Unique ID of the test data
+      responses:
+        200:
+          description: A test data item returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestData"
+        404:
+          description: Test data item not found
+components:
+  schemas:
+    TestData:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The test data item ID
+          example: 1
+        name:
+          type: string
+          description: The name of the test data item
+          example: Sample Item
+        value:
+          type: string
+          description: The value of the test data item
+          example: This is a sample value.
