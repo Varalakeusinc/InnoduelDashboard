@@ -10,6 +10,7 @@ import cors from 'cors';
 import { middleware } from './utils/middleware';
 // import { logger } from './utils/logger'
 import testRoutes from './routes/test';
+import arenaRoutes from './routes/arena';
 
 const swaggerDocument = yaml.load('./swagger.yaml');
 
@@ -27,6 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use('/test', testRoutes);
+app.use('/arena', arenaRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
