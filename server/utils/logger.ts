@@ -8,5 +8,5 @@ const error = (...params: string[]) => {
 
 export const logger = {
   info,
-  error,
+  error
 };

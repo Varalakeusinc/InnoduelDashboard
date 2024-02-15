@@ -7,8 +7,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const WEB_TOKEN_SECRET = process.env.WEB_TOKEN_SECRET;
 
 export const config = {
-    PORT,
-    WEATHER_API_KEY,
-    MONGODB_URI,
-    WEB_TOKEN_SECRET
-  };
+  PORT,
+  WEATHER_API_KEY,
+  MONGODB_URI,
+  WEB_TOKEN_SECRET
+};
