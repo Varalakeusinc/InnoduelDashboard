@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -10,7 +8,305 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Test {
-  id    Int     @id @default(autoincrement())
-  name  String
-} 
+model arena {
+  id                    Int                @id @default(autoincrement())
+  name                  String             @db.VarChar(80)
+  description           String?
+  info_text             String
+  logo_image_url        String?            @db.VarChar(200)
+  image_url             String?            @db.VarChar(255)
+  start_date            DateTime?          @db.Date
+  end_date              DateTime?          @db.Date
+  arena_order           Int?
+  private               Boolean?
+  allow_anon            Boolean            @default(true)
+  active                Boolean?           @default(true)
+  pre_moderation        Boolean            @default(false)
+  created               DateTime           @default(now()) @db.Timestamp(6)
+  duration              Int?
+  login_option          String?            @db.VarChar
+  company_id            Int?
+  is_preview            Boolean?           @default(false)
+  redirect_url          String?            @db.VarChar(255)
+  is_deleted            Boolean?           @default(false)
+  is_deleted_by_user_id Int?
+  is_deleted_time       DateTime?          @db.Timestamp(6)
+  language              String?            @db.VarChar(3)
+  is_template           Boolean?           @default(false)
+  voting_disabled       Boolean?           @default(false)
+  mode                  String             @default("automatic") @db.VarChar(24)
+  short_url             String?            @unique
+  company               company?           @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "arena_companyfk")
+  user_info             user_info?         @relation(fields: [is_deleted_by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "is_deleted_by_userfk")
+  arena_end_screen      arena_end_screen[]
+  idea                  idea[]
+  public_report         public_report[]
+  session_arena         session_arena?
+
+  @@index([active, id], map: "arena_indx_1")
+}
+
+model arena_end_screen {
+  arena_id      Int
+  end_screen_id Int
+  screen_order  Int?       @default(0)
+  arena         arena      @relation(fields: [arena_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  end_screen    end_screen @relation(fields: [end_screen_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([arena_id, end_screen_id])
+}
+
+model company {
+  id                      Int                       @id @default(autoincrement())
+  name                    String?                   @db.VarChar
+  billing_address         String?                   @db.VarChar
+  city                    String?                   @db.VarChar
+  zip                     String?                   @db.VarChar
+  country                 String?                   @db.VarChar
+  logo_image_url          String?                   @db.VarChar
+  plan_id                 Int?
+  valid_until             DateTime?                 @db.Timestamp(6)
+  stripe_customer_id      String?                   @unique(map: "stripe_customer_id_unique") @db.VarChar(64)
+  is_trial                Boolean?
+  arena                   arena[]
+  plan                    plan?                     @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  company_enterprise_link company_enterprise_link[]
+  session                 session[]
+  user_info               user_info[]
+}
+
+model company_enterprise_link {
+  id            BigInt     @id @default(autoincrement())
+  company_id    Int
+  enterprise_id BigInt
+  company       company    @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  enterprise    enterprise @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model end_screen {
+  id               Int                @id @default(autoincrement())
+  description      String?            @db.VarChar
+  action_text      String?            @db.VarChar
+  screen_type      String?            @db.VarChar
+  arena_end_screen arena_end_screen[]
+}
+
+model enterprise {
+  id                      BigInt                    @id @default(autoincrement())
+  plan_id                 Int
+  name                    String
+  company_enterprise_link company_enterprise_link[]
+  plan                    plan                      @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_enterprise_link    user_enterprise_link[]
+}
+
+model flyway_schema_history {
+  installed_rank Int      @id(map: "flyway_schema_history_pk")
+  version        String?  @db.VarChar(50)
+  description    String   @db.VarChar(200)
+  type           String   @db.VarChar(20)
+  script         String   @db.VarChar(1000)
+  checksum       Int?
+  installed_by   String   @db.VarChar(100)
+  installed_on   DateTime @default(now()) @db.Timestamp(6)
+  execution_time Int
+  success        Boolean
+
+  @@index([success], map: "flyway_schema_history_s_idx")
+}
+
+model idea {
+  id                                              Int                  @id @default(autoincrement())
+  idea_text                                       String               @db.VarChar(140)
+  user_id                                         Int
+  arena_id                                        Int
+  created                                         DateTime             @default(now()) @db.Timestamp(6)
+  active                                          Boolean              @default(true)
+  win_rate                                        Int?
+  win_rate_updated                                DateTime?            @db.Timestamp(6)
+  is_deleted                                      Boolean?             @default(false)
+  is_deleted_time                                 DateTime?            @db.Timestamp(6)
+  is_deleted_by_user_id                           Int?
+  is_seed                                         Boolean?             @default(false)
+  arena                                           arena                @relation(fields: [arena_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_info_idea_is_deleted_by_user_idTouser_info user_info?           @relation("idea_is_deleted_by_user_idTouser_info", fields: [is_deleted_by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "idea_deleted_userfk")
+  user_info_idea_user_idTouser_info               user_info            @relation("idea_user_idTouser_info", fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  inappropriate_idea                              inappropriate_idea[]
+  vote                                            vote[]
+
+  @@index([user_id, id], map: "idea_indx_3")
+  @@index([active, user_id, win_rate, arena_id, id], map: "idea_votelist_indx")
+  @@index([win_rate(sort: Desc), user_id(sort: Desc), arena_id, id], map: "vote_list_query_indx")
+}
+
+model inappropriate_idea {
+  user_id   Int
+  idea_id   Int
+  created   DateTime  @default(now()) @db.Timestamp(6)
+  idea      idea      @relation(fields: [idea_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, idea_id])
+}
+
+model password_recovery_token {
+  user_id   Int
+  token     String    @db.VarChar(500)
+  created   DateTime  @default(now()) @db.Timestamp(6)
+  used      Boolean?  @default(false)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, token])
+}
+
+model plan {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar
+  amount      Decimal?     @db.Decimal
+  description String?      @db.VarChar
+  stripe_id   String?      @unique(map: "stripe_id_unique") @db.VarChar(30)
+  currency    String?      @db.VarChar(3)
+  metadata    Json?
+  is_legacy   Boolean?     @default(true)
+  company     company[]
+  enterprise  enterprise[]
+}
+
+model public_report {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  arena_id Int
+  type     String
+  arena    arena  @relation(fields: [arena_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_report_fkey")
+}
+
+model session {
+  id            BigInt          @id @default(autoincrement())
+  name          String
+  is_template   Boolean
+  is_deleted    Boolean         @default(false)
+  active        Boolean
+  company_id    Int
+  created_at    DateTime        @default(now()) @db.Timestamptz(6)
+  company       company         @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  session_arena session_arena[]
+  session_slide session_slide[]
+
+  @@index([company_id])
+}
+
+model session_arena {
+  id            BigInt          @id @default(autoincrement())
+  session_id    BigInt
+  arena_id      Int             @unique
+  order_number  Int
+  arena         arena           @relation(fields: [arena_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  session       session         @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  session_slide session_slide[]
+
+  @@unique([session_id, order_number])
+  @@index([arena_id])
+  @@index([session_id])
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model session_slide {
+  id                    BigInt             @id @default(autoincrement())
+  session_id            BigInt
+  session_slide_type_id String
+  order_number          Int
+  title                 String
+  html_contents         String?
+  results_count         Int?
+  session_arena_id      BigInt?
+  session_arena         session_arena?     @relation(fields: [session_arena_id], references: [id], onUpdate: NoAction)
+  session               session            @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  session_slide_type    session_slide_type @relation(fields: [session_slide_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([session_id, order_number])
+  @@index([session_id])
+  @@index([session_slide_type_id])
+}
+
+model session_slide_type {
+  id            String          @id
+  description   String
+  session_slide session_slide[]
+}
+
+model user_enterprise_link {
+  id            BigInt     @id @default(autoincrement())
+  user_id       Int
+  enterprise_id BigInt
+  enterprise    enterprise @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_info     user_info  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model user_info {
+  id                                         Int                       @id(map: "user_pkey") @default(autoincrement())
+  name                                       String?
+  email                                      String?                   @db.VarChar(100)
+  password                                   String?                   @db.VarChar(256)
+  anon                                       Boolean
+  created                                    DateTime?                 @default(now()) @db.Timestamp(6)
+  last_login                                 DateTime?                 @db.Timestamp(6)
+  company_id                                 Int?
+  marketing_consent                          Boolean?                  @default(false)
+  arena                                      arena[]
+  idea_idea_is_deleted_by_user_idTouser_info idea[]                    @relation("idea_is_deleted_by_user_idTouser_info")
+  idea_idea_user_idTouser_info               idea[]                    @relation("idea_user_idTouser_info")
+  inappropriate_idea                         inappropriate_idea[]
+  password_recovery_token                    password_recovery_token[]
+  user_enterprise_link                       user_enterprise_link[]
+  company                                    company?                  @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_info_companyfk")
+  user_role_link                             user_role_link[]
+  user_secrets                               user_secrets?
+  user_token                                 user_token[]
+  vote                                       vote[]
+}
+
+model user_role {
+  id               Int              @id(map: "user_roles_pkey")
+  role_description String           @db.VarChar(128)
+  created          DateTime         @default(now()) @db.Timestamp(6)
+  name             String?          @unique @db.VarChar(18)
+  user_role_link   user_role_link[]
+}
+
+model user_role_link {
+  user_id   Int
+  role_id   Int
+  user_role user_role @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, role_id])
+}
+
+model user_secrets {
+  user_id   Int    @id
+  secret    String    @db.VarChar(64)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model user_token {
+  user_id   Int
+  token     String    @db.VarChar(500)
+  created   DateTime  @default(now()) @db.Timestamp(6)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, token])
+}
+
+model vote {
+  id        Int       @id @default(autoincrement())
+  user_id   Int
+  idea_id   Int
+  win       Boolean
+  created   DateTime  @default(now()) @db.Timestamp(6)
+  idea      idea      @relation(fields: [idea_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_info user_info @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([user_id, idea_id], map: "idea_user")
+  @@index([idea_id], map: "vote_id_index")
+  @@index([user_id, id], map: "vote_user_id_indx")
+  @@index([user_id, id], map: "vote_userid_indx")
+}
