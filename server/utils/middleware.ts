@@ -4,7 +4,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 const requestLogger = (request: Request, response: Response, next: NextFunction) => {
   logger.info('Method:', request.method);
   logger.info('Path:  ', request.path);
-  logger.info('Body:  ', request.body);
+  logger.info('Body:  ', request.body as string);
   logger.info('---');
   next();
 };
