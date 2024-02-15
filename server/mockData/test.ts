@@ -1,4 +1,4 @@
-import { type Test } from '../models/test'
+import { type Test } from '../models/test';
 
 // This is a mock data file that we can use to test our API endpoints
 // We can use this to test our API endpoints without having to connect to a database
@@ -24,4 +24,4 @@ export const getTestMockData: Test[] = [
     completed: true
 
   }
-]
+];
