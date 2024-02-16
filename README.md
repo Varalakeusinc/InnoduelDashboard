@@ -4,8 +4,8 @@
 1. Make sure you have installed Docker and it's running
 2. Make sure Docker have permissions for your innoduel_dashboard folder.
 - If not, on Windows open Docker Desktop -> Settings -> File Sharing, Add the folder.
-3. Add .env file to the root of server folder. Get content for this from secret file, Discord??? 
-4. In the root of the project run ./db.sh in terminal
+3. Add .env file to the root of server folder. Get content for this from Discord. 
+4. In the root of the project run ./db.sh in Git bash (Available in VS Code)
   ```bash
   ./db.sh
   ```
