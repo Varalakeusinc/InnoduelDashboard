@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "../../lib/utils";
-import { useSidebar } from "../../store/use-sidebar";
+import { cn } from "@/lib/utils";
+import { useSidebar } from "@/store/use-sidebar";
 
 interface WrapperProps {
 	children: React.ReactNode;
