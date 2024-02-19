@@ -37,8 +37,8 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
-            <Label className="sr-only" htmlFor="email">
-              Email
+            <Label className="sr-only" htmlFor="password">
+              Password
             </Label>
             <Input
               id="password"
