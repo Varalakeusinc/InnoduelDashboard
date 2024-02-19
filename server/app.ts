@@ -21,16 +21,15 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.json({ routes: app._router.stack });
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use('/test', testRoutes);
 app.use('/arena', arenaRoutes);
 
-app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
 export default app;
