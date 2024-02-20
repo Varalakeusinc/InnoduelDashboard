@@ -1,6 +1,5 @@
 export async function authenticateUser(email: string, password: string): Promise<boolean> {
-    // Tähän tulee todellinen autentikointilogiikka, kutsu backend-rajapintaa, jne.
-    // Palauta tässä true, jos autentikointi onnistui, muuten false
+
     try {
         const response = await fetch('/auth/login', {
             method: 'POST',

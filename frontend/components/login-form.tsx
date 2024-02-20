@@ -24,12 +24,12 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
       const email = (document.getElementById('email') as HTMLInputElement).value;
       const password = (document.getElementById('password') as HTMLInputElement).value;
   
-      // Kutsu authService authenticateUser-funktiota
+      // Call for authenticateUser-function
       const isAuthenticated = await authenticateUser(email, password);
 
       if (isAuthenticated) {
         console.log('Authentification success');
-        // Tee jotain, esim. ohjaa käyttäjä eteenpäin
+        // Do something
       } else {
         setError('Sign in failed');
       }
