@@ -1,41 +1,37 @@
 import { useEffect, useState } from "react";
 import { arenaService, Arena } from "../services/arena";
+import ArenaCard from "@/components/arena/arena-card"; 
+
+
 
 const HomePage = () => {
-	const [arenas, setArenas] = useState<Arena[]>([]);
+    const [arenas, setArenas] = useState<Arena[]>([]);
 
-	async function fetchData() {
-		try {
-			const data: Arena[] = await arenaService.getAllArenas();
-			setArenas(data);
-		} catch (error) {
-			// Handle error here
-			// Show toast or something
-			console.log("Probably problem with database or server", error);
-		}
-	}
-	useEffect(() => {
-		fetchData();
-	}, []);
-	return (
-		<div>
-			HomePage
-			<h1 className="text-xl">Arena Page</h1>
-			<p>
-				This is the arena page, below should be a list of database
-				"Arenas"
-			</p>
-			<hr className="my-4" />
-			{arenas?.length > 0 &&
-				arenas.map((arena: Arena) => (
-					<div key={arena.id}>
-						<p>Id: {arena.id}</p>
-						<p>Name: {arena.name}</p>
-						<p>Info text: {arena.info_text}</p>
-					</div>
-				))}
-		</div>
-	);
+    useEffect(() => {
+        arenaService.getAllArenas()
+            .then(data => {
+                setArenas(data);
+            })
+            .catch(error => {
+                console.error("Error fetching arenas:", error);
+                // Handle error here (e.g., set error state, show notification)
+            });
+    }, []);
+
+    return (
+        <div>
+            <h1 className="text-3xl font-semibold text-center my-5">Arenas</h1>
+            {arenas.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+                    {arenas.map((arena) => (
+                        <ArenaCard key={arena.id} arena={arena} />
+                    ))}
+                </div>
+            ) : (
+                <p>No arenas to display.</p>
+            )}
+        </div>
+    );
 };
 
 export default HomePage;
