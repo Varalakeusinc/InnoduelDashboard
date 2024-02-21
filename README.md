@@ -1,5 +1,22 @@
 # How to run
 
+## Setup local environment with Docker
+
+- Run only database
+  ```bash
+    ./db.sh
+  ```
+
+- Run all services (frontend, server and db)
+  ```bash
+    ./all.sh
+  ```
+
+- Run server and frontend (for using staging database)
+  ```bash
+    ./dev.sh
+  ```
+
 ## Setup local database
 1. Make sure you have installed Docker and it's running
 2. Make sure Docker have permissions for your innoduel_dashboard folder.

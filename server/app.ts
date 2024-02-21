@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({ routes: app._router.stack });
+  res.send('Backend is working!');
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
