@@ -1,4 +1,4 @@
-import { Fullscreen, Home, LogInIcon } from "lucide-react";
+import { Home, LogInIcon } from "lucide-react";
 import { NavItem, NavItemSkeleton } from "./nav-item";
 
 export const Navigation = () => {
@@ -10,11 +10,6 @@ export const Navigation = () => {
       label: "Home",
       href: `/`,
       icon: Home,
-    },
-    {
-      label: "Test",
-      href: `/test`,
-      icon: Fullscreen,
     },
     {
       label: "Authentication",
