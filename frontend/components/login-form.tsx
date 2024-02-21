@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 import { useState } from "react"
-import { authenticateUser } from "./login-auth"
+import { authenticateUser } from "../src/services/login-auth"
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
