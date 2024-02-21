@@ -2,6 +2,9 @@ import Layout from "@/components/layout";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home";
 import AuthenticationPage from "./pages/authentication";
+import LoginPage from "./pages/login";
+
+
 
 function App() {
 	return (
@@ -12,6 +15,10 @@ function App() {
 					<Route
 						path="/authentication"
 						element={<AuthenticationPage />}
+					/>
+					<Route
+						path="/login"
+						element={<LoginPage/>}
 					/>
 				</Routes>
 			</Layout>

@@ -1,6 +1,6 @@
 # How to run
 
-## Setup database
+## Setup local database
 1. Make sure you have installed Docker and it's running
 2. Make sure Docker have permissions for your innoduel_dashboard folder.
 - If not, on Windows open Docker Desktop -> Settings -> File Sharing, Add the folder.
@@ -11,6 +11,14 @@
   ```
 The database should start with the correct data. Next start server and frontend. In server folder remember npm install. 
 On home page you should be able to see data from database.
+
+## Setup staging database
+1. Make sure your .env file is valid. (Check Discord)
+2. In .env file change CURRENT_DATABASE_URL=${STAGING_DATABASE_URL}
+3. Run the server
+
+If you want to use local database again, make sure the local database is running.
+Then change CURRENT_DATABASE_URL=${DATABASE_URL} and restart the server.
 
 ## Setup backend
 
