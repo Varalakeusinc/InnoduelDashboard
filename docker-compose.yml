@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_DB=${DB_NAME}
     ports:
-      - "6666:5432"
+      - "6666:6666"
     volumes:
       - ./db/development-seed.sql:/docker-entrypoint-initdb.d/development-seed.sql
     env_file:
