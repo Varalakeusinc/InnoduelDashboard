@@ -1,15 +1,11 @@
+import axios from "axios";
+
 export async function authenticateUser(email: string, password: string): Promise<boolean> {
 
     try {
-        const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
+        const response = await axios.post('/auth/login', { email, password });
 
-        if (response.ok) {
+        if (response.status === 200) {
             return true; // Autentication succeeded
         } else {
             return false; // Autentication failed
