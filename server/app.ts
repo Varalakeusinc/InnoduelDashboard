@@ -24,7 +24,7 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ routes: app._router.stack });
 });
 
-app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Routes
 app.use('/test', testRoutes);

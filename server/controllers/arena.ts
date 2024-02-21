@@ -15,6 +15,7 @@ export const getAll = async (req: Request, res: Response) => {
     }
     res.status(200).json(arenas);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 };

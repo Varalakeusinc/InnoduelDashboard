@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
 
@@ -13,53 +13,33 @@ services:
       - "6666:5432"
     volumes:
       - ./db/development-seed.sql:/docker-entrypoint-initdb.d/development-seed.sql
+    env_file:
+      - ./server/.env
 
   backend:
-    build: 
-      context: server
-    container_name: backend
-    working_dir: /usr/src/app
+    build: ./server
+    container_name: innoduel_backend
     networks: 
       - innoduel-dashboard-network
     volumes: 
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules
-    tty: true
+      - ./server:/app
+      - /app/node_modules
     ports:
-      - "3000:3000"
-    command: npm run dev
-    depends_on:
-       - db
+      - "8000:8000"
+    restart: always
 
   frontend:
-    build: 
-      context: frontend
-    container_name: frontend
-    working_dir: /usr/src/app
+    build: ./frontend
+    container_name: innoduel_frontend
     networks:
       - innoduel-dashboard-network
     volumes: 
-      - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules
-    tty: true
+      - ./frontend:/app
+      - /app/node_modules
     ports: 
       - "5173:5173"
-    command: npm run dev
-
-  nginx:
-    build: 
-      context: nginx
-    container_name: nginx
-    restart: always
     tty: true
-    ports: 
-      - "8000:80"
-    networks:
-      - innoduel-dashboard-network
-    depends_on:
-       - backend
-       - frontend
-
+    stdin_open: true
 networks: 
   innoduel-dashboard-network:
     driver: bridge
