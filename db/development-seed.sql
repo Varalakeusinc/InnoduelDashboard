@@ -151,21 +151,6 @@ ALTER TABLE public.enterprise_id_seq OWNER TO innoduel;
 
 ALTER SEQUENCE public.enterprise_id_seq OWNED BY public.enterprise.id;
 
-CREATE TABLE public.flyway_schema_history (
-    installed_rank integer NOT NULL,
-    version character varying(50),
-    description character varying(200) NOT NULL,
-    type character varying(20) NOT NULL,
-    script character varying(1000) NOT NULL,
-    checksum integer,
-    installed_by character varying(100) NOT NULL,
-    installed_on timestamp without time zone DEFAULT now() NOT NULL,
-    execution_time integer NOT NULL,
-    success boolean NOT NULL
-);
-
-ALTER TABLE public.flyway_schema_history OWNER TO innoduel;
-
 CREATE TABLE public.idea (
     id integer NOT NULL,
     idea_text character varying(140) NOT NULL,
@@ -375,6 +360,27 @@ CREATE TABLE public.user_role_link (
     role_id integer NOT NULL
 );
 
+CREATE TABLE public.schema_version (
+    version_rank   INT,
+    installed_rank INT,
+    version        VARCHAR(50) PRIMARY KEY,
+    description    VARCHAR(200),
+    type           VARCHAR(20),
+    script         VARCHAR(1000),
+    checksum       INT,
+    installed_by   VARCHAR(100),
+    installed_on   TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    execution_time INT,
+    success        BOOLEAN
+);
+
+CREATE INDEX schema_version_ir_idx ON public.schema_version (installed_rank);
+CREATE INDEX schema_version_s_idx ON public.schema_version (success);
+CREATE INDEX schema_version_vr_idx ON public.schema_version (version_rank);
+
+ALTER TABLE public.schema_version OWNER TO innoduel;
+
+
 ALTER TABLE public.user_role_link OWNER TO innoduel;
 
 CREATE TABLE public.user_secrets (
@@ -460,9 +466,6 @@ ALTER TABLE ONLY public.end_screen
 ALTER TABLE ONLY public.enterprise
     ADD CONSTRAINT enterprise_pkey PRIMARY KEY (id);
 
-ALTER TABLE ONLY public.flyway_schema_history
-    ADD CONSTRAINT flyway_schema_history_pk PRIMARY KEY (installed_rank);
-
 ALTER TABLE ONLY public.idea
     ADD CONSTRAINT idea_pkey PRIMARY KEY (id);
 
@@ -530,8 +533,6 @@ ALTER TABLE ONLY public.vote
     ADD CONSTRAINT vote_pkey PRIMARY KEY (id);
 
 CREATE INDEX arena_indx_1 ON public.arena USING btree (active, id);
-
-CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success);
 
 CREATE INDEX idea_indx_3 ON public.idea USING btree (user_id, id);
 
@@ -646,36 +647,6 @@ ALTER TABLE ONLY public.vote
 
 ALTER TABLE ONLY public.vote
     ADD CONSTRAINT vote_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_info(id);
-
-
-
-COPY public.flyway_schema_history (installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success) FROM stdin;
-1	1.1	Create db	SQL	V1.1__Create_db.sql	141096753	innoduel	2018-12-16 18:49:20.355254	187	t
-2	1.2	Add is preview column to arena	SQL	V1.2__Add_is_preview_column_to_arena.sql	116389631	innoduel	2018-12-16 18:49:20.550987	11	t
-3	1.3	Add default user roles	SQL	V1.3__Add_default_user_roles.sql	126077298	innoduel	2018-12-16 18:49:20.567269	1	t
-4	1.4	Add default end screens	SQL	V1.4__Add_default_end_screens.sql	-1480714727	innoduel	2018-12-16 18:49:20.574787	1	t
-5	1.5	Add stripe support	SQL	V1.5__Add_stripe_support.sql	603277322	innoduel	2018-12-16 18:49:20.582664	8	t
-6	1.6	Add seed admin	SQL	V1.6__Add_seed_admin.sql	-1642699508	innoduel	2018-12-16 18:49:20.596262	3	t
-7	1.7	Remove deprecated tables and columns	SQL	V1.7__Remove_deprecated_tables_and_columns.sql	2083156374	innoduel	2018-12-16 18:49:20.607025	17	t
-8	1.8	Add redirect url to arena	SQL	V1.8__Add_redirect_url_to_arena.sql	-103712259	innoduel	2018-12-16 18:49:20.65029	2	t
-9	1.9	Add index to vote query and add delete arena	SQL	V1.9__Add_index_to_vote_query_and_add_delete_arena.sql	579483727	innoduel	2018-12-16 18:49:20.658361	15	t
-10	1.10	Add language column to arena	SQL	V1.10__Add_language_column_to_arena.sql	1365709763	innoduel	2018-12-16 18:49:20.683032	2	t
-11	1.11	Add templates support	SQL	V1.11__Add_templates_support.sql	-1050478499	innoduel	2018-12-16 18:49:20.691847	13	t
-12	1.12	Add public report table	SQL	V1.12__Add_public_report_table.sql	-1576416031	innoduel	2018-12-16 18:49:20.715154	19	t
-13	1.14	Add voting automatic support	SQL	V1.14__Add_voting_automatic_support.sql	1250122739	innoduel	2018-12-16 18:49:20.743316	14	t
-14	1.15	Add voting disabled column to arena	SQL	V1.15__Add_voting_disabled_column_to_arena.sql	1088891234	innoduel	2018-12-16 18:49:20.763511	12	t
-15	1.16	add arena mode column to arena	SQL	V1.16__add_arena_mode_column_to_arena.sql	723282795	innoduel	2018-12-16 18:49:20.786993	15	t
-16	1.17	delete leave idea end screen	SQL	V1.17__delete_leave_idea_end_screen.sql	906885646	innoduel	2018-12-16 18:49:20.808428	3	t
-17	1.18	add is legacy column to plan table	SQL	V1.18__add_is_legacy_column_to_plan_table.sql	472116076	innoduel	2018-12-16 18:49:20.826716	11	t
-18	1.19	add is trial column to company	SQL	V1.19__add_is_trial_column_to_company.sql	22400627	innoduel	2018-12-16 18:49:20.847216	2	t
-19	1.20	add user secrets table	SQL	V1.20__add_user_secrets_table.sql	1989302584	innoduel	2018-12-16 18:49:20.853102	4	t
-20	1.30	add marketing consent column	SQL	V1.30__add_marketing_consent_column.sql	-854334502	innoduel	2018-12-16 18:49:20.862208	8	t
-21	1.40	add operator and enterprise tables	SQL	V1.40__add_operator_and_enterprise_tables.sql	-1854006586	innoduel	2018-12-16 18:49:20.878841	19	t
-22	1.41	add enterprise user role	SQL	V1.41__add_enterprise_user_role.sql	-2052214371	innoduel	2019-01-11 09:14:32.769902	7	t
-23	1.42	modify text fieds to support longer names	SQL	V1.42__modify_text_fieds_to_support_longer_names.sql	-1886213759	innoduel	2022-11-28 12:14:11.065821	12	t
-24	1.43	add session tables	SQL	V1.43__add_session_tables.sql	-1868972815	innoduel	2022-11-28 12:18:00.877968	62	t
-25	1.44	add short url to arenas	SQL	V1.44__add_short_url_to_arenas.sql	-1199422663	innoduel	2022-11-28 12:18:00.965017	11	t
-\.
 
 
 
