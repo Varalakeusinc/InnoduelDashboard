@@ -55,7 +55,7 @@ export const mockArenas: Arena[] = [
 ];
 
 // Function to get all arenas - using mock data for now
-async function getAllArenas(): Promise<Arena[]> {
+async function getAllMockArenas(): Promise<Arena[]> {
     // Comment this out to use mock data instead of an actual API call
     // try {
     //     const response: AxiosResponse = await axios.get(`/arena`);
@@ -68,4 +68,13 @@ async function getAllArenas(): Promise<Arena[]> {
     return Promise.resolve(mockArenas);
 }
 
-export const arenaService = { getAllArenas };
+async function getAllArenas(): Promise<Arena[]> {
+    try {
+        const response: AxiosResponse = await axios.get(`/arena`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const arenaService = { getAllMockArenas, getAllArenas };

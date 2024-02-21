@@ -8,7 +8,7 @@ const HomePage = () => {
     const [arenas, setArenas] = useState<Arena[]>([]);
 
     useEffect(() => {
-        arenaService.getAllArenas()
+        arenaService.getAllMockArenas()
             .then(data => {
                 setArenas(data);
             })
@@ -16,6 +16,9 @@ const HomePage = () => {
                 console.error("Error fetching arenas:", error);
                 // Handle error here (e.g., set error state, show notification)
             });
+        arenaService.getAllArenas().then(data => {
+            console.log(data);
+        });
     }, []);
 
     return (
