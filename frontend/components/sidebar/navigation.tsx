@@ -21,6 +21,11 @@ export const Navigation = () => {
       href: `/authentication`,
       icon: LogInIcon,
     },
+    {
+      label: "Log in",
+      href: `/login`,
+      icon: LogInIcon,
+    }
   ];
 
   if (!user?.username) return (
