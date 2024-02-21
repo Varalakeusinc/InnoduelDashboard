@@ -3,6 +3,9 @@ import TestPage from "@/src/pages/test";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home";
 import AuthenticationPage from "./pages/authentication";
+import LoginPage from "./pages/login";
+
+
 
 function App() {
 	return (
@@ -15,6 +18,10 @@ function App() {
 						element={<AuthenticationPage />}
 					/>
 					<Route path="/test" element={<TestPage />} />
+					<Route
+						path="/login"
+						element={<LoginPage/>}
+					/>
 				</Routes>
 			</Layout>
 		</>
