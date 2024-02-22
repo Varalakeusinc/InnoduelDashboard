@@ -16,7 +16,7 @@ export const Logo = () => {
 	const dispatch = useAppDispatch();
 
 	// This is deleted after log in is done but functionality remains
-	const defaultUser = () => {
+	const defaultUser = React.useCallback(() => {
 		dispatch(
 			setUser({
 				userId: 123,
@@ -26,7 +26,7 @@ export const Logo = () => {
 			})
 		);
 		dispatch(setIsLoggedIn(true));
-	};
+	}, []);
 
 	React.useEffect(() => {
 		defaultUser();
