@@ -15,7 +15,7 @@ export const Logo = () => {
 
 	const dispatch = useAppDispatch();
 
-	// This is deleted after log in is done
+	// This is deleted after log in is done but functionality remains
 	const defaultUser = () => {
 		dispatch(
 			setUser({
