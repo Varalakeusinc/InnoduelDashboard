@@ -39,7 +39,8 @@ export const counterSlice = createSlice({
 });
 
 // If you want to use user in some component
-// const user = useAppSelector(state => state.user.user);
+// const currentUser = useAppSelector(selectUser);
+// const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
 // If you want to set values from any component
 // const dispatch = useAppDispatch();
