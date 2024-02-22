@@ -28,6 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Routes
 app.use('/arena', arenaRoutes);
 
+app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
 export default app;
