@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getAll } from '../controllers/arena';
+import { getById } from '../controllers/arenasById';
 
 const router = Router();
 
-router.get('/', getAll);
+router.get('/:id', getById);
 
 export default router;
