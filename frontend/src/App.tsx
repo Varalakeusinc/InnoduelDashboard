@@ -4,8 +4,6 @@ import HomePage from "./pages/home";
 import AuthenticationPage from "./pages/authentication";
 import LoginPage from "./pages/login";
 
-
-
 function App() {
 	return (
 		<>
@@ -16,10 +14,7 @@ function App() {
 						path="/authentication"
 						element={<AuthenticationPage />}
 					/>
-					<Route
-						path="/login"
-						element={<LoginPage/>}
-					/>
+					<Route path="/login" element={<LoginPage />} />
 				</Routes>
 			</Layout>
 		</>
