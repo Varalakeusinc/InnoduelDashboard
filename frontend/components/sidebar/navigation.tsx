@@ -1,4 +1,4 @@
-import { Home, LogInIcon } from "lucide-react";
+import { Home, LogInIcon, Activity} from "lucide-react";
 import { NavItem, NavItemSkeleton } from "./nav-item";
 
 export const Navigation = () => {
@@ -16,6 +16,12 @@ export const Navigation = () => {
       href: `/authentication`,
       icon: LogInIcon,
     },
+    {
+      label: "Analytics",
+      href: `/analytics`,
+      icon: Activity
+    },
+
     {
       label: "Log in",
       href: `/login`,
