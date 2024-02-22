@@ -1,17 +1,9 @@
-import express, {
-  type Application,
-  type Request,
-  type Response
-} from 'express';
-import swaggerUi from 'swagger-ui-express';
-import yaml from 'yamljs';
-
 import cors from 'cors';
+import express, { type Application, type NextFunction, type Request, type Response } from 'express';
+import swaggerUi, { type JsonObject } from 'swagger-ui-express';
+import yaml from 'yamljs';
+import arenaRoutes from './routes/arenas';
 import { middleware } from './utils/middleware';
-// import { logger } from './utils/logger'
-import arenaRoutes from './routes/arena';
-
-const swaggerDocument = yaml.load('./swagger.yaml');
 
 const app: Application = express();
 
@@ -19,14 +11,12 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+app.use('/api-docs', swaggerUi.serve, (req: Request, res: Response, next: NextFunction) => {
+  const swaggerDocument = yaml.load('./swagger.yaml') as JsonObject;
+  swaggerUi.setup(swaggerDocument)(req, res, next);
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-// Routes
-app.use('/arena', arenaRoutes);
+app.use('/api/arenas', arenaRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
