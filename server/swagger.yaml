@@ -1,73 +1,340 @@
 openapi: 3.0.0
 info:
-  title: Sample Express API
-  description: This is a sample server for a Express application.
+  title: Innoduel API
+  description: API for accessing and analyzing arenas, ideas, and voting data within the Innoduel Dashboard Application.
   version: 1.0.0
 servers:
   - url: http://localhost:8000/
     description: Development server
 paths:
-  /:
+  /api/arenas:
     get:
-      summary: Root Endpoint
-      description: Returns a greeting to the caller
+      summary: Get Arena Summaries
+      description: Returns summaries for all arenas, including counts of ideas submitted, total votes, and overall win rates.
       responses:
         200:
-          description: Greeting message returned
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Hello World!
-  /test:
-    get:
-      summary: Get All Test Data
-      description: Retrieves a list of all test data items
-      responses:
-        200:
-          description: A JSON array of test data
+          description: List of arena summaries
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TestData"
-        404:
-          description: Not found
-  /test/{id}:
+                  $ref: "#/components/schemas/ArenaSummary"
+  
+  /api/arenas/{arena_id}:
     get:
-      summary: Get Test Data by ID
-      description: Retrieves a single test data item by its ID
+      summary: Get Detailed Arena Information by arena_id
+      description: Retrieves detailed information for a specific arena by arena_id.
       parameters:
         - in: path
-          name: id
+          name: arena_id
           required: true
           schema:
             type: integer
-          description: Unique ID of the test data
+          description: The unique identifier of the arena
       responses:
         200:
-          description: A test data item returned
+          description: Detailed information of a specific arena
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TestData"
+                $ref: "#/components/schemas/ArenaSummary"
         404:
-          description: Test data item not found
+          description: Arena not found
+
+  /api/arenas/compare:
+    get:
+      summary: Compare Multiple Arenas
+      description: |
+        Allows for the comparison of key metrics across selected arenas using a comma-separated list of arena IDs. 
+        Requires at least two arena IDs to perform the comparison.
+      parameters:
+        - in: query
+          name: ids
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+            minItems: 2
+          style: form
+          explode: true
+          description: |
+            A list of arena IDs for comparison. The list must contain at least two IDs.
+            - **style: form** and **explode: true** indicates that each value of the array will be passed as a separate parameter (e.g., `?ids=1&ids=2&ids=3`).
+      responses:
+        200:
+          description: Comparison data for selected arenas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArenaSummary"
+        404:
+          description: One or more arenas not found
+
+  /api/arenas/{arena_id}/ideas:
+    get:
+      summary: Get Detailed Ideas List for Specific Arena
+      description: |
+        Retrieves a detailed list of ideas for a specific arena, including votes and win rates.
+        Supports sorting by 'win_rate' or 'total_votes' and filtering by a minimum vote threshold.
+      parameters:
+        - in: path
+          name: arena_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the arena.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [win_rate, total_votes]
+          description: |
+            Specifies the sorting criterion of the ideas list.
+            - 'win_rate': Sort ideas by their win rates.
+            - 'total_votes': Sort ideas by their total votes.
+          required: false
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: |
+            Specifies the sorting order.
+            - 'asc': Ascending order.
+            - 'desc': Descending order.
+          required: false
+        - in: query
+          name: min_votes
+          schema:
+            type: integer
+          description: |
+            Filters ideas by a minimum number of total votes. Only ideas with votes equal to or greater than this threshold will be included.
+          required: false
+      responses:
+        200:
+          description: A detailed list of ideas within the specified arena, including votes and win rates, sorted and filtered as requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IdeaDetail"
+        404:
+          description: Arena not found
+
+  /api/arenas/all/vote_distribution:
+    get:
+      summary: Get Vote Distribution for All Arenas
+      description: Retrieves vote distributions across all arenas.
+      responses:
+        200:
+          description: Vote distribution data for all arenas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VoteDistribution"
+
+  /api/arenas/{arena_id}/vote_distribution:
+    get:
+      summary: Get Vote Distribution for Specific Arena
+      description: Retrieves vote distribution for a specific arena.
+      parameters:
+        - in: path
+          name: arena_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the arena
+      responses:
+        200:
+          description: Vote distribution data for the specified arena
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoteDistribution"
+        404:
+          description: Arena not found
+  
+  /api/arenas/compare/vote_distribution:
+    get:
+      summary: Compare Vote Distribution Across Multiple Arenas
+      description: |
+        Retrieves and compares vote distribution across selected arenas. This endpoint is useful for analyzing how votes are distributed among ideas in different arenas, facilitating a deeper understanding of user engagement and preference patterns.
+      parameters:
+        - in: query
+          name: ids
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+            minItems: 2
+          style: form
+          explode: true
+          description: |
+            Comma-separated list of arena IDs for which to compare vote distribution. A minimum of two arena IDs are required to perform the comparison.
+      responses:
+        200:
+          description: Vote distribution comparison data for selected arenas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArenaVoteDistributionComparison"
+        404:
+          description: One or more arenas not found
+
+
+  /api/arenas/{arena_id}/win_rate/trends:
+    get:
+      summary: Win Rate Trends for Specific Arena
+      description: Visualizes the win rate trends of top ideas over time within a specific arena.
+      parameters:
+        - in: path
+          name: arena_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the arena
+      responses:
+        200:
+          description: Win rate trend data for the specified arena
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  arena_id:
+                    type: integer
+                  trends:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        idea_id:
+                          type: integer
+                        winRateOverTime:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              timestamp:
+                                type: string
+                                format: date-time
+                              winRate:
+                                type: string
+
 components:
   schemas:
-    TestData:
+    ArenaSummary:
       type: object
       properties:
-        id:
+        arena_id:
           type: integer
-          description: The test data item ID
-          example: 1
+        total_ideas:
+          type: integer
+        total_votes:
+          type: integer
+        overall_win_rate:
+          type: string
+
+    VoteDistribution:
+      type: object
+      properties:
+        arena_id:
+          type: integer
+        distribution:
+          type: array
+          items:
+            type: object
+            properties:
+              idea_id:
+                type: integer
+              votes:
+                type: integer
+
+    ArenaVoteDistributionComparison:
+      type: object
+      properties:
+        arena_id:
+          type: integer
+          description: The unique identifier of the arena.
         name:
           type: string
-          description: The name of the test data item
-          example: Sample Item
-        value:
+          description: The name of the arena.
+        voteDistributionComparison:
+          type: array
+          description: An array representing the comparison of vote distribution across the selected arenas.
+          items:
+            type: object
+            properties:
+              idea_id:
+                type: integer
+                description: The unique identifier of the idea.
+              votes:
+                type: integer
+                description: The total number of votes received by the idea.
+
+    IdeaDetail:
+      type: object
+      properties:
+        idea_id:
+          type: integer
+          description: The unique identifier of the idea.
+          example: 1
+        idea_text:
           type: string
-          description: The value of the test data item
-          example: This is a sample value.
+          description: The text of the idea submitted to the arena.
+          example: "Implement a new voting system."
+        win_rate:
+          type: string
+          description: The win rate of the idea, expressed as a percentage.
+          example: "75%"
+        total_votes:
+          type: integer
+          description: The total number of votes this idea has received.
+          example: 150
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the idea was submitted.
+          example: "2023-01-01T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: The timestamp when the idea was last updated.
+          example: "2023-01-02T12:00:00Z"
+        tags:
+          type: array
+          items:
+            type: string
+          description: A list of tags associated with the idea for categorization or filtering.
+          example: ["innovation", "voting"]
+        comments_count:
+          type: integer
+          description: The number of comments made on the idea.
+          example: 25
+        author:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: The unique identifier of the idea's author.
+              example: 42
+            username:
+              type: string
+              description: The username of the idea's author.
+              example: "idea_creator"
+      required:
+        - idea_id
+        - idea_text
+        - win_rate
+        - total_votes
+

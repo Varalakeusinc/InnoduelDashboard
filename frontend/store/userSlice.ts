@@ -2,20 +2,26 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
-type UserState = {
-	user: User;
+type User = {
+	userId: number;
+	username: string | "Admin";
+	email: string;
+	isAdmin: boolean;
 };
 
-type User = {
-	userId: number | null;
-	username: string | null;
+type UserState = {
+	currentUser: User | null;
+	isLoggedIn: boolean;
 };
 
 const initialState: UserState = {
-	user: {
-		userId: 1,
-		username: "Jane Doe",
+	currentUser: {
+		userId: -1,
+		username: "",
+		email: "",
+		isAdmin: false,
 	},
+	isLoggedIn: false,
 };
 
 // User redux slice
@@ -24,18 +30,35 @@ export const counterSlice = createSlice({
 	initialState,
 	reducers: {
 		setUser: (state, action: PayloadAction<User>) => {
-			state.user = action.payload;
+			state.currentUser = action.payload;
+		},
+		setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
+			state.isLoggedIn = action.payload;
 		},
 	},
 });
 
-///
-/// If you want to use user in some component
-/// const user = useAppSelector(state => state.user.user);
-///
+// If you want to use user in some component
+// const currentUser = useAppSelector(selectUser);
+// const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
-export const { setUser } = counterSlice.actions;
+// If you want to set values from any component
+// const dispatch = useAppDispatch();
 
-export const selectUser = (state: RootState) => state.user;
+// 	dispatch(
+// 		setUser({
+// 			userId: 123,
+// 			username: "Jane Doe",
+// 			email: "example@example.com",
+// 			isAdmin: false,
+// 		})
+// 	);
+//
+// 	dispatch(setIsLoggedIn(true));
+
+export const { setUser, setIsLoggedIn } = counterSlice.actions;
+
+export const selectUser = (state: RootState) => state.user.currentUser;
+export const selectIsLoggedIn = (state: RootState) => state.user.isLoggedIn;
 
 export default counterSlice.reducer;
