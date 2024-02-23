@@ -5,17 +5,19 @@ import ArenaCard from "@/components/arena/arena-card";
 const HomePage = () => {
 	const [arenas, setArenas] = useState<Arena[]>([]);
 
-	useEffect(() => {
-		arenaService
-			.getAllArenas()
-			.then(data => {
-				setArenas(data);
-			})
-			.catch(error => {
-				console.error("Error fetching arenas:", error);
-				// Handle error here (e.g., set error state, show notification)
-			});
-	}, []);
+    useEffect(() => {
+        arenaService.getAllMockArenas()
+            .then(data => {
+                setArenas(data);
+            })
+            .catch(error => {
+                console.error("Error fetching arenas:", error);
+                // Handle error here (e.g., set error state, show notification)
+            });
+        arenaService.getAllArenas().then(data => {
+            console.log(data);
+        });
+    }, []);
 
 	return (
 		<div>
