@@ -1,22 +1,44 @@
 import { AxiosResponse } from "axios";
 import axios from "@/lib/axios";
+import { UserInfo } from "./users";
+import { Vote } from "./vote";
 
-export interface Idea {
+export type Idea = {
+	id: number;
+	idea_text: string;
+	user_id: number;
+	arena_id: number;
+	created: Date;
+	active: boolean;
+	win_rate?: number | null;
+	win_rate_updated?: Date | null;
+	is_deleted?: boolean | null;
+	is_deleted_time?: Date | null;
+	is_deleted_by_user_id?: number | null;
+	is_seed?: boolean | null;
+	arena: MockArena;
+	user_info_idea_is_deleted_by_user_idTouser_info?: UserInfo | null;
+	user_info_idea_user_idTouser_info: UserInfo;
+	vote: Vote[];
+};
+
+// TODO: Delete Mock interfaces
+export interface MockArena {
+	id: string;
+	name: string;
+	ideas: MockIdea[];
+	totalVotes: number;
+	winRate: number;
+}
+
+export interface MockIdea {
 	id: string;
 	name: string;
 	votes: number;
 }
 
-export interface Arena {
-	id: string;
-	name: string;
-	ideas: Idea[];
-	totalVotes: number;
-	winRate: number;
-}
-
 // Mock data for testing
-export const mockArenas: Arena[] = [
+export const mockArenas: MockArena[] = [
 	{
 		id: "arena-1",
 		name: "Innovation Challenge",
@@ -54,7 +76,7 @@ export const mockArenas: Arena[] = [
 ];
 
 // Function to get all arenas - using mock data for now
-async function getAllMockArenas(): Promise<Arena[]> {
+async function getAllMockArenas(): Promise<MockArena[]> {
 	// Comment this out to use mock data instead of an actual API call
 	// try {
 	//     const response: AxiosResponse = await axios.get(`/arena`);
@@ -67,7 +89,7 @@ async function getAllMockArenas(): Promise<Arena[]> {
 	return Promise.resolve(mockArenas);
 }
 
-async function getAllArenas(): Promise<Arena[]> {
+async function getAllArenas(): Promise<MockArena[]> {
 	try {
 		const response: AxiosResponse = await axios.get("/api/arenas");
 		return response.data;

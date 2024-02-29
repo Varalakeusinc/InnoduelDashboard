@@ -1,17 +1,19 @@
 import * as React from "react";
-import { arenaService, Arena, Idea } from "../services/arena";
+import { arenaService, MockArena, Idea } from "../services/arena";
 import ArenaCard from "@/components/arena/arena-card";
 import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
 import { UserInfo, userService } from "../services/users";
+import { Vote, voteService } from "../services/vote";
 
 const HomePage = () => {
-	const [arenas, setArenas] = React.useState<Arena[]>([]);
+	const [arenas, setArenas] = React.useState<MockArena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
 		[]
 	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
 	const [users, setUsers] = React.useState<ReadonlyArray<UserInfo>>([]);
+	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
 
 	React.useEffect(() => {
 		arenaService
@@ -36,6 +38,9 @@ const HomePage = () => {
 
 		// All users
 		userService.getAllUsers().then(setUsers);
+
+		// All votes
+		voteService.getAllVotes().then(setVotes);
 	}, []);
 
 	return (
@@ -52,6 +57,7 @@ const HomePage = () => {
 				<div>Total Company amount: {companies.length}</div>
 				<div>Total Idea amount: {ideas.length}</div>
 				<div>Total User amount: {users.length}</div>
+				<div>Total vote amount: {votes.length}</div>
 			</div>
 			<div>
 				<h1 className="text-3xl font-semibold text-center my-5">

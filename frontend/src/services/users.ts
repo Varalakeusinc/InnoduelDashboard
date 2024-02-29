@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import axios from "@/lib/axios";
-import { Arena, Idea } from "./arena";
+import { MockArena, Idea } from "./arena";
 import { Company } from "./companies";
 
 export type UserInfo = {
@@ -13,7 +13,7 @@ export type UserInfo = {
 	last_login: Date | null;
 	company_id: number | null;
 	marketing_consent: boolean | null;
-	arena: Arena[];
+	arena: MockArena[];
 	idea_idea_is_deleted_by_user_idTouser_info: Idea[];
 	idea_idea_user_idTouser_info: Idea[];
 	company: Company | null;

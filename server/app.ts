@@ -11,6 +11,7 @@ import arenaRoutes from "./routes/arenas";
 import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
 import userRoutes from "./routes/users";
+import voteRoutes from "./routes/votes";
 
 import { middleware } from "./utils/middleware";
 
@@ -40,6 +41,9 @@ app.use("/api/ideas", ideaRoutes);
 
 // Ideas
 app.use("/api/users", userRoutes);
+
+// Votes
+app.use("/api/votes", voteRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
