@@ -24,6 +24,10 @@ const HomePage = () => {
 				// Handle error here (e.g., set error state, show notification)
 			});
 
+		// All arenas
+		// The mock data needs to be removed and changed to user this
+		// arenaService.getAllArenas().then(setArenas);
+
 		// All companies
 		companyService.getAllCompanies().then(setCompanies);
 
