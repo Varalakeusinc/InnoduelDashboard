@@ -18,22 +18,6 @@ export const getCompanies = async (req: Request, res: Response) => {
 				valid_until: true,
 				stripe_customer_id: true,
 				is_trial: true,
-				arena: {
-					select: {
-						id: true,
-					},
-				},
-				plan: true,
-				session: {
-					select: {
-						id: true,
-					},
-				},
-				user_info: {
-					select: {
-						id: true,
-					},
-				},
 			},
 		});
 
