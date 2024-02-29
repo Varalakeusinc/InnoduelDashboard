@@ -56,10 +56,10 @@ const HomePage = () => {
 					backgroundColor: "#ADD8E6",
 				}}
 			>
-				<div>Total Company amount: {companies.length}</div>
-				<div>Total Idea amount: {ideas.length}</div>
-				<div>Total User amount: {users.length}</div>
-				<div>Total vote amount: {votes.length}</div>
+				<div>Company amount: {companies.length}</div>
+				<div>Idea amount: {ideas.length}</div>
+				<div>User amount: {users.length}</div>
+				<div>Vote amount: {votes.length}</div>
 			</div>
 			<div>
 				<h1 className="text-3xl font-semibold text-center my-5">
