@@ -52,6 +52,8 @@ const HomePage = () => {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "space-around",
+					borderRadius: "20px",
+					backgroundColor: "#ADD8E6",
 				}}
 			>
 				<div>Total Company amount: {companies.length}</div>
