@@ -16,6 +16,7 @@ function App() {
 					<Route path="/arenas" element={<Arenas />} />
 					<Route path="/arena/:id" element={<Arena />} />
 					<Route path="/login" element={<LoginPage />} />
+					{/* Add not found component later */}
 					<Route path="*" element={<strong>Not found</strong>} />
 				</Routes>
 			</Layout>
