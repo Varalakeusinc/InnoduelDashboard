@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
-import { Idea } from '@/src/services/arena'; 
+import React, { useEffect, useRef } from "react";
+import * as d3 from "d3";
+import { MockIdea } from "@/src/services/arena";
 
 interface VotesBarChartProps {
-  ideas: Idea[];
+	ideas: MockIdea[];
 }
 
 const VotesBarChart: React.FC<VotesBarChartProps> = ({ ideas }) => {

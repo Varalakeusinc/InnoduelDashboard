@@ -1,10 +1,10 @@
 import React from "react";
-import { Arena } from "@/src/services/arena";
+import { MockArena } from "@/src/services/arena";
 import IdeasList from "./ideas-list";
 import VotesBarChart from "../charts/bar-chart";
 
 interface ArenaCardProps {
-	arena: Arena;
+	arena: MockArena;
 }
 
 const ArenaCard: React.FC<ArenaCardProps> = ({ arena }) => {
