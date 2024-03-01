@@ -11,7 +11,7 @@ const router = Router();
 router.get("/", getArenas);
 router.get("/compare", compareArenas);
 router.get("/:id", getById);
-router.get("/:arena_id/ideas", getIdeasOfArena);
-router.get("/:arena_id/win_rate/trends", getArenaWinRateTrends);
+router.get("/:arenaId/ideas", getIdeasOfArena);
+router.get("/:arenaId/win_rate/trends", getArenaWinRateTrends);
 
 export default router;
