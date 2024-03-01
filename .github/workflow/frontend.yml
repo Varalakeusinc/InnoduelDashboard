@@ -1,6 +1,9 @@
-name: Actions Frontend
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Frontend Actions
+run-name: Frontend Actions 🚀
+on:
+  push:
+    branches:
+      - '*'
 jobs:
   Run Frontend Tests:
     runs-on: ubuntu-latest
@@ -20,4 +23,4 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
-      -run: echo "Frontend tests completed successfully! 🎉"
+      - run: echo "Frontend tests completed successfully! 🎉"
