@@ -7,10 +7,17 @@ servers:
   - url: http://localhost:8000/
     description: Development server
 paths:
-  /api/arenas:
+  /api/arenas/{company_id}/arenas:
     get:
       summary: Get Arena Summaries
       description: Returns summaries for all arenas, including counts of ideas submitted, total votes, and overall win rates.
+      parameters:
+      - in: path
+        name: company_id
+        required: true
+        schema:
+          type: integer
+        description: The unique identifier of the company to fetch arenas.
       responses:
         200:
           description: List of arena summaries
@@ -20,6 +27,17 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ArenaSummary"
+        404:
+          description: No arenas found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No arenas found
+
   
   /api/arenas/{arena_id}:
     get:
@@ -42,13 +60,19 @@ paths:
         404:
           description: Arena not found
 
-  /api/arenas/compare:
+  /api/arenas/{company_id}/compare:
     get:
       summary: Compare Multiple Arenas
       description: |
         Allows for the comparison of key metrics across selected arenas using a comma-separated list of arena IDs. 
         Requires at least two arena IDs to perform the comparison.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arenas.
         - in: query
           name: ids
           required: true
