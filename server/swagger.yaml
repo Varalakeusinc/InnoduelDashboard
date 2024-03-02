@@ -74,13 +74,19 @@ paths:
         404:
           description: One or more arenas not found
 
-  /api/arenas/{arena_id}/ideas:
+  /api/arenas/{company_id}/{arena_id}/ideas:
     get:
       summary: Get Detailed Ideas List for Specific Arena
       description: |
         Retrieves a detailed list of ideas for a specific arena, including votes and win rates.
         Supports sorting by 'win_rate' or 'total_votes' and filtering by a minimum vote threshold.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arena.
         - in: path
           name: arena_id
           required: true
@@ -125,6 +131,14 @@ paths:
                   $ref: "#/components/schemas/IdeaDetail"
         404:
           description: Arena not found
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Arena not found
 
   /api/votes/{company_id}/all:
     get:
@@ -244,11 +258,17 @@ paths:
           description: One or more arenas not found
 
 
-  /api/arenas/{arena_id}/win_rate/trends:
+  /api/arenas/{company_id}/{arena_id}/win_rate/trends:
     get:
       summary: Win Rate Trends for Specific Arena
       description: Visualizes the win rate trends of top ideas over time within a specific arena.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arena
         - in: path
           name: arena_id
           required: true
@@ -282,6 +302,16 @@ paths:
                                 format: date-time
                               winRate:
                                 type: string
+        404:
+          description: Arena not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Arena not found
 
 components:
   schemas:
