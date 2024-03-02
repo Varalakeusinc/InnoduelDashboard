@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { type Request, type Response } from 'express';
-
-const prisma = new PrismaClient();
+import prisma from '../utils/db';
 
 export const getArenas = async (req: Request, res: Response) => {
   try {

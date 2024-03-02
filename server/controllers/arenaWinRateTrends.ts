@@ -1,7 +1,5 @@
 import { type Request, type Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../utils/db';
 
 export const getArenaWinRateTrends = async (req: Request, res: Response) => {
     const { companyId, arenaId } = req.params;
