@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getIdeasOfArena = async (req: Request, res: Response) => {
-    const { arenaId } = req.params;
+    const { companyId, arenaId } = req.params;
     const { sort, order, minVotes } = req.query;
 
     const minVotesThreshold = minVotes !== undefined ? parseInt(minVotes as string) : 0;
@@ -13,6 +13,7 @@ export const getIdeasOfArena = async (req: Request, res: Response) => {
         const arena = await prisma.arena.findUnique({
             where: {
                 id: parseInt(arenaId),
+                company_id: parseInt(companyId),
             },
             include: {
                 idea: {

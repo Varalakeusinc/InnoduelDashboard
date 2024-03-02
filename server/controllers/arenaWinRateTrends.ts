@@ -4,9 +4,20 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getArenaWinRateTrends = async (req: Request, res: Response) => {
-    const { arenaId } = req.params;
+    const { companyId, arenaId } = req.params;
 
     try {
+        const arena = await prisma.arena.findUnique({
+            where: {
+                id: parseInt(arenaId),
+                company_id: parseInt(companyId),
+            },
+        });
+
+        if (arena === null) {
+            return res.status(404).json({ message: 'Arena not found' });
+        }
+
         const winRateTrends = await prisma.idea.findMany({
             where: {
                 arena_id: parseInt(arenaId),
