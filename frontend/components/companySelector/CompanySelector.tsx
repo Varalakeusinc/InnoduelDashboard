@@ -25,7 +25,11 @@ const CompanySelector = () => {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>
-				<button className="IconButton" aria-label="Customise options">
+				<button //
+					className="IconButton"
+					aria-label="Customise options"
+					style={{ width: "100%" }}
+				>
 					Select company
 				</button>
 			</DropdownMenu.Trigger>
