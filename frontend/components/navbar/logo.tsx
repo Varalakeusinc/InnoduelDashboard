@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
+	selectCompanyName,
 	selectIsLoggedIn,
 	selectUser,
 	setIsLoggedIn,
@@ -12,6 +13,7 @@ import { Link } from "react-router-dom";
 export const Logo = () => {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	const currentUser = useAppSelector(selectUser);
+	const currentCompanyName = useAppSelector(selectCompanyName);
 
 	const dispatch = useAppDispatch();
 
@@ -48,7 +50,7 @@ export const Logo = () => {
 				<p className="text-xs text-muted-foreground">Motto</p>
 				<p>
 					{isLoggedIn ? currentUser?.username : "Not logged in"}{" "}
-					{currentUser?.email}
+					{currentUser?.email} / {currentCompanyName}
 				</p>
 			</div>
 		</div>

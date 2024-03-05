@@ -3,16 +3,19 @@ import { arenaService, MockArena, Idea } from "../services/arena";
 import ArenaCard from "@/components/arena/arena-card";
 import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
-import { UserInfo, userService } from "../services/users";
 import { Vote, voteService } from "../services/vote";
+import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
+import { useAppSelector } from "@/store/hooks";
+import { selectCompanyId } from "@/store/userSlice";
 
 const HomePage = () => {
+	const companyId = useAppSelector(selectCompanyId);
+
 	const [arenas, setArenas] = React.useState<MockArena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
 		[]
 	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
-	const [users, setUsers] = React.useState<ReadonlyArray<UserInfo>>([]);
 	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
 
 	React.useEffect(() => {
@@ -36,11 +39,8 @@ const HomePage = () => {
 		// All ideas
 		ideaService.getAllIdeas().then(setIdeas);
 
-		// All users
-		userService.getAllUsers().then(setUsers);
-
 		// All votes
-		voteService.getAllVotes().then(setVotes);
+		voteService.getAllVotes(companyId).then(setVotes);
 	}, []);
 
 	return (
@@ -56,9 +56,18 @@ const HomePage = () => {
 					backgroundColor: "#ADD8E6",
 				}}
 			>
-				<div>Company amount: {companies.length}</div>
-				<div>Idea amount: {ideas.length}</div>
-				<div>User amount: {users.length}</div>
+				<div>
+					Company amount:
+					{companies.length === 0 ? (
+						<LoadingIndicator />
+					) : (
+						companies.length
+					)}
+				</div>
+				<div>
+					Idea amount:{" "}
+					{ideas.length === 0 ? <LoadingIndicator /> : ideas.length}
+				</div>
 				<div>Vote amount: {votes.length}</div>
 			</div>
 			<div>
