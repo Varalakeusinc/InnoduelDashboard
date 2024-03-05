@@ -1,4 +1,6 @@
 #!/bin/bash
 
-# Run Docker Compose
-docker-compose --env-file server/.env up -d
+# Runs only db
+
+docker compose --env-file=./server/.env down db
+docker compose --env-file=./server/.env up -d db

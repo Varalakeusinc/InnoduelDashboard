@@ -1,6 +1,8 @@
 {
-  "eslint.workingDirectories": [ "./frontend", "./server" ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  }
+	"eslint.workingDirectories": ["./frontend", "./server"],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always"
+	},
+	// Please do not change by your own
+	"editor.tabSize": 4
 }
