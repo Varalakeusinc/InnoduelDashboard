@@ -59,7 +59,7 @@ export const mockArenas: MockArena[] = [
 			{ id: "idea-5", name: "AR Tool", votes: 160 },
 		],
 		totalVotes: 340,
-		winRate: 52.9,
+		winRate: 52.8,
 	},
 	{
 		id: "arena-3",
