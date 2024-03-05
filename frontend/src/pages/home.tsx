@@ -45,6 +45,7 @@ const HomePage = () => {
 
 	return (
 		<>
+			{/* Please feel free to delete everything inside this div */}
 			<div
 				style={{
 					width: "100%",
