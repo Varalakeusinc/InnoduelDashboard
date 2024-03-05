@@ -57,7 +57,6 @@ const CompanySelector = () => {
 							{company.name}
 						</DropdownMenu.Item>
 					))}
-					<DropdownMenu.Arrow className="DropdownMenuArrow" />
 				</DropdownMenu.Content>
 			</DropdownMenu.Portal>
 		</DropdownMenu.Root>

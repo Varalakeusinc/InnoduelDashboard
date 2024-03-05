@@ -47,7 +47,10 @@ export function UserNav() {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<CompanySelector />
+					<DropdownMenuItem>
+						<CompanySelector />
+					</DropdownMenuItem>
+
 					<DropdownMenuItem>Profile</DropdownMenuItem>
 					<DropdownMenuItem>Settings</DropdownMenuItem>
 				</DropdownMenuGroup>
