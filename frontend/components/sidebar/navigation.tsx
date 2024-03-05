@@ -21,6 +21,11 @@ export const Navigation = () => {
 			href: `/arenas`,
 			icon: AreaChartIcon,
 		},
+		{
+			label: "ArenaTESTING",
+			href: `/testArena`,
+			icon: AreaChartIcon,
+		},
 	];
 
 	if (!user?.username)
