@@ -30,6 +30,10 @@ export interface MockArena {
 	totalVotes: number;
 	winRate: number;
 	info_text?: string;
+	totalIdeas?: number;
+	totalVoters?: number;
+	winningIdea?: string;
+	winningVotes?: number;
 }
 
 export interface MockIdea {
@@ -43,6 +47,10 @@ export const mockArenas: MockArena[] = [
 	{
 		id: "arena-1",
 		name: "Innovation Challenge",
+		totalIdeas: 3,
+		totalVoters: 50,
+		winningIdea: "Recycling Program",
+		winningVotes: 150,
 		ideas: [
 			{ id: "idea-1", name: "Recycling Program", votes: 150 },
 			{ id: "idea-2", name: "Gardening Project", votes: 120 },
