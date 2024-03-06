@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppSelector } from "@/store/hooks";
 import { selectIsLoggedIn, selectUser } from "@/store/userSlice";
+import CompanySelector from "../companySelector/CompanySelector";
 
 export function UserNav() {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -46,6 +47,10 @@ export function UserNav() {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
+					<DropdownMenuItem>
+						<CompanySelector />
+					</DropdownMenuItem>
+
 					<DropdownMenuItem>Profile</DropdownMenuItem>
 					<DropdownMenuItem>Settings</DropdownMenuItem>
 				</DropdownMenuGroup>
