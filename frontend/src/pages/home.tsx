@@ -1,5 +1,6 @@
 import * as React from "react";
-import { arenaService, MockArena, Idea } from "../services/arena";
+import { arenaService, Arena } from "../services/arena";
+import { Idea } from "../services/ideas";
 import ArenaCard from "@/components/arena/arena-card";
 import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
@@ -11,7 +12,7 @@ import { selectCompanyId } from "@/store/userSlice";
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
 
-	const [arenas, setArenas] = React.useState<MockArena[]>([]);
+	const [arenas, setArenas] = React.useState<Arena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
 		[]
 	);
@@ -20,7 +21,7 @@ const HomePage = () => {
 
 	React.useEffect(() => {
 		arenaService
-			.getAllMockArenas()
+			.getArenas(companyId)
 			.then(data => {
 				setArenas(data);
 			})
