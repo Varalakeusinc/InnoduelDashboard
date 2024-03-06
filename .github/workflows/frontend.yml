@@ -2,7 +2,7 @@ name: Frontend Actions
 run-name: Frontend Actions 🚀
 on: [push]
 jobs:
-  Run Frontend Tests:
+  run_frontend_tests:
     runs-on: ubuntu-latest
     defaults:
       run:
