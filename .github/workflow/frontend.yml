@@ -1,9 +1,6 @@
 name: Frontend Actions
 run-name: Frontend Actions 🚀
-on:
-  push:
-    branches:
-      - '*'
+on: [push]
 jobs:
   Run Frontend Tests:
     runs-on: ubuntu-latest

@@ -1,9 +1,6 @@
 name: Backend Actions
 run-name: Backend Actions 🚀
-on:
-  push:
-    branches:
-      - '*'
+on: [push]
 jobs:
   Run Backend Tests:
     runs-on: ubuntu-latest
@@ -25,4 +22,3 @@ jobs:
         run: npm test
       - run: echo "Backend tests completed successfully! 🎉"
 
-      
