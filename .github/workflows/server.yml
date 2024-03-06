@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: server
+        working-directory: ./server
     steps:
       - run: echo "Run tests for backend"
       - name: Check out repository code
