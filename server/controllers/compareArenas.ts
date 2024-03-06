@@ -1,9 +1,8 @@
 import { type Request, type Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../utils/db';
 
 export const compareArenas = async (req: Request, res: Response) => {
+  const { companyId } = req.params;
   const { ids } = req.query;
 
   const idsArray: string[] = Array.isArray(ids) ? ids.map(String) : typeof ids === 'string' ? [ids] : [];
@@ -17,9 +16,16 @@ export const compareArenas = async (req: Request, res: Response) => {
   try {
     const arenas = await prisma.arena.findMany({
       where: {
-        id: {
-          in: arenaIds
-        }
+        AND: [
+          {
+            id: {
+              in: arenaIds
+            }
+          },
+          {
+            company_id: parseInt(companyId)
+          }
+        ]
       },
       select: {
         id: true,

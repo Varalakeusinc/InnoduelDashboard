@@ -29,6 +29,7 @@ export interface MockArena {
 	ideas: MockIdea[];
 	totalVotes: number;
 	winRate: number;
+	info_text?: string;
 }
 
 export interface MockIdea {

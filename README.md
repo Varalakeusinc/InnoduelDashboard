@@ -2,6 +2,11 @@
 
 ## Setup local environment with Docker
 
+Before running the script to give execution permission (for macOS):
+  ```bash
+    chmod +x ./db.sh ./all.sh ./dev.sh
+  ```
+
 - Run only database
   ```bash
     ./db.sh

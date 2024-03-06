@@ -1,8 +1,10 @@
 import Layout from "@/components/layout";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home";
-import AuthenticationPage from "./pages/authentication";
 import LoginPage from "./pages/login";
+import Arenas from "./pages/Arenas";
+import Arena from "./pages/Arena";
+import Compare from "./pages/Compare";
 
 function App() {
 	return (
@@ -10,11 +12,12 @@ function App() {
 			<Layout>
 				<Routes>
 					<Route path="/" element={<HomePage />} />
-					<Route
-						path="/authentication"
-						element={<AuthenticationPage />}
-					/>
+					<Route path="/compare" element={<Compare />} />
+					<Route path="/arenas" element={<Arenas />} />
+					<Route path="/arena/:id" element={<Arena />} />
 					<Route path="/login" element={<LoginPage />} />
+					{/* Add not found component later */}
+					<Route path="*" element={<strong>Not found</strong>} />
 				</Routes>
 			</Layout>
 		</>

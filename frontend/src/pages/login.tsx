@@ -1,5 +1,4 @@
 import { LoginForm } from "@/components/login-form";
-import { Link } from "react-router-dom";
 
 const LoginPage = () => {
 	return (
@@ -10,15 +9,6 @@ const LoginPage = () => {
 						<h1 className="text-2xl font-semibold tracking-tight">
 							Log in
 						</h1>
-						<p className="text-sm text-muted-foreground">
-							Don't have an account?{" "}
-							<Link
-								to="/authentication"
-								className="text-blue-500"
-							>
-								Sign up
-							</Link>
-						</p>
 					</div>
 					<LoginForm />
 				</div>

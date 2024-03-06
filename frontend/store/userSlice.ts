@@ -12,6 +12,7 @@ type User = {
 type UserState = {
 	currentUser: User | null;
 	isLoggedIn: boolean;
+	companyId: number;
 };
 
 const initialState: UserState = {
@@ -21,6 +22,7 @@ const initialState: UserState = {
 		email: "",
 		isAdmin: false,
 	},
+	companyId: 3,
 	isLoggedIn: false,
 };
 
@@ -34,6 +36,9 @@ export const counterSlice = createSlice({
 		},
 		setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
 			state.isLoggedIn = action.payload;
+		},
+		setCompanyId: (state, action: PayloadAction<number>) => {
+			state.companyId = action.payload;
 		},
 	},
 });
@@ -60,5 +65,6 @@ export const { setUser, setIsLoggedIn } = counterSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.currentUser;
 export const selectIsLoggedIn = (state: RootState) => state.user.isLoggedIn;
+export const selectCompanyId = (state: RootState) => state.user.companyId;
 
 export default counterSlice.reducer;

@@ -7,10 +7,17 @@ servers:
   - url: http://localhost:8000/
     description: Development server
 paths:
-  /api/arenas:
+  /api/arenas/{company_id}/arenas:
     get:
       summary: Get Arena Summaries
       description: Returns summaries for all arenas, including counts of ideas submitted, total votes, and overall win rates.
+      parameters:
+      - in: path
+        name: company_id
+        required: true
+        schema:
+          type: integer
+        description: The unique identifier of the company to fetch arenas.
       responses:
         200:
           description: List of arena summaries
@@ -20,6 +27,17 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ArenaSummary"
+        404:
+          description: No arenas found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No arenas found
+
   
   /api/arenas/{arena_id}:
     get:
@@ -42,13 +60,19 @@ paths:
         404:
           description: Arena not found
 
-  /api/arenas/compare:
+  /api/arenas/{company_id}/compare:
     get:
       summary: Compare Multiple Arenas
       description: |
         Allows for the comparison of key metrics across selected arenas using a comma-separated list of arena IDs. 
         Requires at least two arena IDs to perform the comparison.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arenas.
         - in: query
           name: ids
           required: true
@@ -74,13 +98,19 @@ paths:
         404:
           description: One or more arenas not found
 
-  /api/arenas/{arena_id}/ideas:
+  /api/arenas/{company_id}/{arena_id}/ideas:
     get:
       summary: Get Detailed Ideas List for Specific Arena
       description: |
         Retrieves a detailed list of ideas for a specific arena, including votes and win rates.
         Supports sorting by 'win_rate' or 'total_votes' and filtering by a minimum vote threshold.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arena.
         - in: path
           name: arena_id
           required: true
@@ -125,78 +155,144 @@ paths:
                   $ref: "#/components/schemas/IdeaDetail"
         404:
           description: Arena not found
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Arena not found
 
-  /api/arenas/all/vote_distribution:
+  /api/votes/{company_id}/all:
     get:
-      summary: Get Vote Distribution for All Arenas
-      description: Retrieves vote distributions across all arenas.
+      summary: Get all votes by company ID
+      description: Retrieves all votes for ideas associated with arenas owned by the specified company.
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the company to retrieve votes for.
       responses:
         200:
-          description: Vote distribution data for all arenas
+          description: A list of votes for the specified company
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/VoteDistribution"
+                  $ref: '#/components/schemas/Vote'
+        404:
+          description: No votes found for the specified company
 
-  /api/arenas/{arena_id}/vote_distribution:
+  /api/votes/{company_id}/distribution:
     get:
-      summary: Get Vote Distribution for Specific Arena
-      description: Retrieves vote distribution for a specific arena.
+      summary: Get Vote Distribution for All Arenas
+      description: Retrieves vote distributions across all arenas for a given company.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the company to retrieve vote distributions for.
+      responses:
+        200:
+          description: Vote distribution data for all arenas associated with the given company.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VoteDistributions'
+        404:
+          description: No ideas found for the given company_id
+
+  /api/votes/{company_id}/{arena_id}/distribution:
+    get:
+      summary: Get Vote Distribution for All Arenas
+      description: Retrieves vote distributions across all arenas for a given company.
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the company to retrieve vote distributions for.
         - in: path
           name: arena_id
           required: true
           schema:
             type: integer
-          description: The unique identifier of the arena
+          description: The ID of the arena to retrieve vote distributions for.
       responses:
         200:
-          description: Vote distribution data for the specified arena
+          description: Vote distribution data for all arenas associated with the given company.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VoteDistribution"
+                type: array
+                items:
+                  $ref: '#/components/schemas/VoteDistributions'
         404:
-          description: Arena not found
+          description: No ideas found for the given company_id
   
-  /api/arenas/compare/vote_distribution:
+  /api/votes/{company_id}/{arena_ids}/distribution/compare:
     get:
       summary: Compare Vote Distribution Across Multiple Arenas
       description: |
-        Retrieves and compares vote distribution across selected arenas. This endpoint is useful for analyzing how votes are distributed among ideas in different arenas, facilitating a deeper understanding of user engagement and preference patterns.
+        Retrieves and compares vote distribution across selected arenas within a specific company.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the company for which to compare vote distribution across arenas.
         - in: query
-          name: ids
+          name: arena_ids
           required: true
           schema:
             type: array
-            items:
+            tems:
               type: integer
             minItems: 2
           style: form
           explode: true
           description: |
-            Comma-separated list of arena IDs for which to compare vote distribution. A minimum of two arena IDs are required to perform the comparison.
+            Comma-separated list or array of arena IDs for which to compare vote distribution. A minimum of two arena IDs are required to perform the comparison.
       responses:
         200:
           description: Vote distribution comparison data for selected arenas
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ArenaVoteDistributionComparison"
+                type: object
+                properties:
+                  total_votes_across_arenas:
+                    type: integer
+                    description: The total number of votes across all specified arenas.
+                  vote_distribution_per_idea:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/VoteDistributions"
         404:
           description: One or more arenas not found
 
 
-  /api/arenas/{arena_id}/win_rate/trends:
+  /api/arenas/{company_id}/{arena_id}/win_rate/trends:
     get:
       summary: Win Rate Trends for Specific Arena
       description: Visualizes the win rate trends of top ideas over time within a specific arena.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arena
         - in: path
           name: arena_id
           required: true
@@ -230,6 +326,16 @@ paths:
                                 format: date-time
                               winRate:
                                 type: string
+        404:
+          description: Arena not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Arena not found
 
 components:
   schemas:
@@ -244,43 +350,71 @@ components:
           type: integer
         overall_win_rate:
           type: string
+    
+    Vote:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        idea_id:
+          type: integer
+        win:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+        idea:
+          type: object
+          properties:
+            id:
+              type: integer
+            idea_text:
+              type: string
+            arena:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+        user_info:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
 
+    VoteDistributions:
+      type: object
+      properties:
+        total_votes:
+          type: integer
+          description: The total number of votes.
+        vote_distributions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoteDistribution'
     VoteDistribution:
       type: object
       properties:
+        idea_id:
+          type: integer
+          description: The ID of the idea.
+        idea_text:
+          type: string
+          description: The text of the idea.
         arena_id:
           type: integer
-        distribution:
-          type: array
-          items:
-            type: object
-            properties:
-              idea_id:
-                type: integer
-              votes:
-                type: integer
-
-    ArenaVoteDistributionComparison:
-      type: object
-      properties:
-        arena_id:
-          type: integer
-          description: The unique identifier of the arena.
-        name:
+          description: The ID of the arena that the idea belongs to.
+        arena_name:
           type: string
           description: The name of the arena.
-        voteDistributionComparison:
-          type: array
-          description: An array representing the comparison of vote distribution across the selected arenas.
-          items:
-            type: object
-            properties:
-              idea_id:
-                type: integer
-                description: The unique identifier of the idea.
-              votes:
-                type: integer
-                description: The total number of votes received by the idea.
+        total_votes:
+          type: integer
+          description: The total number of votes for the idea.
 
     IdeaDetail:
       type: object
