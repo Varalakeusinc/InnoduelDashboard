@@ -1,0 +1,28 @@
+name: Backend Actions
+run-name: Backend Actions 🚀
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  Run Backend Tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - run: echo "Run tests for backend"
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - run: echo "Backend tests completed successfully! 🎉"
+
+      
