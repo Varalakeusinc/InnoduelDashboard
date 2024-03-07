@@ -1,10 +1,10 @@
 import React from "react";
-import { MockArena } from "@/src/services/arena";
+import { Arena } from "@/src/services/arena";
 import IdeasList from "./ideas-list";
 import VotesBarChart from "../charts/bar-chart";
 
 interface ArenaCardProps {
-	arena: MockArena;
+	arena: Arena;
 }
 
 const ArenaCard: React.FC<ArenaCardProps> = ({ arena }) => {
@@ -14,8 +14,8 @@ const ArenaCard: React.FC<ArenaCardProps> = ({ arena }) => {
 			style={{ backgroundColor: "seashell" }}
 		>
 			<h3 className="text-xl font-bold mb-2">{arena.name}</h3>
-			<p>Total Votes: {arena.totalVotes}</p>
-			<p>Win Rate: {arena.winRate}%</p>
+			<p>Total Votes: {arena.total_votes}</p>
+			<p>Win Rate: {arena.overall_win_rate}</p>
 			<IdeasList ideas={arena.ideas} />
 
 			{/* Votes Bar Chart */}

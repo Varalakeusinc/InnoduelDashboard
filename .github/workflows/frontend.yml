@@ -1,0 +1,23 @@
+name: Frontend Actions
+run-name: Frontend Actions 🚀
+on: [push]
+jobs:
+  run_frontend_tests:
+    runs-on: ubuntu-latest
+      
+    steps:
+      - run: echo "Run tests for frontend"
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm test
+      - run: echo "Frontend tests completed successfully! 🎉"

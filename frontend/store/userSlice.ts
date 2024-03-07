@@ -12,7 +12,7 @@ type User = {
 type UserState = {
 	currentUser: User | null;
 	isLoggedIn: boolean;
-	companyId: number;
+	currentCompany: { companyId: number; companyName: string };
 };
 
 const initialState: UserState = {
@@ -22,7 +22,7 @@ const initialState: UserState = {
 		email: "",
 		isAdmin: false,
 	},
-	companyId: 3,
+	currentCompany: { companyName: "Default company", companyId: 3 },
 	isLoggedIn: false,
 };
 
@@ -37,34 +37,24 @@ export const counterSlice = createSlice({
 		setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
 			state.isLoggedIn = action.payload;
 		},
-		setCompanyId: (state, action: PayloadAction<number>) => {
-			state.companyId = action.payload;
+		setCompany: (
+			state,
+			action: PayloadAction<{ companyId: number; companyName: string }>
+		) => {
+			state.currentCompany = action.payload;
 		},
 	},
 });
 
-// If you want to use user in some component
-// const currentUser = useAppSelector(selectUser);
-// const isLoggedIn = useAppSelector(selectIsLoggedIn);
-
-// If you want to set values from any component
-// const dispatch = useAppDispatch();
-
-// 	dispatch(
-// 		setUser({
-// 			userId: 123,
-// 			username: "Jane Doe",
-// 			email: "example@example.com",
-// 			isAdmin: false,
-// 		})
-// 	);
-//
-// 	dispatch(setIsLoggedIn(true));
-
-export const { setUser, setIsLoggedIn } = counterSlice.actions;
+export const { setUser, setIsLoggedIn, setCompany } = counterSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.currentUser;
 export const selectIsLoggedIn = (state: RootState) => state.user.isLoggedIn;
-export const selectCompanyId = (state: RootState) => state.user.companyId;
+
+export const selectCompanyId = (state: RootState) =>
+	state.user.currentCompany.companyId;
+
+export const selectCompanyName = (state: RootState) =>
+	state.user.currentCompany.companyName;
 
 export default counterSlice.reducer;

@@ -1,18 +1,18 @@
 import * as React from "react";
-import { MockArena, arenaService } from "../services/arena";
+import { Arena, arenaService } from "../services/arena";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
 
 const Arenas = () => {
-	const [arenas, setArenas] = React.useState<MockArena[]>([]);
+	const [arenas, setArenas] = React.useState<Arena[]>([]);
 
 	// Use this to fetch all arenas for specifc company
 	const companyId = useAppSelector(selectCompanyId);
 
 	React.useEffect(() => {
 		// All arenas -> has to be company specific
-		arenaService.getAllArenas().then(setArenas);
+		arenaService.getArenas(companyId).then(setArenas);
 	}, []);
 
 	return (

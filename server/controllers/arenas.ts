@@ -2,8 +2,13 @@ import { type Request, type Response } from 'express';
 import prisma from '../utils/db';
 
 export const getArenas = async (req: Request, res: Response) => {
+  const { companyId } = req.params; 
+
   try {
     const arenas = await prisma.arena.findMany({
+      where: {
+        company_id: parseInt(companyId),
+      },
       select: {
         id: true,
         name: true,
@@ -45,7 +50,13 @@ export const getArenas = async (req: Request, res: Response) => {
         info_text: arena.info_text,
         total_ideas: totalIdeas,
         total_votes: totalVotes,
-        overall_win_rate: overallWinRate.toFixed(2) + '%'
+        overall_win_rate: overallWinRate.toFixed(2) + '%',
+        ideas: arena.idea.map(idea => ({
+          id: idea.id,
+          idea_text: idea.idea_text,
+          vote_count: idea.vote.length,
+          win_rate: idea.win_rate
+        })),
       };
     });
 

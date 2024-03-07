@@ -1,23 +1,27 @@
 import * as React from "react";
-import { arenaService, MockArena, Idea } from "../services/arena";
+import { arenaService, Arena } from "../services/arena";
+import { Idea } from "../services/ideas";
 import ArenaCard from "@/components/arena/arena-card";
 import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
-import { UserInfo, userService } from "../services/users";
 import { Vote, voteService } from "../services/vote";
+import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
+import { useAppSelector } from "@/store/hooks";
+import { selectCompanyId } from "@/store/userSlice";
 
 const HomePage = () => {
-	const [arenas, setArenas] = React.useState<MockArena[]>([]);
+	const companyId = useAppSelector(selectCompanyId);
+
+	const [arenas, setArenas] = React.useState<Arena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
 		[]
 	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
-	const [users, setUsers] = React.useState<ReadonlyArray<UserInfo>>([]);
 	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
 
 	React.useEffect(() => {
 		arenaService
-			.getAllMockArenas()
+			.getArenas(companyId)
 			.then(data => {
 				setArenas(data);
 			})
@@ -36,15 +40,13 @@ const HomePage = () => {
 		// All ideas
 		ideaService.getAllIdeas().then(setIdeas);
 
-		// All users
-		userService.getAllUsers().then(setUsers);
-
 		// All votes
-		voteService.getAllVotes().then(setVotes);
+		voteService.getAllVotes(companyId).then(setVotes);
 	}, []);
 
 	return (
 		<>
+			{/* Please feel free to delete everything inside this div */}
 			<div
 				style={{
 					width: "100%",
@@ -56,9 +58,18 @@ const HomePage = () => {
 					backgroundColor: "#ADD8E6",
 				}}
 			>
-				<div>Company amount: {companies.length}</div>
-				<div>Idea amount: {ideas.length}</div>
-				<div>User amount: {users.length}</div>
+				<div>
+					Company amount:
+					{companies.length === 0 ? (
+						<LoadingIndicator />
+					) : (
+						companies.length
+					)}
+				</div>
+				<div>
+					Idea amount:{" "}
+					{ideas.length === 0 ? <LoadingIndicator /> : ideas.length}
+				</div>
 				<div>Vote amount: {votes.length}</div>
 			</div>
 			<div>
