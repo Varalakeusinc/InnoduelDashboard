@@ -1,9 +1,9 @@
 import cors from "cors";
 import express, {
-	type Application,
-	type NextFunction,
-	type Request,
-	type Response,
+    type Application,
+    type NextFunction,
+    type Request,
+    type Response,
 } from "express";
 import swaggerUi, { type JsonObject } from "swagger-ui-express";
 import yaml from "yamljs";
@@ -12,6 +12,7 @@ import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
 import userRoutes from "./routes/users";
 import voteRoutes from "./routes/votes";
+import authRoutes from "./routes/auth";
 
 import { middleware } from "./utils/middleware";
 
@@ -22,12 +23,12 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use(
-	"/api-docs",
-	swaggerUi.serve,
-	(req: Request, res: Response, next: NextFunction) => {
-		const swaggerDocument = yaml.load("./swagger.yaml") as JsonObject;
-		swaggerUi.setup(swaggerDocument)(req, res, next);
-	}
+    "/api-docs",
+    swaggerUi.serve,
+    (req: Request, res: Response, next: NextFunction) => {
+        const swaggerDocument = yaml.load("./swagger.yaml") as JsonObject;
+        swaggerUi.setup(swaggerDocument)(req, res, next);
+    },
 );
 
 // Arenas
@@ -44,6 +45,9 @@ app.use("/api/users", userRoutes);
 
 // Votes
 app.use("/api/votes", voteRoutes);
+
+// Auth
+app.use("/api/auth", authRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
