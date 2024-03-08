@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { MockIdea } from "@/src/services/arena";
+import { Idea } from "@/src/services/ideas";
 
 interface VotesBarChartProps {
-	ideas: MockIdea[];
+	ideas: Idea[];
 }
 
 const VotesBarChart: React.FC<VotesBarChartProps> = ({ ideas }) => {
@@ -27,8 +27,8 @@ const VotesBarChart: React.FC<VotesBarChartProps> = ({ ideas }) => {
 
       const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
-      x.domain(ideas.map((d) => d.name));
-      y.domain([0, d3.max(ideas, (d) => d.votes || 0) || 0]); 
+      x.domain(ideas.map((d) => d.idea_text));
+      y.domain([0, d3.max(ideas, (d) => d.vote_count || 0) || 0]); 
 
       g.append("g")
         .attr("class", "axis axis--x")
@@ -49,10 +49,10 @@ const VotesBarChart: React.FC<VotesBarChartProps> = ({ ideas }) => {
         .data(ideas)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", (d) => x(d.name) ?? 0) 
-        .attr("y", (d) => y(d.votes || 0))
+        .attr("x", (d) => x(d.idea_text) ?? 0) 
+        .attr("y", (d) => y(d.vote_count || 0))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - margin.top - margin.bottom - y(d.votes || 0))
+        .attr("height", (d) => height - margin.top - margin.bottom - y(d.vote_count || 0))
         .attr("fill", (d, i) => colorScale(i.toString())); 
     }
   }, [ideas]); 

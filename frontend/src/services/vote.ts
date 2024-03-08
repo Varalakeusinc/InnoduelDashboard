@@ -13,9 +13,11 @@ export type Vote = {
 	user_info: UserInfo;
 };
 
-async function getAllVotes(): Promise<Vote[]> {
+async function getAllVotes(companyId: number): Promise<Vote[]> {
 	try {
-		const response: AxiosResponse = await axios.get("/api/votes");
+		const response: AxiosResponse = await axios.get(
+			`/api/votes/${companyId}/all`
+		);
 		return response.data;
 	} catch (error) {
 		throw error;

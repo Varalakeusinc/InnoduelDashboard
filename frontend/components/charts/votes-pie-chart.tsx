@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { Idea } from '@/src/services/arena';
+import { Idea } from '@/src/services/ideas';
 
 interface VotesPieChartProps {
   ideas: Idea[];
@@ -11,7 +11,7 @@ const VotesPieChart: React.FC<VotesPieChartProps> = ({ ideas }) => {
 
   useEffect(() => {
     if (ref.current) { // Check if ref.current is not null
-      const data = ideas.map(idea => idea.votes);
+      const data = ideas.map(idea => idea.vote_count);
       const colors = d3.scaleOrdinal(d3.schemeCategory10);
   
       const svg = d3.select(ref.current)

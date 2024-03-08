@@ -1,8 +1,8 @@
 import React from "react";
-import { MockIdea } from "@/src/services/arena";
+import { Idea } from "@/src/services/ideas";
 
 interface IdeasListProps {
-	ideas: MockIdea[];
+	ideas: Idea[];
 }
 
 const IdeasList: React.FC<IdeasListProps> = ({ ideas }) => {
@@ -10,8 +10,8 @@ const IdeasList: React.FC<IdeasListProps> = ({ ideas }) => {
 		<ul className="list-disc pl-5">
 			{ideas.map(idea => (
 				<li key={idea.id} className="mt-1">
-					<span className="font-semibold">{idea.name}:</span>{" "}
-					{idea.votes} votes
+					<span className="font-semibold">{idea.idea_text}:</span>{" "}
+					{idea.vote_count} votes
 				</li>
 			))}
 		</ul>
