@@ -23,4 +23,15 @@ async function getArenas(companyId: number): Promise<Arena[]> {
 	}
 }
 
-export const arenaService = { getArenas };
+async function getArenaById(arenaId: number): Promise<Arena> {
+	try {
+		const response: AxiosResponse = await axios.get(
+			`/api/arenas/${arenaId}`
+		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export const arenaService = { getArenas, getArenaById };
