@@ -12,6 +12,7 @@ import {
 import { useAppSelector } from "@/store/hooks";
 import { selectIsLoggedIn, selectUser } from "@/store/userSlice";
 import CompanySelector from "../companySelector/CompanySelector";
+import LanguageSwitcher from "../language-switcher";
 
 export function UserNav() {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -47,12 +48,14 @@ export function UserNav() {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">
 						<CompanySelector />
 					</DropdownMenuItem>
-
-					<DropdownMenuItem>Profile</DropdownMenuItem>
-					<DropdownMenuItem>Settings</DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">
+						<LanguageSwitcher />
+					</DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>Log out</DropdownMenuItem>
