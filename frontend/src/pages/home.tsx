@@ -42,7 +42,7 @@ const HomePage = () => {
 
 		// All votes
 		voteService.getAllVotes(companyId).then(setVotes);
-	}, []);
+	}, [companyId]);
 
 	return (
 		<>
@@ -77,7 +77,7 @@ const HomePage = () => {
 					Arenas
 				</h1>
 				{arenas.length > 0 ? (
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 						{arenas.map(arena => (
 							<ArenaCard key={arena.id} arena={arena} />
 						))}

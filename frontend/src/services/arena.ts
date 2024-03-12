@@ -3,22 +3,35 @@ import axios from "@/lib/axios";
 import { Idea } from "./ideas";
 
 export interface Arena {
-    id: string;
-    name: string;
+	id: string;
+	name: string;
 	info_text: string | null;
 	total_ideas: number;
-    total_votes: number;
-    overall_win_rate: string;
-    ideas: Idea[];
+	total_votes: number;
+	overall_win_rate: string;
+	ideas: Idea[];
 }
 
 async function getArenas(companyId: number): Promise<Arena[]> {
 	try {
-		const response: AxiosResponse = await axios.get(`/api/arenas/${companyId}/arenas`);
+		const response: AxiosResponse = await axios.get(
+			`/api/arenas/${companyId}/arenas`
+		);
 		return response.data;
 	} catch (error) {
 		throw error;
 	}
 }
 
-export const arenaService = { getArenas };
+async function getArenaById(arenaId: number): Promise<Arena> {
+	try {
+		const response: AxiosResponse = await axios.get(
+			`/api/arenas/${arenaId}`
+		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+}
+
+export const arenaService = { getArenas, getArenaById };
