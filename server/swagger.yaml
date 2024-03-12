@@ -84,26 +84,32 @@ paths:
                     example: No arenas found
 
   
-  /api/arenas/{arena_id}:
+  /api/arenas/{company_id}/{arena_id}:
     get:
-      summary: Get Detailed Arena Information by arena_id
-      description: Retrieves detailed information for a specific arena by arena_id.
+      summary: Get Detailed Arena Information by company_id and arena_id
+      description: Retrieves detailed information for a specific arena within a given company by company_id and arena_id.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company that owns the arena
         - in: path
           name: arena_id
           required: true
           schema:
             type: integer
-          description: The unique identifier of the arena
+          description: The unique identifier of the arena within the specified company
       responses:
         200:
-          description: Detailed information of a specific arena
+          description: Detailed information of a specific arena within the specified company
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ArenaSummary"
         404:
-          description: Arena not found
+          description: Arena not found or does not belong to the specified company
 
   /api/arenas/{company_id}/compare:
     get:
