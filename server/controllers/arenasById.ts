@@ -3,9 +3,14 @@ import prisma from '../utils/db';
 
 export const getById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { companyId } = req.params;
+
   try {
     const arena = await prisma.arena.findUnique({
-      where: { id: Number(id) },
+      where: {
+        id: Number(id),
+        company_id: parseInt(companyId),
+      },
       select: {
         id: true,
         name: true,
@@ -17,16 +22,16 @@ export const getById = async (req: Request, res: Response) => {
             win_rate: true,
             vote: {
               select: {
-                win: true
-              }
-            }
-          }
-        }
-      }
+                win: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (arena === null) {
-      return res.status(404).json({ message: 'Arena not found' });
+      return res.status(404).json({ message: 'Arena not found or does not belong to the specified company' });
     }
 
     let totalWinRate = 0;
@@ -55,7 +60,7 @@ export const getById = async (req: Request, res: Response) => {
       name: arena.name,
       info_text: arena.info_text,
       total_ideas: totalIdeas,
-      overall_win_rate: overallWinRate.toFixed(2) + '%'
+      overall_win_rate: overallWinRate.toFixed(2) + '%',
     };
 
     res.status(200).json(arenaWithDetails);
