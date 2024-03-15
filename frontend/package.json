@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.1.0",
     "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^2.12.1",
