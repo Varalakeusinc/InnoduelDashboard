@@ -8,6 +8,7 @@ import { Vote, voteService } from "../services/vote";
 import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
+import {Notification, NotificationType} from "@/components/notification/Notification";
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
@@ -18,7 +19,42 @@ const HomePage = () => {
 	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
 	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
-
+ 
+	// Delete (This is just a sample code)
+	const notifications = [
+        {
+            id: '1',
+            notificationType: NotificationType.Success,
+            title: 'Success!',
+            description: 'Operation completed successfully.'
+        },
+        {
+            id: '2',
+            notificationType: NotificationType.Error,
+            title: 'Error!',
+            description: 'Operation failed.',
+            actionText: 'Retry',
+            onActionClick: () => {
+                console.log('Retry action clicked');
+            }
+        },
+		{
+            id: '3',
+            notificationType: NotificationType.Warning,
+            title: 'Warning!',
+            description: 'Operation failing...',
+			actionText: 'Retry',
+            onActionClick: () => {
+                console.log('Retry action clicked');
+            }
+        },
+		{
+            id: '4',
+            notificationType: NotificationType.Info,
+            title: 'Info!',
+            description: 'Operation info...'
+        },
+    ];
 	React.useEffect(() => {
 		arenaService
 			.getArenas(companyId)
@@ -42,11 +78,14 @@ const HomePage = () => {
 
 		// All votes
 		voteService.getAllVotes(companyId).then(setVotes);
-	}, []);
+	}, [companyId]);
 
 	return (
 		<>
 			{/* Please feel free to delete everything inside this div */}
+
+			<Notification notifications={notifications} /> {/*To be deleted */}
+            
 			<div
 				style={{
 					width: "100%",
@@ -77,7 +116,7 @@ const HomePage = () => {
 					Arenas
 				</h1>
 				{arenas.length > 0 ? (
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 						{arenas.map(arena => (
 							<ArenaCard key={arena.id} arena={arena} />
 						))}

@@ -7,8 +7,147 @@ servers:
   - url: http://localhost:8000/
     description: Development server
 paths:
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User Login
+      description: Authenticates a user based on email and password. No actual validation or authentication is performed at this stage.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                  description: The user's email address.
+                password:
+                  type: string
+                  example: securepassword
+                  description: The user's password.
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+        400:
+          description: Email and password are required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and password are required
+  
+  /api/users:
+    get:
+      tags:
+        - Not to be used in production
+      summary: Returns all users
+      description: >
+        Retrieves a list of all users in the system. **This API endpoint should not be used in production versions due to data security concerns and the extensive nature of the information returned.**
+      operationId: getUsers
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: No users found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/companies:
+    get:
+      tags:
+        - Not to be used in production
+      summary: Fetches all companies
+      description: >
+        **This API should not be used in the production version due to the requirement and data security concern.** Retrieves a list of all companies, including sensitive information such as billing addresses and stripe customer IDs. Use with caution and ensure proper security measures are in place.
+      operationId: getCompanies
+      responses:
+        '200':
+          description: A list of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '404':
+          description: No companies found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /api/ideas:
+    get:
+      tags:
+        - Not to be used in production
+      summary: Fetches all ideas
+      description: >
+        **This API should not be used in the production version due to the requirement and data security concern.** Retrieves a comprehensive list of ideas, including details on creation, status (active or deleted), win rate, and associated user and arena information. Use with caution and ensure proper security measures are in place.
+      operationId: getIdeas
+      responses:
+        '200':
+          description: A list of ideas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaExtended'
+        '404':
+          description: No ideas found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/arenas/{company_id}/arenas:
     get:
+      tags:
+        - Arenas
       summary: Get Arena Summaries
       description: Returns summaries for all arenas, including counts of ideas submitted, total votes, and overall win rates.
       parameters:
@@ -39,29 +178,39 @@ paths:
                     example: No arenas found
 
   
-  /api/arenas/{arena_id}:
+  /api/arenas/{company_id}/{arena_id}:
     get:
-      summary: Get Detailed Arena Information by arena_id
-      description: Retrieves detailed information for a specific arena by arena_id.
+      tags:
+        - Arenas
+      summary: Get Detailed Arena Information by company_id and arena_id
+      description: Retrieves detailed information for a specific arena within a given company by company_id and arena_id.
       parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company that owns the arena
         - in: path
           name: arena_id
           required: true
           schema:
             type: integer
-          description: The unique identifier of the arena
+          description: The unique identifier of the arena within the specified company
       responses:
         200:
-          description: Detailed information of a specific arena
+          description: Detailed information of a specific arena within the specified company
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ArenaSummary"
         404:
-          description: Arena not found
+          description: Arena not found or does not belong to the specified company
 
   /api/arenas/{company_id}/compare:
     get:
+      tags:
+        - Arenas
       summary: Compare Multiple Arenas
       description: |
         Allows for the comparison of key metrics across selected arenas using a comma-separated list of arena IDs. 
@@ -100,6 +249,8 @@ paths:
 
   /api/arenas/{company_id}/{arena_id}/ideas:
     get:
+      tags:
+        - Arenas
       summary: Get Detailed Ideas List for Specific Arena
       description: |
         Retrieves a detailed list of ideas for a specific arena, including votes and win rates.
@@ -166,6 +317,8 @@ paths:
 
   /api/votes/{company_id}/all:
     get:
+      tags:
+        - Votes
       summary: Get all votes by company ID
       description: Retrieves all votes for ideas associated with arenas owned by the specified company.
       parameters:
@@ -189,6 +342,8 @@ paths:
 
   /api/votes/{company_id}/distribution:
     get:
+      tags:
+        - Votes
       summary: Get Vote Distribution for All Arenas
       description: Retrieves vote distributions across all arenas for a given company.
       parameters:
@@ -212,6 +367,8 @@ paths:
 
   /api/votes/{company_id}/{arena_id}/distribution:
     get:
+      tags:
+        - Votes
       summary: Get Vote Distribution for All Arenas
       description: Retrieves vote distributions across all arenas for a given company.
       parameters:
@@ -241,6 +398,8 @@ paths:
   
   /api/votes/{company_id}/{arena_ids}/distribution/compare:
     get:
+      tags:
+        - Votes
       summary: Compare Vote Distribution Across Multiple Arenas
       description: |
         Retrieves and compares vote distribution across selected arenas within a specific company.
@@ -284,6 +443,8 @@ paths:
 
   /api/arenas/{company_id}/{arena_id}/win_rate/trends:
     get:
+      tags:
+        - Arenas
       summary: Win Rate Trends for Specific Arena
       description: Visualizes the win rate trends of top ideas over time within a specific arena.
       parameters:
@@ -471,4 +632,126 @@ components:
         - idea_text
         - win_rate
         - total_votes
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's ID.
+        name:
+          type: string
+          description: The user's name.
+        email:
+          type: string
+          description: The user's email address.
+        password:
+          type: string
+          description: The user's password. **Caution: Exposing this information poses a significant security risk.**
+        anon:
+          type: boolean
+          description: Indicates if the user is anonymous.
+        created:
+          type: string
+          format: date-time
+          description: The creation date of the user account.
+        last_login:
+          type: string
+          format: date-time
+          description: The last login time of the user.
+        company_id:
+          type: string
+          description: The ID of the company the user belongs to.
+        marketing_consent:
+          type: boolean
+          description: Indicates if the user has consented to marketing communications.
+        arena:
+          type: string
+          description: The arena or field in which the user operates.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message detailing the error.
+  
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The company's ID.
+        name:
+          type: string
+          description: The company's name.
+        billing_address:
+          type: string
+          description: The billing address of the company.
+        city:
+          type: string
+          description: The city where the company is located.
+        zip:
+          type: string
+          description: The postal code for the company.
+        country:
+          type: string
+          description: The country where the company is located.
+        logo_image_url:
+          type: string
+          description: The URL to the company's logo image.
+        plan_id:
+          type: string
+          description: The ID of the subscription plan the company is on.
+        valid_until:
+          type: string
+          format: date-time
+          description: The expiration date of the company's current subscription plan.
+        stripe_customer_id:
+          type: string
+          description: The Stripe customer ID associated with the company.
+        is_trial:
+          type: boolean
+          description: Indicates if the company is currently in a trial subscription.
+    
+    IdeaExtended:
+      type: object
+      properties:
+        id:
+          type: integer
+        idea_text:
+          type: string
+        user_id:
+          type: integer
+        arena_id:
+          type: integer
+        created:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+        win_rate:
+          type: string
+        win_rate_updated:
+          type: string
+          format: date-time
+        is_deleted:
+          type: boolean
+        is_deleted_time:
+          type: string
+          format: date-time
+        is_deleted_by_user_id:
+          type: integer
+        is_seed:
+          type: boolean
+        arena:
+          $ref: '#/components/schemas/ArenaSummary'
+        user_info_idea_is_deleted_by_user_idTouser_info:
+          $ref: '#/components/schemas/User'
+        user_info_idea_user_idTouser_info:
+          $ref: '#/components/schemas/User'
+        inappropriate_idea:
+          type: boolean
+        vote:
+          type: array
+          items:
+            $ref: '#/components/schemas/Vote'
 

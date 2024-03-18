@@ -10,7 +10,7 @@ const router = Router();
 // Arenas
 router.get("/:companyId/arenas", getArenas);
 router.get("/:companyId/compare", compareArenas);
-router.get("/:id", getById);
+router.get("/:companyId/:id", getById);
 router.get("/:companyId/:arenaId/ideas", getIdeasOfArena);
 router.get("/:companyId/:arenaId/win_rate/trends", getArenaWinRateTrends);
 
