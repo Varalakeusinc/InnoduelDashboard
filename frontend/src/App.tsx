@@ -7,7 +7,6 @@ import ArenaPage from "./pages/Arena";
 import Compare from "./pages/Compare";
 import { useTranslation } from "react-i18next";
 
-
 function App() {
 	const { t } = useTranslation();
 	return (
