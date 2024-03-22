@@ -9,6 +9,7 @@ export interface Arena {
 	total_ideas: number;
 	total_votes: number;
 	overall_win_rate: string;
+	company_id: number;
 	ideas: Idea[];
 }
 
