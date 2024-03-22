@@ -12,13 +12,13 @@ export const Navigation = () => {
 			icon: Home,
 		},
 		{
-			label: "Compare",
-			href: `/compare`,
+			label: "Arenas",
+			href: `/arenas`,
 			icon: AreaChartIcon,
 		},
 		{
-			label: "Arenas",
-			href: `/arenas`,
+			label: "Compare",
+			href: `/compare`,
 			icon: AreaChartIcon,
 		},
 	];
