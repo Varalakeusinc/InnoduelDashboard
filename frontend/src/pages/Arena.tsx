@@ -3,22 +3,40 @@ import { useParams } from "react-router-dom";
 import ChartBarHorizontal from "@/components/charts/bar-chart-horizontal";
 import { Arena, arenaService } from "../services/arena";
 import { Idea, ideaService } from "../services/ideas";
+import { useAppSelector } from "@/store/hooks";
+import { selectCompanyId } from "@/store/userSlice";
+import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
 
 const ArenaPage = () => {
 	const { id } = useParams();
+	const companyId = useAppSelector(selectCompanyId);
+
 	const [selectedArena, setSelectedArena] = React.useState<Arena | null>(
 		null
 	); // Initialize with null
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
+	const [voteAmount, setVoteAMount] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		if (id) {
-			arenaService.getArenaById(Number(id)).then((arena: Arena) => {
-				setSelectedArena(arena);
-			});
+			arenaService
+				.getArenaById(companyId, Number(id))
+				.then(setSelectedArena);
 
 			ideaService.getAllIdeas().then((ideas: Idea[]) => {
-				setIdeas(ideas.filter(x => x.arena_id === Number(id)));
+				const currentArenaIdeas = ideas.filter(
+					x => x.arena_id === Number(id)
+				);
+
+				let votesForArena = 0;
+
+				currentArenaIdeas.forEach(x => {
+					votesForArena += x.vote.length;
+				});
+
+				setVoteAMount(votesForArena);
+
+				setIdeas(currentArenaIdeas);
 			});
 		}
 	}, [id]); // Re-fetch data when the id parameter changes
@@ -33,7 +51,11 @@ const ArenaPage = () => {
 					<div className="grid grid-cols-4 gap-4 mb-8">
 						<div className="p-4 bg-violet-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
-								{selectedArena.total_votes}
+								{voteAmount === null ? (
+									<LoadingIndicator />
+								) : (
+									voteAmount
+								)}
 							</span>
 							<span className="text-white">Vote amount</span>
 						</div>
@@ -43,18 +65,19 @@ const ArenaPage = () => {
 							</span>
 							<span className="text-white">Idea amount</span>
 						</div>
-						<div className="p-4 bg-purple-800 rounded-xl shadow-md flex flex-col items-center">
+						{/* Uncomment when data is correct */}
+						{/* <div className="p-4 bg-purple-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
 								{}
 							</span>
 							<span className="text-white">Voter amount</span>
-						</div>
-						<div className="p-4 bg-pink-800 rounded-xl shadow-md flex flex-col items-center">
+						</div> */}
+						{/* <div className="p-4 bg-pink-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
 								{selectedArena.overall_win_rate}
 							</span>
 							<span className="text-white">Win rate</span>
-						</div>
+						</div> */}
 					</div>
 					<ChartBarHorizontal ideas={[...ideas]} />
 				</>
