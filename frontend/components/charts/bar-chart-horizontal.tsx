@@ -1,22 +1,22 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
 import Chart from "chart.js/auto";
 import { Idea } from "@/src/services/ideas";
 
-interface Props {
+type ChartBarHorizontalProps = {
 	ideas: Idea[];
-}
+};
 
-const ChartBarHorizontal: React.FC<Props> = ({ ideas }) => {
-	const chartRef = useRef<HTMLCanvasElement>(null);
+const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
+	const chartRef = React.useRef<HTMLCanvasElement>(null);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		if (chartRef && chartRef.current) {
 			const sortedIdeas = [...ideas].sort(
 				(a, b) => b.vote_count - a.vote_count
 			); // Sort ideas by votes in descending order
 
-			const data = sortedIdeas.map(idea => idea.vote);
-			const labels = sortedIdeas.map(idea => "");
+			const data = sortedIdeas.map(idea => idea.vote.length);
+			const labels = sortedIdeas.map(idea => idea.idea_text);
 
 			const chartConfig = {
 				type: "bar",

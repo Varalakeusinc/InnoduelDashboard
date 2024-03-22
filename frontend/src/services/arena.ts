@@ -12,7 +12,7 @@ export interface Arena {
 	ideas: Idea[];
 }
 
-async function getArenas(companyId: number): Promise<Arena[]> {
+const getArenas = async (companyId: number): Promise<Arena[]> => {
 	try {
 		const response: AxiosResponse = await axios.get(
 			`/api/arenas/${companyId}/arenas`
@@ -21,17 +21,20 @@ async function getArenas(companyId: number): Promise<Arena[]> {
 	} catch (error) {
 		throw error;
 	}
-}
+};
 
-async function getArenaById(arenaId: number): Promise<Arena> {
+const getArenaById = async (
+	companyId: number,
+	arenaId: number
+): Promise<Arena> => {
 	try {
 		const response: AxiosResponse = await axios.get(
-			`/api/arenas/${arenaId}`
+			`/api/arenas/${companyId}/${arenaId}`
 		);
 		return response.data;
 	} catch (error) {
 		throw error;
 	}
-}
+};
 
 export const arenaService = { getArenas, getArenaById };
