@@ -44,7 +44,11 @@ Then change CURRENT_DATABASE_URL=${DATABASE_URL} and restart the server.
 
 ## Create data for compare arena page
 1. In .env file change CURRENT_DATABASE_URL=${DATABASE_URL}
-2. In the root of the project run ./dummy.sh in Git bash (Available in VS Code)
+2. Run local db with ./db.sh 
+  ```bash
+  ./db.sh
+  ```
+3. In the root of the project run ./dummy.sh in Git bash (Available in VS Code)
   ```bash
   ./dummy.sh
   ```
