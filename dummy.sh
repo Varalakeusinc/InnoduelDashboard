@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o allexport; source .env; set +o allexport
+set -o allexport; source ./server/.env; set +o allexport
 
 export PGPASSWORD=$DB_PASSWORD
 
