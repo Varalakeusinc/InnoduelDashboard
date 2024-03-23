@@ -3,14 +3,15 @@ import prisma from '../utils/db';
 
 interface IdeaComparison {
     idea_text: string
-    arena1_winRate: number
-    arena2_winRate: number
+    arena1_winRate: number | null
+    arena2_winRate: number | null
 }
 
-const scaleWinRate = (winRate: number | null): number => {
-    if (winRate === null) return 1;
-    const scaledWinRate = Math.round(winRate / 8.33);
-    return Math.min(Math.max(scaledWinRate, 1), 12);
+const scaleWinRate = (winRate: number | null) => {
+    if (winRate !== null) {
+        return winRate / 100;
+    }
+    return null;
 };
 
 export const compareIdeasWinRate = async (req: Request, res: Response) => {
