@@ -42,6 +42,17 @@ On home page you should be able to see data from database.
 If you want to use local database again, make sure the local database is running.
 Then change CURRENT_DATABASE_URL=${DATABASE_URL} and restart the server.
 
+## Create data for compare arena page
+1. In .env file change CURRENT_DATABASE_URL=${DATABASE_URL}
+2. In the root of the project run ./dummy.sh in Git bash (Available in VS Code)
+  ```bash
+  ./dummy.sh
+  ```
+3. Use the company_id shown in terminal for endpoints
+4. Run the server
+5. Use /api/arenas/{company_id}/find_matching_arenas/{arenaId} to load the 2nd select component's options
+6. Use /api/arenas/{company_id}/compare_win_rate/{arenaId1}/{arenaId2} to get the winRate/risk-probability data
+
 ## Setup backend
 
 1. cd server
