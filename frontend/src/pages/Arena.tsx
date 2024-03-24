@@ -6,8 +6,10 @@ import { Idea, ideaService } from "../services/ideas";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
 import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
+import { useTranslation } from 'react-i18next';
 
 const ArenaPage = () => {
+	const { t } = useTranslation();
 	const { id } = useParams();
 	const companyId = useAppSelector(selectCompanyId);
 
@@ -57,13 +59,13 @@ const ArenaPage = () => {
 									voteAmount
 								)}
 							</span>
-							<span className="text-white">Vote amount</span>
+							<span className="text-white">{t("vote_amount")}</span>
 						</div>
 						<div className="p-4 bg-fuchsia-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
 								{selectedArena.total_ideas}
 							</span>
-							<span className="text-white">Idea amount</span>
+							<span className="text-white">{t("idea_amount")}</span>
 						</div>
 						{/* Uncomment when data is correct */}
 						{/* <div className="p-4 bg-purple-800 rounded-xl shadow-md flex flex-col items-center">

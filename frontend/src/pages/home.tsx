@@ -315,7 +315,7 @@ const HomePage = () => {
 								<YAxis />
 								<Tooltip />
 								<Legend />
-								<Bar dataKey="Ideas" fill="#8884d8" />
+								<Bar dataKey="Ideas" label={t("ideas")} fill="#8884d8" />
 							</BarChart>
 						</div>
 
