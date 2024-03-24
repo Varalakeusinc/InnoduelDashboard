@@ -1,31 +1,13 @@
 import { type Request, type Response } from 'express';
 import prisma from '../utils/db';
 
-export const compareArenas = async (req: Request, res: Response) => {
-  const { companyId } = req.params;
-  const { ids } = req.query;
-
-  const idsArray: string[] = Array.isArray(ids) ? ids.map(String) : typeof ids === 'string' ? [ids] : [];
-
-  if (idsArray.length < 2) {
-    return res.status(400).json({ message: 'At least two arena IDs are required for comparison' });
-  }
-
-  const arenaIds: number[] = Array.isArray(ids) ? ids.map(id => parseInt(id as string)) : [parseInt(ids as string)];
+export const getSimilarArenas = async (req: Request, res: Response) => {
+  const { companyId, arenaId } = req.params;
 
   try {
     const arenas = await prisma.arena.findMany({
       where: {
-        AND: [
-          {
-            id: {
-              in: arenaIds
-            }
-          },
-          {
-            company_id: parseInt(companyId)
-          }
-        ]
+        company_id: parseInt(companyId)
       },
       select: {
         id: true,
@@ -47,11 +29,35 @@ export const compareArenas = async (req: Request, res: Response) => {
       }
     });
 
-    if (arenas.length < 2) {
-      return res.status(404).json({ message: 'One or more arenas not found' });
+    const filteredArena = arenas.find(arena => arena.id === parseInt(arenaId));
+    if (!filteredArena) {
+      return res.status(404).json({ message: 'Arena not found' });
     }
 
-    const comparisonData = arenas.map(arena => {
+    const filteredIdeas = filteredArena.idea.map(idea => idea.idea_text);
+
+    function compareIdeas(filteredIdeas: string[], ideas: { idea_text: string }[]): boolean {
+      if (filteredIdeas.length !== ideas.length) {
+        return false;
+      }
+
+      const ideaSet = new Set(filteredIdeas);
+      for (const idea of ideas) {
+        if (!ideaSet.has(idea.idea_text)) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    const similarArenas = arenas.filter(arena => arena.id !== parseInt(arenaId) && compareIdeas(filteredIdeas, arena.idea));
+
+    if (similarArenas.length === 0) {
+      return res.status(404).json({ message: 'No arenas with similar ideas found' });
+    }
+
+    const response = similarArenas.map(arena => {
       const totalIdeas = arena.idea.length;
       let totalVotes = 0;
       let totalWinVotes = 0;
@@ -75,9 +81,9 @@ export const compareArenas = async (req: Request, res: Response) => {
       };
     });
 
-    res.status(200).json(comparisonData);
+    res.status(200).json(response);
   } catch (error) {
-    console.error('Error comparing arenas:', error);
+    console.error('Error retrieving similar arenas:', error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 };

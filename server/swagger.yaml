@@ -207,6 +207,38 @@ paths:
         404:
           description: Arena not found or does not belong to the specified company
 
+  /api/arenas/{company_id}/{arena_id}/similar_arenas:
+    get:
+      tags:
+        - Arenas
+      summary: Get Arenas with Similar Ideas
+      description: |
+        Retrieves arenas with similar ideas to the specified arena within the given company.
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company associated with the arenas.
+        - in: path
+          name: arena_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the arena to retrieve related arenas for.
+      responses:
+        200:
+          description: Arenas with similar ideas to the specified arena
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArenaSummary"
+        404:
+          description: No arenas found with similar ideas
+
   /api/arenas/{company_id}/compare:
     get:
       tags:
