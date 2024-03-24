@@ -1,5 +1,20 @@
 {
     "test": "Test (English)",
     "finnish": "Finnish",
-    "english": "English"
+    "english": "English",
+
+    "total_arenas": "Total arenas",
+    "total_ideas": "Total ideas",
+    "total_votes": "Total Votes",
+    "avg_winrate": "Average win rate",
+    "ideas_distribution": "Ideas distribution",
+    "votes_per_arena": "Votes per Arena",
+    "ideas": "ideas",
+
+    "week": "Week",
+    "month": "Month",
+    "year": "Year"
+
+    
+
 }

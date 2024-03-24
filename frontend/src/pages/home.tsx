@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from 'react-i18next';
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { arenaService, Arena } from "../services/arena";
@@ -33,6 +34,8 @@ import {
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
+
+	const { t } = useTranslation();
 
 	const [arenas, setArenas] = React.useState<Arena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
@@ -223,7 +226,7 @@ const HomePage = () => {
 				}}
 			>
 				<div>
-					Total Arenas:{" "}
+					{t('total_arenas')}:{' '}
 					{summary.totalArenas === 0 ? (
 						<LoadingIndicator />
 					) : (
@@ -231,7 +234,7 @@ const HomePage = () => {
 					)}
 				</div>
 				<div>
-					Total Ideas:{" "}
+					{t('total_ideas')}:{" "}
 					{summary.totalIdeas === 0 ? (
 						<LoadingIndicator />
 					) : (
@@ -239,7 +242,7 @@ const HomePage = () => {
 					)}
 				</div>
 				<div>
-					Total Votes:{" "}
+					{t('total_votes')}:{" "}
 					{summary.totalVotes === 0 ? (
 						<LoadingIndicator />
 					) : (
@@ -247,7 +250,7 @@ const HomePage = () => {
 					)}
 				</div>
 				<div>
-					Average Win Rate:{" "}
+					{t('avg_winrate')}:{" "}
 					{summary.averageWinRate === 0 ? (
 						<LoadingIndicator />
 					) : (
@@ -280,9 +283,9 @@ const HomePage = () => {
 							<SelectValue placeholder="Select mode" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="week">Week</SelectItem>
-							<SelectItem value="month">Month</SelectItem>
-							<SelectItem value="year">Year</SelectItem>
+							<SelectItem value="week">{t('week')}</SelectItem>
+							<SelectItem value="month">{t('month')}</SelectItem>
+        					<SelectItem value="year">{t('year')}</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
@@ -295,7 +298,7 @@ const HomePage = () => {
 					<>
 						{/* Ideas Bar Chart */}
 						<div>
-							<h2>Ideas Distribution</h2>
+							<h2>{t("ideas_distribution")}</h2>
 							<BarChart
 								width={900}
 								height={500}
@@ -318,7 +321,7 @@ const HomePage = () => {
 
 						{/* Votes Bar Chart */}
 						<div>
-							<h2>Votes per Arena</h2>
+							<h2>{t("votes_per_arena")}</h2>
 							<BarChart width={900} height={500} data={barData}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="name" />

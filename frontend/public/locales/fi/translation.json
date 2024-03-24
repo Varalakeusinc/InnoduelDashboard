@@ -1,5 +1,17 @@
 {
     "test": "Test (Suomi)",
     "finnish": "Suomi",
-    "english": "Englanti"
+    "english": "Englanti",
+
+    "total_arenas": "Kaikki areenat",
+    "total_ideas": "Kaikki ideat",
+    "total_votes": "Kaikki äänet",
+    "avg_winrate": "Keskimääräinen voittoprosentti",
+    "ideas_distribution": "Ideoiden jakautuminen",
+    "votes_per_arena": "Ääniä per areena",
+    "ideas": "ideat",
+
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "year": "Vuosi"
 }
