@@ -18,5 +18,11 @@
     "month": "Month",
     "year": "Year",
 
-    "not_found": "Not found"
+    "not_found": "Not found",
+
+    "select_company": "Select Company",
+    "profile": "Profile",
+    "settings": "Settings",
+    "log_out": "Log out"
+
 }

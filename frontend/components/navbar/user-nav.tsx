@@ -13,10 +13,12 @@ import { useAppSelector } from "@/store/hooks";
 import { selectIsLoggedIn, selectUser } from "@/store/userSlice";
 import CompanySelector from "../companySelector/CompanySelector";
 import LanguageSwitcher from "../language-switcher";
+import { useTranslation } from 'react-i18next';
 
 export function UserNav() {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	const currentUser = useAppSelector(selectUser);
+	const { t } = useTranslation();
 
 	return (
 		<DropdownMenu>
@@ -54,11 +56,11 @@ export function UserNav() {
 					<DropdownMenuItem className="cursor-pointer">
 						<LanguageSwitcher />
 					</DropdownMenuItem>
-					<DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-					<DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">{t("profile")}</DropdownMenuItem>
+					<DropdownMenuItem className="cursor-pointer">{t("settings")}</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>Log out</DropdownMenuItem>
+				<DropdownMenuItem>{t("log_out")}</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

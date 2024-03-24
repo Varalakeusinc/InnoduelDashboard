@@ -18,5 +18,10 @@
     "month": "Kuukausi",
     "year": "Vuosi",
 
-    "not_found": "Ei löydetty"
+    "not_found": "Ei löydetty",
+
+    "select_company": "Valitse yritys",
+    "profile": "Profiili",
+    "settings": "Asetukset",
+    "log_out": "Kirjaudu ulos"
 }
