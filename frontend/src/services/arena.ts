@@ -10,6 +10,7 @@ export interface Arena {
 	total_ideas: number;
 	total_votes: number;
 	overall_win_rate: string;
+	company_id: number;
 	ideas: Idea[];
 }
 
@@ -17,7 +18,7 @@ export interface ArenaIdeaCompareData {
 	idea_text: string;
 	arena1_winRate: number;
 	arena2_winRate: number;
-  }
+}
 
 const getArenas = async (companyId: number): Promise<Arena[]> => {
 	try {
@@ -47,7 +48,7 @@ const getArenaById = async (
 const getSimilarArenas = async (companyId: number, arenaId: number): Promise<Arena[]> => {
 	try {
 		const response: AxiosResponse<Arena[]> = await axios.get(
-			`/api/arenas/${companyId}/${arenaId}/similar_arenas`
+			`/api/arenas/${companyId}/find_matching_arenas/${arenaId}`
 		);
 		return response.data;
 	} catch (error) {
@@ -55,15 +56,10 @@ const getSimilarArenas = async (companyId: number, arenaId: number): Promise<Are
 	}
 };
 
-async function compareArenas(companyId: number, arenaIds: string[]): Promise<Arena[]> {
+async function compareArenas(companyId: number, arenaId1: number, arenaId2: number): Promise<Arena[]> {
 	try {
 		const response: AxiosResponse<Arena[]> = await axios.get(
-			`/api/arenas/${companyId}/compare`,
-			{
-				params: {
-					ids: arenaIds
-				}
-			}
+			`/api/arenas/${companyId}/compare_win_rate/${arenaId1}/${arenaId2}`
 		);
 		return response.data;
 	} catch (error) {

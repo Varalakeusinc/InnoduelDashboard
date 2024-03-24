@@ -71,7 +71,7 @@ const ArenaCompareSelector = () => {
 	const onArena2Change = (arenaId: string) => {
 		setSelectedArena2(arenaId);
 		setComparisonData([]);
-		getComparisonDetails([selectedArena1, arenaId]);
+		getComparisonDetails(parseInt(selectedArena1), parseInt(arenaId));
 	};
 
 	const fetchSimilarArenas = (arenaId: string) => {
@@ -86,9 +86,9 @@ const ArenaCompareSelector = () => {
 			});
 	};
 
-	const getComparisonDetails = (arenaIds: string[]) => {
+	const getComparisonDetails = (arenaId1: number, arenaId2: number) => {
 		arenaService
-			.compareArenas(companyId, arenaIds)
+			.compareArenas(companyId, arenaId1,arenaId2 )
 			.then(data => {
 				setComparisonData(compareData);
 				setErrorMsg(null);
@@ -106,7 +106,7 @@ const ArenaCompareSelector = () => {
 			actionText: 'Retry',
 			onActionClick: () => {
 				setErrorMsg(null);
-				getComparisonDetails([selectedArena1, selectedArena2]);
+				getComparisonDetails(parseInt(selectedArena1), parseInt(selectedArena2));
 			}
 		}
 	];
