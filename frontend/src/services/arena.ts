@@ -38,4 +38,35 @@ const getArenaById = async (
 	}
 };
 
-export const arenaService = { getArenas, getArenaById };
+const findMatchingArenas = async (companyId: number, arenaId: number) => {
+	try {
+		const response: AxiosResponse = await axios.get(
+			`/api/arenas/${companyId}/find_matching_arenas/${arenaId}`
+		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+const compareWinRate = async (
+	companyId: number,
+	arenaId: number,
+	arenaId2: number
+) => {
+	try {
+		const response: AxiosResponse = await axios.get(
+			`/api/arenas/${companyId}/compare_win_rate/${arenaId}/${arenaId2}`
+		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const arenaService = {
+	getArenas,
+	getArenaById,
+	findMatchingArenas,
+	compareWinRate,
+};
