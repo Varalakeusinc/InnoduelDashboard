@@ -74,6 +74,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 							},
 							ticks: {
 								color: "rgba(0,0,0, 0.5)",
+								stepSize: 1,
 							},
 						},
 						y: {
