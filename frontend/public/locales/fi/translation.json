@@ -1,5 +1,4 @@
 {
-    "test": "Test (Suomi)",
     "finnish": "Suomi",
     "english": "Englanti",
 
@@ -9,7 +8,7 @@
     "avg_winrate": "Keskimääräinen voittoprosentti",
     "ideas_distribution": "Ideoiden jakautuminen",
     "votes_per_arena": "Ääniä per areena",
-    "ideas": "ideat",
+    "Ideas": "ideat",
 
     "week": "Viikko",
     "month": "Kuukausi",

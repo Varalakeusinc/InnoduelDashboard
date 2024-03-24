@@ -12,7 +12,6 @@ function App() {
 	return (
 		<>
 			<Layout>
-				{t("test")}
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/compare" element={<Compare />} />
