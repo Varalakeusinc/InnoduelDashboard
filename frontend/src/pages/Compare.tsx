@@ -12,37 +12,10 @@ const ArenaCompareSelector = () => {
 	const companyId = useAppSelector(selectCompanyId);
 	const [arenaList1, setArenaList1] = useState<Arena[]>([]);
 	const [arenaList2, setArenaList2] = useState<Arena[]>([]);
-	const [selectedArena1, setSelectedArena1] = useState<string>('');
-	const [selectedArena2, setSelectedArena2] = useState<string>('');
+	const [selectedArena1, setSelectedArena1] = useState<Arena | null>(null);
+	const [selectedArena2, setSelectedArena2] = useState<Arena | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const [comparisonData, setComparisonData] = useState<ArenaIdeaCompareData[]>([]);
-
-	const compareData = [
-		{
-			idea_text: "Text 1",
-			arena1_winRate: 0.2,
-			arena2_winRate: 0.3,
-			total_winRate: 0.5
-		},
-		{
-			idea_text: "Text 2 hgfthtfg jyfuyfjjh yghgkhg",
-			arena1_winRate: 0.3,
-			arena2_winRate: 0.4,
-			total_winRate: 0.7
-		},
-		{
-			idea_text: "Text 3",
-			arena1_winRate: 0.7,
-			arena2_winRate: 0.1,
-			total_winRate: 0.8
-		},
-		{
-			idea_text: "Text 4hgfjgfc ygjhgfkhfvhkv kugkjgjkgkgjkgkjgkjgkjgkjgkjg jfjgdfjgdjgdcjgcdgjcgchjchjckhcvkhcvkhcvkjcvkjcvkhjcc",
-			arena1_winRate: 0.2,
-			arena2_winRate: 0.6,
-			total_winRate: 0.8
-		}
-	];
 
 	useEffect(() => {
 		fetchArenas();
@@ -61,17 +34,21 @@ const ArenaCompareSelector = () => {
 	};
 
 	const onArena1Change = (arenaId: string) => {
-		setSelectedArena1(arenaId);
-		setSelectedArena2('');
+		setSelectedArena1(fetchArena(arenaId));
+		setSelectedArena2(null);
 		setArenaList2([]);
 		setComparisonData([]);
+		setErrorMsg(null);
 		fetchSimilarArenas(arenaId);
 	};
 
 	const onArena2Change = (arenaId: string) => {
-		setSelectedArena2(arenaId);
+		setSelectedArena2(fetchArena(arenaId));
 		setComparisonData([]);
-		getComparisonDetails(parseInt(selectedArena1), parseInt(arenaId));
+		setErrorMsg(null);
+		if (selectedArena1) {
+			getComparisonDetails(parseInt(selectedArena1.id), parseInt(arenaId));
+		}
 	};
 
 	const fetchSimilarArenas = (arenaId: string) => {
@@ -88,14 +65,19 @@ const ArenaCompareSelector = () => {
 
 	const getComparisonDetails = (arenaId1: number, arenaId2: number) => {
 		arenaService
-			.compareArenas(companyId, arenaId1,arenaId2 )
+			.compareArenas(companyId, arenaId1, arenaId2)
 			.then(data => {
-				setComparisonData(compareData);
+				setComparisonData(data);
 				setErrorMsg(null);
 			})
 			.catch(error => {
 				setErrorMsg(error);
 			});
+	};
+
+	const fetchArena = (arenaId: string) => {
+		const selectedArena = arenaList1.find(arena => arena.id === arenaId);
+		return selectedArena || null;
 	};
 
 	const notification = [
@@ -106,7 +88,9 @@ const ArenaCompareSelector = () => {
 			actionText: 'Retry',
 			onActionClick: () => {
 				setErrorMsg(null);
-				getComparisonDetails(parseInt(selectedArena1), parseInt(selectedArena2));
+				if (selectedArena1 && selectedArena2) {
+					getComparisonDetails(parseInt(selectedArena1.id), parseInt(selectedArena2.id));
+				}
 			}
 		}
 	];
@@ -123,7 +107,7 @@ const ArenaCompareSelector = () => {
 					</div>
 				</div>
 				<div className="mt-2">
-					{comparisonData.length > 0 && <PlotGraph comparisonData={comparisonData} />}
+					{comparisonData.length > 0 && selectedArena1 && selectedArena2 && <PlotGraph arena1={selectedArena1} arena2={selectedArena2} comparisonData={comparisonData} />}
 				</div>
 			</div>
 			{errorMsg && <Notification notifications={notification} />}

@@ -56,9 +56,9 @@ const getSimilarArenas = async (companyId: number, arenaId: number): Promise<Are
 	}
 };
 
-async function compareArenas(companyId: number, arenaId1: number, arenaId2: number): Promise<Arena[]> {
+async function compareArenas(companyId: number, arenaId1: number, arenaId2: number): Promise<ArenaIdeaCompareData[]> {
 	try {
-		const response: AxiosResponse<Arena[]> = await axios.get(
+		const response: AxiosResponse<ArenaIdeaCompareData[]> = await axios.get(
 			`/api/arenas/${companyId}/compare_win_rate/${arenaId1}/${arenaId2}`
 		);
 		return response.data;

@@ -20,8 +20,12 @@ export const findMatchingArenas = async (req: Request, res: Response) => {
         });
 
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (!targetArena || !targetArena.idea) {
-            return res.status(404).json({ error: 'Target arena not found' });
+        if (!targetArena) {
+            return res.status(404).json({ message: 'Target arena not found' });
+        }
+
+        if (!targetArena.idea || targetArena.idea.length === 0) {
+            return res.status(404).json({ message: 'Selected arena has no ideas' });
         }
 
         const targetIdeas = targetArena.idea.map(idea => idea.idea_text);
@@ -54,6 +58,10 @@ export const findMatchingArenas = async (req: Request, res: Response) => {
             id: arena.id,
             name: arena.name,
         }));
+
+        if (matchingArenas.length === 0) {
+            return res.status(404).json({ message: 'No arenas with similar ideas found' });
+        }
 
         res.status(200).json(matchingArenas);
     } catch (error) {

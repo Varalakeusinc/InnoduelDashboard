@@ -11,7 +11,7 @@ const scaleWinRate = (winRate: number | null) => {
     if (winRate !== null) {
         return winRate / 100;
     }
-    return null;
+    return 0;
 };
 
 export const compareIdeasWinRate = async (req: Request, res: Response) => {

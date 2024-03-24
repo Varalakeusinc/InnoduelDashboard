@@ -1,17 +1,23 @@
 import React from "react";
 import { CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XAxis, YAxis, LabelList } from "recharts";
 import { ArenaIdeaCompareData } from "../../src/services/arena";
-
+import { Arena } from "../../src/services/arena";
 
 interface ComparisonPlotGraphProps {
   comparisonData: ArenaIdeaCompareData[];
+  arena1: Arena;
+  arena2: Arena;
 }
 
-const ComparisonPlotGraph: React.FC<ComparisonPlotGraphProps> = ({ comparisonData }) => {
+const ComparisonPlotGraph: React.FC<ComparisonPlotGraphProps> = ({ comparisonData, arena1, arena2 }) => {
   const numberedData = comparisonData.map((data, index) => ({
     ...data,
     idea_number: index + 1
   }));
+
+  const getRandomColor = () => {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  };
 
   return (
     <div className="relative">
@@ -29,11 +35,11 @@ const ComparisonPlotGraph: React.FC<ComparisonPlotGraphProps> = ({ comparisonDat
             className="ml-auto"
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" dataKey="arena1_winRate" name="Arena 1" domain={[0, 1]} label={{ value: 'Arena 1', position: 'insideBottom', dy: 20 }} />
-            <YAxis type="number" dataKey="arena2_winRate" name="Arena 2" domain={[0, 1]} label={{ value: 'Arena 2', position: 'insideLeft', angle: -90, dy: -10 }} />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip />} />
+            <XAxis type="number" dataKey="arena1_winRate" name={arena1.name} domain={[0, 1]} label={{ value: arena1.name, position: 'insideBottom', dy: 20 }} />
+            <YAxis type="number" dataKey="arena2_winRate" name={arena2.name} domain={[0, 1]} label={{ value: arena2.name, position: 'insideLeft', angle: -90, dy: -10 }} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip arena1={arena1} arena2={arena2}/>} />
             <Legend verticalAlign="top" align="left" layout="vertical" wrapperStyle={{ top: 30, left: -100 }} />
-            <Scatter name="Overall Win Rate" data={numberedData} fill="#8884d8">
+            <Scatter name="Overall Win Rate" data={numberedData} fill={getRandomColor()}>
               <LabelList dataKey="idea_number" position="top" />
             </Scatter>
           </ScatterChart>
@@ -50,14 +56,14 @@ const ComparisonPlotGraph: React.FC<ComparisonPlotGraphProps> = ({ comparisonDat
   );
 };
 
-const CustomTooltip: React.FC<any> = ({ active, payload }) => {
-  if (active && payload && payload.length) {
+const CustomTooltip: React.FC<any> = ({ active, payload, arena1, arena2 }) => {
+  if (active && payload && payload.length && arena1 && arena2) {
     const data = payload[0].payload;
     return (
       <div className="bg-white border border-gray-300 p-4 rounded">
         <p className="recharts-tooltip-label font-bold break-words text-sm">{data.idea_text}</p>
-        <p className="recharts-tooltip-label text-sm">Arena 1 : {data.arena1_winRate}</p>
-        <p className="recharts-tooltip-label text-sm">Arena 2 : {data.arena2_winRate}</p>
+        <p className="recharts-tooltip-label text-sm">{arena1.name} : {data.arena1_winRate}</p>
+        <p className="recharts-tooltip-label text-sm">{arena2.name} : {data.arena2_winRate}</p>
       </div>
     );
   }
