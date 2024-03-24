@@ -19,7 +19,7 @@ function App() {
 					<Route path="/arena/:id" element={<ArenaPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					{/* Add not found component later */}
-					<Route path="*" element={<strong>Not found</strong>} />
+					<Route path="*" element={<strong>{t("not_found")}</strong>} />
 				</Routes>
 			</Layout>
 		</>

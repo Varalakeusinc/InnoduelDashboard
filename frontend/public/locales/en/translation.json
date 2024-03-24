@@ -1,7 +1,10 @@
 {
-    "test": "Test (English)",
     "finnish": "Finnish",
     "english": "English",
+
+    "home": "Home",
+    "arenas": "Arenas",
+    "compare": "Compare",
 
     "total_arenas": "Total arenas",
     "total_ideas": "Total ideas",
@@ -13,8 +16,7 @@
 
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
 
-    
-
+    "not_found": "Not found"
 }

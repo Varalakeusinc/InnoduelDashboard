@@ -2,6 +2,10 @@
     "finnish": "Suomi",
     "english": "Englanti",
 
+    "home": "Koti",
+    "arenas": "Areenat",
+    "compare": "Vertaile",
+
     "total_arenas": "Kaikki areenat",
     "total_ideas": "Kaikki ideat",
     "total_votes": "Kaikki äänet",
@@ -12,5 +16,7 @@
 
     "week": "Viikko",
     "month": "Kuukausi",
-    "year": "Vuosi"
+    "year": "Vuosi",
+
+    "not_found": "Ei löydetty"
 }
