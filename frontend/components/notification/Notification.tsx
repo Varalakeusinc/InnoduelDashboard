@@ -17,7 +17,7 @@ export enum NotificationType {
 
 interface NotificationProps {
     notifications: {
-        id: string;
+        id?: string;
         notificationType: NotificationType;
         title: string;
         description: string;
@@ -46,7 +46,7 @@ export const Notification: React.FC<NotificationProps> = ({ notifications }) => 
         <ToastProvider>
             <ToastViewport>
                 {notifications.map(notification => (
-                    <Toast key={notification.id} style={{ backgroundColor: mapTypeToColor(notification.notificationType) }}>
+                    <Toast key={notification.id || new Date().getTime().toString()} style={{ backgroundColor: mapTypeToColor(notification.notificationType) }}>
                         <div className="grid gap-1">
                             <ToastTitle>{notification.title}</ToastTitle>
                             <ToastDescription>{notification.description}</ToastDescription>

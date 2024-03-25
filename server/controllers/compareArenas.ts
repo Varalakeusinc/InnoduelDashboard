@@ -8,7 +8,7 @@ export const compareArenas = async (req: Request, res: Response) => {
   const idsArray: string[] = Array.isArray(ids) ? ids.map(String) : typeof ids === 'string' ? [ids] : [];
 
   if (idsArray.length < 2) {
-    return res.status(400).json({ error: 'At least two arena IDs are required for comparison' });
+    return res.status(400).json({ message: 'At least two arena IDs are required for comparison' });
   }
 
   const arenaIds: number[] = Array.isArray(ids) ? ids.map(id => parseInt(id as string)) : [parseInt(ids as string)];
