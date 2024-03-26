@@ -28,9 +28,14 @@ BEGIN
 
     RAISE NOTICE 'Inserting ideas into arenas...';
     FOR v_arena_id IN SELECT id FROM arena WHERE company_id = v_company_id LOOP
-        INSERT INTO idea (idea_text, arena_id, win_rate, user_id)
-        SELECT 'Idea ' || generate_series, v_arena_id, (generate_series * 10), v_user_id
-        FROM generate_series(1, 10);
+    INSERT INTO idea (idea_text, arena_id, win_rate, user_id)
+    SELECT 
+        'Idea ' || generate_series, 
+        v_arena_id, 
+        random() * 100 AS win_rate, -- Random winrate for test data
+        v_user_id
+    FROM 
+    generate_series(1, 10);
     END LOOP;
     RAISE NOTICE 'Ideas inserted for arenas of company ID %.', v_company_id;
 END $$;
