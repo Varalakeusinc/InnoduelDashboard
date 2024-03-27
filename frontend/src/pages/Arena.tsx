@@ -77,18 +77,18 @@ const ArenaPage = () => {
 							</span>
 							<span className="text-white">Voter amount</span>
 						</div> */}
-						<div className="p-4 bg-pink-800 rounded-xl shadow-md flex flex-col items-center">
+						{/* <div className="p-4 bg-pink-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
 								{selectedArena.overall_win_rate}
 							</span>
 							<span className="text-white">Win rate</span>
-						</div>
+						</div> */}
 					</div>
 					<ChartBarHorizontal ideas={selectedArena.ideas} />
 					<IdeaWinRateChart ideaData={selectedArena.ideas} />
 				</>
 			)}
-			 {notification && <Notification notifications={notification} />}
+			{notification && <Notification notifications={notification} />}
 		</div>
 	);
 };
