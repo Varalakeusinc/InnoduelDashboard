@@ -103,6 +103,7 @@ const ArenaCompare = ({ onClose, isCloseDisabled }: { onClose: () => void; isClo
                 } else if (selectedArena1 && selectedArena2) {
                     getComparisonDetails(parseInt(selectedArena1.id), parseInt(selectedArena2.id));
                 }
+                setNotification([]);
             }
         }])
     };
