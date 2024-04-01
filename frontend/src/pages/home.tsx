@@ -257,7 +257,7 @@ const HomePage = () => {
 				</div>
 			</div>
 			<div className="flex flex-col space-y-4 mt-4">
-				<div className="flex space-x-4">
+				<div className="flex space-x-4 w-1/2">
 					<ReactDatePicker
 						selected={startDate}
 						onChange={(date: any) => setStartDate(date)}
@@ -273,8 +273,6 @@ const HomePage = () => {
 						minDate={startDate}
 						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
 					/>
-				</div>
-				<div className="w-48">
 					<Select onValueChange={setMode} value={mode}>
 						<SelectTrigger aria-label="Mode">
 							<SelectValue placeholder="Select mode" />
@@ -297,7 +295,7 @@ const HomePage = () => {
 						<div>
 							<h2>Ideas Distribution</h2>
 							<BarChart
-								width={900}
+								width={750}
 								height={500}
 								data={aggregatedData}
 								margin={{
@@ -319,7 +317,7 @@ const HomePage = () => {
 						{/* Votes Bar Chart */}
 						<div>
 							<h2>Votes per Arena</h2>
-							<BarChart width={900} height={500} data={barData}>
+							<BarChart width={750} height={500} data={barData}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="name" />
 								<YAxis />
