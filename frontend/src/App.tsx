@@ -6,7 +6,7 @@ import Arenas from "./pages/Arenas";
 import ArenaPage from "./pages/Arena";
 import Compare from "./pages/Compare";
 
-function App() {
+const App = () => {
 	return (
 		<>
 			<Layout>
@@ -22,6 +22,6 @@ function App() {
 			</Layout>
 		</>
 	);
-}
+};
 
 export default App;
