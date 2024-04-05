@@ -26,6 +26,8 @@ export const Navigation = () => {
 		},
 	];
 
+	const isActive = (path : string) => window.location.pathname === path;
+
 	if (!user?.username)
 		return (
 			<ul className="space-y-2">
@@ -43,7 +45,7 @@ export const Navigation = () => {
 						label={route.label}
 						icon={route.icon}
 						href={route.href}
-						isActive={window.location.pathname.includes(route.href)}
+						isActive={isActive(route.href)}
 					/>
 				</div>
 			))}
