@@ -68,10 +68,10 @@ const checkCompany = (request: Request, response: Response, next: NextFunction) 
   try {
     const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean, companyId: number };
     if (decodedToken?.isAdmin) {
-      next();
+      return next();
     }
     if (decodedToken?.companyId === Number(request.params.companyId)) {
-      next();
+      return next();
     } else {
       return response.status(401).send('Unauthorized');
     }
