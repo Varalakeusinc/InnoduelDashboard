@@ -9,34 +9,29 @@ import { useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/userSlice";
 
 const App = () => {
-	const user = useAppSelector(selectUser);
-
-	if (user && user.companyId === -1) {
-		return (
-			<>
-				<Routes>
-					<Route path="/login" element={<LoginPage />} />
-					<Route path="*" element={<strong>Not found</strong>} />
-				</Routes>
-				<Navigate to="/login" />
-			</>
-		);
-	}
-
 	return (
 		<>
 			<Layout>
 				<Routes>
-					<Route path="/" element={<HomePage />} />
-					<Route path="/compare" element={<Compare />} />
-					<Route path="/arenas" element={<Arenas />} />
-					<Route path="/arena/:id" element={<ArenaPage />} />
-					{/* Add not found component later */}
-					<Route path="*" element={<strong>Not found</strong>} />
+					<Route element={<PrivateRoutes />}>
+						<Route path="/" element={<HomePage />} />
+						<Route path="/compare" element={<Compare />} />
+						<Route path="/arenas" element={<Arenas />} />
+						<Route path="/arena/:id" element={<ArenaPage />} />
+						{/* Add not found component later */}
+						<Route path="*" element={<strong>Not found</strong>} />
+					</Route>
+					<Route path="/login" element={<LoginPage />} />
 				</Routes>
 			</Layout>
 		</>
 	);
+};
+
+const PrivateRoutes = () => {
+	const user = useAppSelector(selectUser);
+
+	return user?.companyId === -1 ? <></> : <Navigate to="/login" />;
 };
 
 export default App;

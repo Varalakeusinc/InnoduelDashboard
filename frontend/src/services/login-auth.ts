@@ -1,5 +1,5 @@
+import axios from "@/lib/axios";
 import { User } from "@/store/userSlice";
-import axios from "axios";
 
 export async function authenticateUser(
 	email: string,
