@@ -38,9 +38,8 @@ export const Navigation = () => {
 	return (
 		<ul className="space-y-2 px-2 pt-4 lg:pt-0">
 			{routes.map(route => (
-				<div data-test-id={route.dataTestId}>
+				<div key={route.href} data-test-id={route.dataTestId}>
 					<NavItem
-						key={route.href}
 						label={route.label}
 						icon={route.icon}
 						href={route.href}
