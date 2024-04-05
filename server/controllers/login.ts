@@ -37,7 +37,7 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     const isAdmin = user.user_role_link.some((role) => role.role_id === 3);
-    const token = jwt.sign({ userId: user.id, isAdmin }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ userId: user.id, isAdmin, companyId: user.company_id }, process.env.JWT_SECRET as string, {
         expiresIn: '1h',
     });
 
@@ -50,7 +50,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(201).json({ 
         message: "Login successful", 
         user: { email: user.email, companyId: user.company_id, isAdmin, username: user.name },
-        company: { companyId: user?.company?.id, companyName: user?.company?.name }
+        company: { companyId: user.company_id, companyName: user?.company?.name }
     });
 };
 

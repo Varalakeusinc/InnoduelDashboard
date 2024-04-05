@@ -11,12 +11,12 @@ import { middleware } from "../utils/middleware";
 const router = Router();
 
 // Arenas
-router.get("/:companyId/arenas", middleware.requireAuth, getArenas);
-router.get("/:companyId/find_matching_arenas/:arenaId", middleware.requireAuth, findMatchingArenas);
-router.get("/:companyId/compare_win_rate/:arenaId1/:arenaId2", middleware.requireAuth, compareIdeasWinRate);
-router.get("/:companyId/compare", middleware.requireAuth, compareArenas);
-router.get("/:companyId/:id", middleware.requireAuth, getById);
-router.get("/:companyId/:arenaId/ideas", middleware.requireAuth, getIdeasOfArena);
-router.get("/:companyId/:arenaId/win_rate/trends", middleware.requireAuth, getArenaWinRateTrends);
+router.get("/:companyId/arenas", middleware.requireAuth, middleware.checkCompany, getArenas);
+router.get("/:companyId/find_matching_arenas/:arenaId", middleware.requireAuth, middleware.checkCompany, findMatchingArenas);
+router.get("/:companyId/compare_win_rate/:arenaId1/:arenaId2", middleware.requireAuth, middleware.checkCompany, compareIdeasWinRate);
+router.get("/:companyId/compare", middleware.requireAuth, middleware.checkCompany, compareArenas);
+router.get("/:companyId/:id", middleware.requireAuth, middleware.checkCompany, getById);
+router.get("/:companyId/:arenaId/ideas", middleware.requireAuth, middleware.checkCompany, getIdeasOfArena);
+router.get("/:companyId/:arenaId/win_rate/trends", middleware.requireAuth, middleware.checkCompany, getArenaWinRateTrends);
 
 export default router;

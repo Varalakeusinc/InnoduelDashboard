@@ -47,7 +47,7 @@ const requireAdmin = (request: Request, response: Response, next: NextFunction) 
   logger.info("requireAdmin: Checking is user admin.");
   const { cookies } = request;
   try {
-    const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean };
+    const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean, companyId: number };
     if (decodedToken?.isAdmin) {
       logger.info("requireAdmin: User is admin.");
       next();
@@ -62,10 +62,31 @@ const requireAdmin = (request: Request, response: Response, next: NextFunction) 
 
 }
 
+const checkCompany = (request: Request, response: Response, next: NextFunction) => {
+  logger.info("checkCompany: Checking user company.");
+  const { cookies } = request;
+  try {
+    const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean, companyId: number };
+    if (decodedToken?.isAdmin) {
+      next();
+    }
+    if (decodedToken?.companyId === Number(request.params.company_id)) {
+      next();
+    } else {
+      return response.status(401).send('Unauthorized');
+    }
+  } catch (error) {
+    logger.info("checkCompany: User unauthorized, not correct company!");
+    return response.status(401).send('Unauthorized');
+  }
+
+}
+
 export const middleware = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   requireAuth,
-  requireAdmin
+  requireAdmin,
+  checkCompany
 };

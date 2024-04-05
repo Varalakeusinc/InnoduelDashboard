@@ -8,9 +8,9 @@ import { middleware } from "../utils/middleware";
 const router = Router();
 
 // Votes
-router.get("/:company_id/all", middleware.requireAuth, getVotesByCompanyId);
-router.get("/:company_id/distribution", middleware.requireAuth, getVoteDistributionByCompanyId);
-router.get("/:company_id/:arena_id/distribution", middleware.requireAuth, getVoteDistributionByCompanyAndArena);
-router.get("/:company_id/:arena_ids/distribution/compare", middleware.requireAuth, getVoteDistributionCompare);
+router.get("/:company_id/all", middleware.requireAuth, middleware.checkCompany, getVotesByCompanyId);
+router.get("/:company_id/distribution", middleware.requireAuth, middleware.checkCompany, getVoteDistributionByCompanyId);
+router.get("/:company_id/:arena_id/distribution", middleware.requireAuth, middleware.checkCompany, getVoteDistributionByCompanyAndArena);
+router.get("/:company_id/:arena_ids/distribution/compare", middleware.requireAuth, middleware.checkCompany, getVoteDistributionCompare);
 
 export default router;
