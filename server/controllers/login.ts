@@ -1,4 +1,6 @@
 import { type Request, type Response } from "express";
+import prisma from "../utils/db";
+import jwt from "jsonwebtoken";
 
 export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -7,5 +9,34 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(400).json({ message: "Email and password are required" });
     }
 
-    res.status(200).json({ message: "Login successful" });
+    if (process.env.EMAIL !== email || process.env.PASSWORD !== password) {
+        return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const user = await prisma.user_info.findUnique({
+        where: {
+            id: 1
+        }
+    });
+
+    if (!user) {
+        return res.status(401).json({ message: "User not found" });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
+        expiresIn: '1h',
+    });
+
+    res.cookie('token', token, { 
+        httpOnly: true, 
+        sameSite: 'strict', 
+        maxAge: 60 * 60 * 1000 // 1h
+    });
+
+    res.status(201).json({ message: "Login successful" });
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: "Logout successful" });
 };

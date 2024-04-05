@@ -10,7 +10,6 @@ import yaml from "yamljs";
 import arenaRoutes from "./routes/arenas";
 import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
-import userRoutes from "./routes/users";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
 
@@ -39,9 +38,6 @@ app.use("/api/companies", companyRoutes);
 
 // Ideas
 app.use("/api/ideas", ideaRoutes);
-
-// Ideas
-app.use("/api/users", userRoutes);
 
 // Votes
 app.use("/api/votes", voteRoutes);
