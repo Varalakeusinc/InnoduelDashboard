@@ -12,13 +12,14 @@ import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
-
+import cookieParser from "cookie-parser";
 import { middleware } from "./utils/middleware";
 
 const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(middleware.requestLogger);
 
 app.use(

@@ -25,14 +25,12 @@ export const loginUser = async (req: Request, res: Response) => {
             name: true
         }
     });
-    console.log(user);
 
     if (!user) {
         return res.status(401).json({ message: "User not found" });
     }
 
     const isAdmin = user.user_role_link.some((role) => role.role_id === 3);
-    console.log(isAdmin);
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
         expiresIn: '1h',
     });
