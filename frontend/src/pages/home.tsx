@@ -10,10 +10,6 @@ import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
 import {
-	Notification,
-	NotificationType,
-} from "@/components/notification/Notification";
-import {
 	Tooltip,
 	Legend,
 	BarChart,
@@ -53,41 +49,6 @@ const HomePage = () => {
 		averageWinRate: 0,
 	});
 
-	// Delete (This is just a sample code)
-	const notifications = [
-		{
-			id: "1",
-			notificationType: NotificationType.Success,
-			title: "Success!",
-			description: "Operation completed successfully.",
-		},
-		{
-			id: "2",
-			notificationType: NotificationType.Error,
-			title: "Error!",
-			description: "Operation failed.",
-			actionText: "Retry",
-			onActionClick: () => {
-				console.log("Retry action clicked");
-			},
-		},
-		{
-			id: "3",
-			notificationType: NotificationType.Warning,
-			title: "Warning!",
-			description: "Operation failing...",
-			actionText: "Retry",
-			onActionClick: () => {
-				console.log("Retry action clicked");
-			},
-		},
-		{
-			id: "4",
-			notificationType: NotificationType.Info,
-			title: "Info!",
-			description: "Operation info...",
-		},
-	];
 	React.useEffect(() => {
 		arenaService
 			.getArenas(companyId)
@@ -209,7 +170,6 @@ const HomePage = () => {
 
 	return (
 		<>
-			<Notification notifications={notifications} />{" "}
 			{/* Consider moving or removing as per comment */}
 			<div
 				style={{
