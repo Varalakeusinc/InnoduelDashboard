@@ -70,7 +70,7 @@ const checkCompany = (request: Request, response: Response, next: NextFunction) 
     if (decodedToken?.isAdmin) {
       next();
     }
-    if (decodedToken?.companyId === Number(request.params.company_id)) {
+    if (decodedToken?.companyId === Number(request.params.companyId)) {
       next();
     } else {
       return response.status(401).send('Unauthorized');
