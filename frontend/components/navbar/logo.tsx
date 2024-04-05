@@ -17,23 +17,6 @@ export const Logo = () => {
 
 	const dispatch = useAppDispatch();
 
-	// This is deleted after log in is done but functionality remains
-	const defaultUser = React.useCallback(() => {
-		dispatch(
-			setUser({
-				userId: 123,
-				username: "Bob Smith",
-				email: "any@any.com",
-				isAdmin: false,
-			})
-		);
-		dispatch(setIsLoggedIn(true));
-	}, []);
-
-	React.useEffect(() => {
-		defaultUser();
-	}, []);
-
 	return (
 		<div className="flex items-center gap-x-4">
 			<Link to="/" className="hover:opacity-75 transition">

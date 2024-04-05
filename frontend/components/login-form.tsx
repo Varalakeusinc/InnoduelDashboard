@@ -4,7 +4,8 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authenticateUser } from "../src/services/login-auth";
+import { useAppDispatch } from "@/store/hooks";
+import { setIsLoggedIn, setUser } from "@/store/userSlice";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -14,27 +15,43 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
+	const dispatch = useAppDispatch();
+
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
 		setIsLoading(true);
 		setError(null);
 
-		try {
-			// Call for authenticateUser-function
-			const isAuthenticated = await authenticateUser(email, password);
+		// This should be fetched by actual authentication
+		dispatch(
+			setUser({
+				userId: 1,
+				username: "Bob Smith",
+				email: "any@any.com",
+				isAdmin: true,
+			})
+		);
+		dispatch(setIsLoggedIn(true));
 
-			if (isAuthenticated) {
-				console.log("Authentication success");
-				// Do something
-			} else {
-				setError("Sign in failed");
-			}
-		} catch (error) {
-			console.error("Error during authentication:", error);
-			setError("An error occurred during authentication.");
-		} finally {
-			setIsLoading(false);
-		}
+		// This navigates to homepage
+		window.location.href = "/";
+
+		// try {
+		// 	// Call for authenticateUser-function
+		// 	const isAuthenticated = await authenticateUser(email, password);
+
+		// 	if (isAuthenticated) {
+		// 		console.log("Authentication success");
+		// 		// Do something
+		// 	} else {
+		// 		setError("Sign in failed");
+		// 	}
+		// } catch (error) {
+		// 	console.error("Error during authentication:", error);
+		// 	setError("An error occurred during authentication.");
+		// } finally {
+		// 	setIsLoading(false);
+		// }
 	}
 
 	return (
