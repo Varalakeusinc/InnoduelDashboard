@@ -30,30 +30,36 @@ const requireAuth = (request: Request, response: Response, next: NextFunction) =
   const { cookies } = request;
   logger.info("Checking is user authorized.");
   if (!cookies || !cookies.token) {
-      logger.info("User unauthorized, no token provided!");
-      return response.status(401).send('Unauthorized');
+    logger.info("User unauthorized, no token provided!");
+    return response.status(401).send('Unauthorized');
   }
   try {
-      jwt.verify(cookies.token, process.env.JWT_SECRET as string);
-      logger.info("User authorized."); 
-      next();
+    jwt.verify(cookies.token, process.env.JWT_SECRET as string);
+    logger.info("User authorized.");
+    next();
   } catch (error) {
-      logger.info("User unauthorized, invalid cookie!");
-      response.status(401).send('Unauthorized');
+    logger.info("User unauthorized, invalid cookie!");
+    response.status(401).send('Unauthorized');
   }
 };
 
 const requireAdmin = (request: Request, response: Response, next: NextFunction) => {
   logger.info("requireAdmin: Checking is user admin.");
   const { cookies } = request;
-  const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean };
-  if (decodedToken?.isAdmin) {
+  try {
+    const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean };
+    if (decodedToken?.isAdmin) {
       logger.info("requireAdmin: User is admin.");
       next();
-  } else {
+    } else {
       logger.info("requireAdmin: User unauthorized, not an admin!");
       return response.status(401).send('Unauthorized');
+    }
+  } catch (error) {
+    logger.info("requireAdmin: User unauthorized, not an admin!");
+    return response.status(401).send('Unauthorized');
   }
+
 }
 
 export const middleware = {
