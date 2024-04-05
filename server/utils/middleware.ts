@@ -47,7 +47,7 @@ const requireAdmin = (request: Request, response: Response, next: NextFunction) 
   logger.info("requireAdmin: Checking is user admin.");
   const { cookies } = request;
   const decodedToken = jwt.verify(cookies.token, process.env.JWT_SECRET as string) as { userId: string, isAdmin: boolean };
-  if (decodedToken.isAdmin) {
+  if (decodedToken?.isAdmin) {
       logger.info("requireAdmin: User is admin.");
       next();
   } else {
