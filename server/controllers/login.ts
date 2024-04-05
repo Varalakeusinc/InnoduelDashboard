@@ -15,7 +15,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const user = await prisma.user_info.findUnique({
         where: {
-            id: 1
+            id: 3
         }
     });
 
