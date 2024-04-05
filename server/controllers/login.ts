@@ -22,7 +22,13 @@ export const loginUser = async (req: Request, res: Response) => {
             email: true,
             company_id: true,
             user_role_link: true,
-            name: true
+            name: true,
+            company: {
+                select: {
+                    name: true,
+                    id: true
+                }
+            }
         }
     });
 
@@ -31,7 +37,7 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     const isAdmin = user.user_role_link.some((role) => role.role_id === 3);
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ userId: user.id, isAdmin }, process.env.JWT_SECRET as string, {
         expiresIn: '1h',
     });
 
@@ -41,7 +47,11 @@ export const loginUser = async (req: Request, res: Response) => {
         maxAge: 60 * 60 * 1000 // 1h
     });
 
-    res.status(201).json({ message: "Login successful", user: { email: user.email, companyId: user.company_id, isAdmin, username: user.name } });
+    res.status(201).json({ 
+        message: "Login successful", 
+        user: { email: user.email, companyId: user.company_id, isAdmin, username: user.name },
+        company: { companyId: user?.company?.id, companyName: user?.company?.name }
+    });
 };
 
 export const logoutUser = async (req: Request, res: Response) => {
