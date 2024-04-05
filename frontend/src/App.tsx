@@ -11,7 +11,7 @@ import { selectUser } from "@/store/userSlice";
 const App = () => {
 	const user = useAppSelector(selectUser);
 
-	if (user && user.userId === -1) {
+	if (user && user.companyId === -1) {
 		return (
 			<>
 				<Routes>

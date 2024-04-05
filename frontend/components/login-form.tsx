@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/store/hooks";
 import { setIsLoggedIn, setUser } from "@/store/userSlice";
+import { authenticateUser } from "@/src/services/login-auth";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -22,36 +23,24 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 		setIsLoading(true);
 		setError(null);
 
-		// This should be fetched by actual authentication
-		dispatch(
-			setUser({
-				userId: 1,
-				username: "Bob Smith",
-				email: "any@any.com",
-				isAdmin: true,
-			})
-		);
-		dispatch(setIsLoggedIn(true));
+		try {
+			const isAuthenticated = await authenticateUser(email, password);
 
-		// This navigates to homepage
-		window.location.href = "/";
+			if (!isAuthenticated) {
+				throw Error();
+			}
 
-		// try {
-		// 	// Call for authenticateUser-function
-		// 	const isAuthenticated = await authenticateUser(email, password);
+			dispatch(setUser(isAuthenticated.user));
+			dispatch(setIsLoggedIn(true));
 
-		// 	if (isAuthenticated) {
-		// 		console.log("Authentication success");
-		// 		// Do something
-		// 	} else {
-		// 		setError("Sign in failed");
-		// 	}
-		// } catch (error) {
-		// 	console.error("Error during authentication:", error);
-		// 	setError("An error occurred during authentication.");
-		// } finally {
-		// 	setIsLoading(false);
-		// }
+			// This navigates to homepage
+			window.location.href = "/";
+		} catch (error) {
+			console.error("Error during authentication:", error);
+			setError("An error occurred during authentication.");
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
 	return (

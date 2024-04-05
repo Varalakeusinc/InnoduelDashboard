@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
-type User = {
-	userId: number;
+export type User = {
+	companyId: number;
 	username: string | "Admin";
 	email: string;
 	isAdmin: boolean;
@@ -17,7 +17,7 @@ type UserState = {
 
 const initialState: UserState = {
 	currentUser: {
-		userId: -1,
+		companyId: -1,
 		username: "",
 		email: "",
 		isAdmin: false,

@@ -1,0 +1,27 @@
+import { User } from "@/store/userSlice";
+import axios from "axios";
+
+export async function authenticateUser(
+	email: string,
+	password: string
+): Promise<{ message: string; user: User } | undefined> {
+	try {
+		const response = await axios.post("/auth/login", { email, password });
+
+		return response.data;
+	} catch (error) {
+		console.error("Error with login authentication:", error);
+		return;
+	}
+}
+
+export async function logOutUser(): Promise<boolean> {
+	try {
+		await axios.post("/auth/logout");
+
+		return true;
+	} catch (error) {
+		console.error("Error with logout:", error);
+		return false;
+	}
+}
