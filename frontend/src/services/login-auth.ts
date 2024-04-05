@@ -22,7 +22,7 @@ export async function authenticateUser(
 
 export async function logOutUser(): Promise<boolean> {
 	try {
-		await axios.post("/auth/logout");
+		await axios.post("/api/auth/logout");
 
 		return true;
 	} catch (error) {
