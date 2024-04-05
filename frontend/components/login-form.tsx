@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/store/hooks";
 import { setIsLoggedIn, setUser } from "@/store/userSlice";
 import { authenticateUser } from "@/src/services/login-auth";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -17,7 +18,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 	const [password, setPassword] = useState<string>("");
 
 	const dispatch = useAppDispatch();
-
+	const navigate = useNavigate();
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
 		setIsLoading(true);
@@ -34,7 +35,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 			dispatch(setIsLoggedIn(true));
 
 			// This navigates to homepage
-			window.location.href = "/";
+			navigate("/");
 		} catch (error) {
 			console.error("Error during authentication:", error);
 			setError("An error occurred during authentication.");

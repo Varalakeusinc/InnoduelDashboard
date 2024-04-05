@@ -28,6 +28,7 @@ const errorHandler = (error: Error, request: Request, response: Response, next: 
 
 const requireAuth = (request: Request, response: Response, next: NextFunction) => {
   const { cookies } = request;
+  console.log(cookies);
   logger.info("Checking is user authorized.");
   if (!cookies || !cookies.token) {
       logger.info("User unauthorized, no token provided!");

@@ -32,7 +32,7 @@ interface PrivateRoutesProps {
 const PrivateRoutes = ({ children }: PrivateRoutesProps) => {
     const user = useAppSelector(selectUser);
 
-    return user?.companyId === -1 ? <Layout>{children}</Layout> : <Navigate to="/login" />;
+    return user?.companyId === -1 ? <Navigate to="/login" /> : <Layout>{children}</Layout>;
 };
 
 export default App;
