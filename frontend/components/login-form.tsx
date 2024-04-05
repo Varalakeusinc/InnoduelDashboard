@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/store/hooks";
-import { setIsLoggedIn, setUser } from "@/store/userSlice";
+import { setCompany, setIsLoggedIn, setUser } from "@/store/userSlice";
 import { authenticateUser } from "@/src/services/login-auth";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +32,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 			}
 
 			dispatch(setUser(isAuthenticated.user));
+			dispatch(setCompany(isAuthenticated.company));
 			dispatch(setIsLoggedIn(true));
 
 			// This navigates to homepage
