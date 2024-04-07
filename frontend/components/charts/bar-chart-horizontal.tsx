@@ -12,7 +12,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 	React.useEffect(() => {
 		if (chartRef && chartRef.current) {
 			const sortedIdeas = [...ideas].sort(
-				(a, b) => b.vote_count - a.vote_count
+				(a, b) => b.vote.length - a.vote.length
 			); // Sort ideas by votes in descending order
 
 			const data = sortedIdeas.map(idea => idea.vote.length);
@@ -77,6 +77,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 							},
 						},
 						y: {
+							display: false, 
 							stacked: true,
 							grid: {
 								display: false,
