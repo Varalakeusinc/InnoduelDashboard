@@ -31,7 +31,6 @@ const Arenas = () => {
     // Calculate total number of pages
     const totalPages = Math.ceil(arenas.length / arenasPerPage);
 
-    // Calculate range of pages to display in pagination
     const getPageButtonClassName = (pageNumber: number) => {
         if (currentPage === pageNumber) {
             return "bg-cyan-300 hover:bg-cyan-400";
@@ -93,26 +92,27 @@ const Arenas = () => {
                     </button>
                 </div>
             )}
-            <div style={{ height: "20px" }} aria-hidden="true"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-10 gap-x-4 max-w-screen-xl">
-                {currentArenas.map(arena => (
-                    <Link
-                        key={arena.id}
-                        to={`/arena/${arena.id}`}
-                        className="block focus:outline-none"
-                        aria-label={`Navigate to ${arena.name}`}
-                    >
-                        <div className="p-4 bg-orange-300 rounded-lg hover:bg-orange-400 max-w-sm shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:ring-2 focus:ring-orange-500">
-                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 overflow-hidden whitespace-normal break-words">
-                                {arena.name}
-                            </h5>
-                            <p className="mb-3 font-normal text-gray-700 overflow-hidden whitespace-normal break-words">
-                                {!!arena.info_text && arena.info_text}
-                            </p>
-                        </div>
-                    </Link>
-                ))}
-            </div>
+            <div style={{ height: "35px" }} aria-hidden="true"></div>
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-10 gap-x-4 max-w-screen-xl mx-auto">
+					{currentArenas.map(arena => (
+						<Link
+							key={arena.id}
+							to={`/arena/${arena.id}`}
+							className="block focus:outline-none"
+							aria-label={`Navigate to ${arena.name}`}
+						>
+							<div className="p-4 bg-orange-300 rounded-lg hover:bg-orange-400 shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:ring-2 focus:ring-orange-500">
+								<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 overflow-hidden whitespace-normal break-words">
+									{arena.name}
+								</h5>
+								<p className="mb-3 font-normal text-gray-700 overflow-hidden whitespace-normal break-words">
+									{!!arena.info_text && arena.info_text}
+								</p>
+							</div>
+						</Link>
+					))}
+					<div style={{ marginBottom: "5px" }} aria-hidden="true"></div>
+				</div>
         </div>
     );
 };
