@@ -2,44 +2,53 @@ import * as React from "react";
 import { useParams } from "react-router-dom";
 import ChartBarHorizontal from "@/components/charts/bar-chart-horizontal";
 import { Arena, arenaService } from "../services/arena";
-import { Idea, ideaService } from "../services/ideas";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
-import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
+import { Notification, NotificationType } from "@/components/notification/Notification";
+import IdeaWinRateChart from "@/components/charts/idea-win-rate-chart";
 
 const ArenaPage = () => {
 	const { id } = useParams();
 	const companyId = useAppSelector(selectCompanyId);
+	const [notification, setNotification] = React.useState<{ id: string, notificationType: NotificationType; title: string; description: string; actionText: string; onActionClick: () => void; }[]>([]);
 
 	const [selectedArena, setSelectedArena] = React.useState<Arena | null>(
 		null
 	); // Initialize with null
-	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
-	const [voteAmount, setVoteAMount] = React.useState<number | null>(null);
 
 	React.useEffect(() => {
 		if (id) {
-			arenaService
-				.getArenaById(companyId, Number(id))
-				.then(setSelectedArena);
-
-			ideaService.getAllIdeas().then((ideas: Idea[]) => {
-				const currentArenaIdeas = ideas.filter(
-					x => x.arena_id === Number(id)
-				);
-
-				let votesForArena = 0;
-
-				currentArenaIdeas.forEach(x => {
-					votesForArena += x.vote.length;
-				});
-
-				setVoteAMount(votesForArena);
-
-				setIdeas(currentArenaIdeas);
-			});
+			fetchArenaDetails(id);
 		}
 	}, [id]); // Re-fetch data when the id parameter changes
+
+	const fetchArenaDetails = (arenaId: string) => {
+		arenaService
+			.getArenaById(companyId, Number(arenaId))
+			.then(data => {
+				setSelectedArena(data);
+				setNotification([]);
+			})
+			.catch(error => {
+				handleNotification(error);
+			});
+	};
+
+	const handleNotification = (errorMsg: string) => {
+		setNotification([{
+			id: new Date().getTime().toString(),
+			notificationType: NotificationType.Error,
+			title: 'Error!',
+			description: errorMsg || '',
+			actionText: 'Retry',
+			onActionClick: () => {
+				if (id) {
+					fetchArenaDetails(id);
+				}
+				setNotification([]);
+			}
+		}])
+	};
 
 	return (
 		<div className="mt-8">
@@ -48,14 +57,10 @@ const ArenaPage = () => {
 					<h1 className="text-3xl font-semibold mb-4">
 						{selectedArena.name}
 					</h1>
-					<div className="grid grid-cols-4 gap-4 mb-8">
+					<div className="grid grid-cols-2 gap-4 mb-8"> {/* change grid-cols according to component number */}
 						<div className="p-4 bg-violet-800 rounded-xl shadow-md flex flex-col items-center">
 							<span className="text-3xl font-bold text-white">
-								{voteAmount === null ? (
-									<LoadingIndicator />
-								) : (
-									voteAmount
-								)}
+								{selectedArena.total_votes}
 							</span>
 							<span className="text-white">Vote amount</span>
 						</div>
@@ -79,9 +84,11 @@ const ArenaPage = () => {
 							<span className="text-white">Win rate</span>
 						</div> */}
 					</div>
-					<ChartBarHorizontal ideas={[...ideas]} />
+					<ChartBarHorizontal ideas={selectedArena.ideas} />
+					<IdeaWinRateChart ideaData={selectedArena.ideas} />
 				</>
 			)}
+			{notification && <Notification notifications={notification} />}
 		</div>
 	);
 };

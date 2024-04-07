@@ -57,10 +57,10 @@ paths:
   /api/users:
     get:
       tags:
-        - Not to be used in production
+        - Only to be used for admin role
       summary: Returns all users
       description: >
-        Retrieves a list of all users in the system. **This API endpoint should not be used in production versions due to data security concerns and the extensive nature of the information returned.**
+        **This API endpoint should be used cautiously due to data security concerns and the extensive nature of the information returned.** Retrieves a list of all users in the system. 
       operationId: getUsers
       responses:
         '200':
@@ -87,10 +87,10 @@ paths:
   /api/companies:
     get:
       tags:
-        - Not to be used in production
+        - Only to be used for admin role
       summary: Fetches all companies
       description: >
-        **This API should not be used in the production version due to the requirement and data security concern.** Retrieves a list of all companies, including sensitive information such as billing addresses and stripe customer IDs. Use with caution and ensure proper security measures are in place.
+        **This API should be used cautiously in the production version due to the requirement and data security concern.** Retrieves a list of all companies, including sensitive information such as billing addresses and stripe customer IDs. Use with caution and ensure proper security measures are in place.
       operationId: getCompanies
       responses:
         '200':
@@ -117,10 +117,10 @@ paths:
   /api/ideas:
     get:
       tags:
-        - Not to be used in production
+        - Only to be used for admin role
       summary: Fetches all ideas
       description: >
-        **This API should not be used in the production version due to the requirement and data security concern.** Retrieves a comprehensive list of ideas, including details on creation, status (active or deleted), win rate, and associated user and arena information. Use with caution and ensure proper security measures are in place.
+        **This API should be used cautiously in the production version due to the requirement and data security concern.** Retrieves a comprehensive list of ideas, including details on creation, status (active or deleted), win rate, and associated user and arena information. Use with caution and ensure proper security measures are in place.
       operationId: getIdeas
       responses:
         '200':
@@ -314,6 +314,113 @@ paths:
                 message:
                   type: string
                   example: Arena not found
+
+  /api/arenas/{company_id}/find_matching_arenas/{arenaId}:
+    get:
+      tags:
+        - Arenas
+      summary: Find Matching Arenas
+      description: |
+        Finds arenas within the same company that have identical sets of ideas to the target arena. 
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company.
+        - in: path
+          name: arenaId
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the target arena to compare against other arenas in the same company.
+      responses:
+        200:
+          description: A list of arenas matching the target arena's set of ideas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    arena_id:
+                      type: integer
+                      description: The unique identifier of the matching arena.
+                    arena_name:
+                      type: string
+                      description: The name of the matching arena.
+        404:
+          description: Target arena not found or no matching arenas found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Target arena not found
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/arenas/{company_id}/compare_win_rate/{arenaId1}/{arenaId2}:
+    get:
+      tags:
+        - Arenas
+      summary: Compare Ideas Win Rate
+      description: Compares the win rates of same ideas between two arenas belonging to the same company.
+      operationId: compareIdeasWinRate
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the company.
+        - in: path
+          name: arenaId1
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the first arena.
+        - in: path
+          name: arenaId2
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the second arena.
+      responses:
+        200:
+          description: A list of ideas present in both arenas with their corresponding scaled win rates.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdeaComparison'
+        400:
+          description: Invalid input data. Either company ID or arena IDs are not valid integers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: One or both arenas not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: An error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /api/votes/{company_id}/all:
     get:
@@ -754,4 +861,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Vote'
+      
+    IdeaComparison:
+      type: object
+      properties:
+        idea_text:
+          type: string
+          description: The text of the idea being compared.
+        arena1_winRate:
+          type: number
+          format: float
+          description: The scaled win rate of the idea in the first arena.
+        arena2_winRate:
+          type: number
+          format: float
+          description: The scaled win rate of the idea in the second arena.
+      required:
+        - idea_text
+        - arena1_winRate
+        - arena2_winRate
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message detailing the error.
 

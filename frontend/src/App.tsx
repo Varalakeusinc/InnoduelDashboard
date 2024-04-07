@@ -5,14 +5,11 @@ import LoginPage from "./pages/login";
 import Arenas from "./pages/Arenas";
 import ArenaPage from "./pages/Arena";
 import Compare from "./pages/Compare";
-import { useTranslation } from "react-i18next";
 
-function App() {
-	const { t } = useTranslation();
+const App = () => {
 	return (
 		<>
 			<Layout>
-				{t("test")}
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/compare" element={<Compare />} />
@@ -25,6 +22,6 @@ function App() {
 			</Layout>
 		</>
 	);
-}
+};
 
 export default App;

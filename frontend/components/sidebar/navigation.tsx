@@ -10,16 +10,19 @@ export const Navigation = () => {
 			label: "Home",
 			href: `/`,
 			icon: Home,
+			dataTestId: "navigation-home",
 		},
 		{
 			label: "Arenas",
 			href: `/arenas`,
 			icon: AreaChartIcon,
+			dataTestId: "navigation-arenas",
 		},
 		{
 			label: "Compare",
 			href: `/compare`,
 			icon: AreaChartIcon,
+			dataTestId: "navigation-compare",
 		},
 	];
 
@@ -35,13 +38,15 @@ export const Navigation = () => {
 	return (
 		<ul className="space-y-2 px-2 pt-4 lg:pt-0">
 			{routes.map(route => (
-				<NavItem
-					key={route.href}
-					label={route.label}
-					icon={route.icon}
-					href={route.href}
-					isActive={false}
-				/>
+				<div data-test-id={route.dataTestId}>
+					<NavItem
+						key={route.href}
+						label={route.label}
+						icon={route.icon}
+						href={route.href}
+						isActive={false}
+					/>
+				</div>
 			))}
 		</ul>
 	);
