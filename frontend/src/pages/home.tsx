@@ -88,7 +88,7 @@ const HomePage = () => {
 		companyService.getAllCompanies().then(setCompanies);
 
 		// All ideas
-		ideaService.getAllIdeas().then(setIdeas);
+		ideaService.getCompanyIdeas(companyId).then(setIdeas);
 
 		// All votes
 		voteService.getAllVotes(companyId).then(setVotes);

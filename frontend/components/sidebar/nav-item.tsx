@@ -28,7 +28,7 @@ export const NavItem = ({
       className={cn(
         "w-full h-12",
         collapsed ? "justify-center" : "justify-start",
-        isActive && "bg-accent"
+        isActive ? "bg-[#f60] text-white" : ""
       )}
     >
       <Link to={href}>

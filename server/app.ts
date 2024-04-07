@@ -10,16 +10,19 @@ import yaml from "yamljs";
 import arenaRoutes from "./routes/arenas";
 import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
-import userRoutes from "./routes/users";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
-
+import cookieParser from "cookie-parser";
 import { middleware } from "./utils/middleware";
 
 const app: Application = express();
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:5173",
+}));
 app.use(express.json());
+app.use(cookieParser());
 app.use(middleware.requestLogger);
 
 app.use(
@@ -39,9 +42,6 @@ app.use("/api/companies", companyRoutes);
 
 // Ideas
 app.use("/api/ideas", ideaRoutes);
-
-// Ideas
-app.use("/api/users", userRoutes);
 
 // Votes
 app.use("/api/votes", voteRoutes);
