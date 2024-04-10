@@ -103,7 +103,7 @@ const HomePage = () => {
 	const formatDateLabel = (date: any) => {
 		switch (mode) {
 			case "week":
-				return `Week ${getWeek(date)}-${date.getFullYear()}`;
+				return `W ${getWeek(date)}-${date.getFullYear()}`;
 			case "month":
 				return `${date.getMonth() + 1}-${date.getFullYear()}`;
 			case "year":
@@ -168,129 +168,153 @@ const HomePage = () => {
 		return sortedData.map(({ name, Ideas }) => ({ name, Ideas }));
 	}, [ideas, startDate, endDate, mode]);
 
-	return (
-		<>
-			{/* Consider moving or removing as per comment */}
-			<div
-				style={{
-					width: "100%",
-					height: "100px",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-around",
-					borderRadius: "20px",
-					backgroundColor: "#ADD8E6",
-				}}
-			>
-				<div>
-					Total Arenas:{" "}
-					{summary.totalArenas === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.totalArenas
-					)}
-				</div>
-				<div>
-					Total Ideas:{" "}
-					{summary.totalIdeas === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.totalIdeas
-					)}
-				</div>
-				<div>
-					Total Votes:{" "}
-					{summary.totalVotes === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.totalVotes
-					)}
-				</div>
-				<div>
-					Average Win Rate:{" "}
-					{summary.averageWinRate === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.averageWinRate
-					)}
-					%
-				</div>
-			</div>
-			<div className="flex flex-col space-y-4 mt-4">
-				<div className="flex space-x-4 w-1/2">
-					<ReactDatePicker
-						selected={startDate}
-						onChange={(date: any) => setStartDate(date)}
-						selectsStart
-						startDate={startDate}
-						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<ReactDatePicker
-						selected={endDate}
-						onChange={(date: any) => setEndDate(date)}
-						selectsEnd
-						endDate={endDate}
-						minDate={startDate}
-						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<Select onValueChange={setMode} value={mode}>
-						<SelectTrigger aria-label="Mode">
-							<SelectValue placeholder="Select mode" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="week">Week</SelectItem>
-							<SelectItem value="month">Month</SelectItem>
-							<SelectItem value="year">Year</SelectItem>
-						</SelectContent>
-					</Select>
-				</div>
-			</div>
-			{/* Chart Section */}
-			<div className="flex justify-center space-x-8">
-				{arenas.length === 0 ? (
-					<LoadingIndicator />
-				) : (
-					<>
-						{/* Ideas Bar Chart */}
-						<div>
-							<h2>Ideas Distribution</h2>
-							<BarChart
-								width={750}
-								height={500}
-								data={aggregatedData}
-								margin={{
-									top: 5,
-									right: 30,
-									left: 20,
-									bottom: 5,
-								}}
-							>
-								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="name" />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Bar dataKey="Ideas" fill="#8884d8" />
-							</BarChart>
-						</div>
+	const customFormatter = (value: any) => {
+		const maxLength = 7; 
+		return value.length > maxLength ? `${value.substring(0, maxLength)}...` : value;
+	  };
 
-						{/* Votes Bar Chart */}
-						<div>
-							<h2>Votes per Arena</h2>
-							<BarChart width={750} height={500} data={barData}>
-								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="name" />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Bar dataKey="votes" fill="#82ca9d" />
-							</BarChart>
-						</div>
-					</>
-				)}
+	return (
+		<div className="homepage-container"
+		style={{
+			color: "#333",
+			height: "100%",
+			backgroundColor: "#f5f5f5",
+			borderRadius: "10px"
+		}}>
+		  <div
+			style={{
+				width: "100%",
+				height: "100px",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "space-around",
+				fontWeight: "bold",
+				color: "white"
+			}}
+		  >
+			<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
+			  Total Arenas:{" "}
+			  {summary.totalArenas === 0 ? (
+				<LoadingIndicator />
+			  ) : (
+				summary.totalArenas
+			  )}
 			</div>
-		</>
-	);
+			<div className="p-7 w-1/4 mx-5 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
+			  Total Ideas:{" "}
+			  {summary.totalIdeas === 0 ? (
+				<LoadingIndicator />
+			  ) : (
+				summary.totalIdeas
+			  )}
+			</div>
+			<div className="p-7 w-1/4 mx-5 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
+			  Total Votes:{" "}
+			  {summary.totalVotes === 0 ? (
+				<LoadingIndicator />
+			  ) : (
+				summary.totalVotes
+			  )}
+			</div>
+			<div className="p-7 w-1/4 mx-5 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
+			  Average Win Rate:{" "}
+			  {summary.averageWinRate === 0 ? (
+				<LoadingIndicator />
+			  ) : (
+				`${summary.averageWinRate}%`
+			  )}
+			</div>
+		  </div>
+	  
+		  <div className="flex space-x-4 w-1/3 my-5">
+			<ReactDatePicker
+			  selected={startDate}
+			  onChange={(date: any) => setStartDate(date)}
+			  selectsStart
+			  startDate={startDate}
+			  endDate={endDate}
+			  className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+			/>
+			<ReactDatePicker
+			  selected={endDate}
+			  onChange={(date: any) => setEndDate(date)}
+			  selectsEnd
+			  startDate={startDate}
+			  endDate={endDate}
+			  minDate={startDate}
+			  className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+			/>
+			<Select onValueChange={setMode} value={mode}>
+				<SelectTrigger aria-label="Mode">
+					<SelectValue placeholder="Select mode" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectItem value="week">Week</SelectItem>
+					<SelectItem value="month">Month</SelectItem>
+					<SelectItem value="year">Year</SelectItem>
+				</SelectContent>
+			</Select>
+		  </div>
+	  
+		  <div className="chart-container"
+		   style={{
+				display: "flex",
+				justifyContent: "space-around",
+				flexWrap: "wrap",
+				padding: "20px"
+			}}>
+			{arenas.length === 0 ? (
+			  <LoadingIndicator />
+			) : (
+			  <>
+				<div 
+				 style={{
+					backgroundColor: "#fff",
+					borderRadius: "10px",
+					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+				}}>
+				  <h2 className="mx-10 my-5 p-2 font-semibold">Ideas Distribution</h2>
+				  <BarChart
+					width={750}
+					height={500}
+					data={aggregatedData}
+					margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+				  >
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis dataKey="name" tickFormatter={(value) => customFormatter(value)} />
+					<YAxis />
+					<Tooltip />
+					<Legend />
+					<Bar dataKey="Ideas" fill="#8884d8" />
+				  </BarChart>
+				</div>
+	  
+				<div style={{
+					backgroundColor: "#fff",
+					borderRadius: "10px",
+					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+				}}>
+				  <h2 className="mx-10 my-5 p-2 font-semibold">Votes per Arena</h2>
+				  <BarChart
+					width={750}
+					height={500}
+					data={barData}
+					margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+				  >
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis dataKey="name" tickFormatter={(value) => customFormatter(value)} />
+					<YAxis />
+					<Tooltip />
+					<Legend />
+					<Bar dataKey="votes" fill="#82ca9d" />
+				  </BarChart>
+				</div>
+			  </>
+			)}
+		  </div>
+		</div>
+	  );
+	  
 };
 
 export default HomePage;
