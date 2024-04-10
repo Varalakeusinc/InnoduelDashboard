@@ -62,6 +62,10 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
                                     return "";
                                 },
                             },
+                            padding: 18,
+                            bodyFont: {
+                                size: 18,
+                            },
                         },
                     },
                     scales: {

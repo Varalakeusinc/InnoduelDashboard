@@ -65,26 +65,26 @@ const ArenaPage = () => {
                         {selectedArena.name}
                     </h1>
                     <div className="grid grid-cols-2 gap-4 mb-8"> {/* change grid-cols according to component number */}
-                        <div className="p-4 bg-violet-800 rounded-xl shadow-md flex flex-col items-center">
+                        <div className="p-4 bg-violet-600 rounded-xl shadow-md flex flex-col items-center">
                             <span className="text-3xl font-bold text-white">
                                 {selectedArena.total_votes}
                             </span>
                             <span className="text-white">Vote amount</span>
                         </div>
-                        <div className="p-4 bg-fuchsia-800 rounded-xl shadow-md flex flex-col items-center">
+                        <div className="p-4 bg-fuchsia-600 rounded-xl shadow-md flex flex-col items-center">
                             <span className="text-3xl font-bold text-white">
                                 {selectedArena.total_ideas}
                             </span>
                             <span className="text-white">Idea amount</span>
                         </div>
                         {/* Uncomment when data is correct */}
-                        {/* <div className="p-4 bg-purple-800 rounded-xl shadow-md flex flex-col items-center">
+                        {/* <div className="p-4 bg-purple-600 rounded-xl shadow-md flex flex-col items-center">
                             <span className="text-3xl font-bold text-white">
                                 {}
                             </span>
                             <span className="text-white">Voter amount</span>
                         </div> */}
-                        {/* <div className="p-4 bg-pink-800 rounded-xl shadow-md flex flex-col items-center">
+                        {/* <div className="p-4 bg-pink-600 rounded-xl shadow-md flex flex-col items-center">
                             <span className="text-3xl font-bold text-white">
                                 {selectedArena.overall_win_rate}
                             </span>
