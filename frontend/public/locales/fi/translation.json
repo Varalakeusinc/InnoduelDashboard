@@ -1,5 +1,35 @@
 {
-    "test": "Test (Suomi)",
     "finnish": "Suomi",
-    "english": "Englanti"
+    "english": "Englanti",
+
+    "home": "Koti",
+    "arenas": "Areenat",
+    "compare": "Vertaile",
+
+    "total_arenas": "Kaikki areenat",
+    "total_ideas": "Kaikki ideat",
+    "total_votes": "Kaikki äänet",
+    "avg_winrate": "Keskimääräinen voittoprosentti",
+    "ideas_distribution": "Ideoiden jakautuminen",
+    "votes_per_arena": "Ääniä per areena",
+    "Ideas": "ideat",
+
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "year": "Vuosi",
+
+    "not_found": "Ei löydetty",
+
+    "select_company": "Valitse yritys",
+    "profile": "Profiili",
+    "settings": "Asetukset",
+    "log_out": "Kirjaudu ulos",
+
+
+    "vote_amount": "Äänien määrä",
+    "idea_amount": "Ideoiden määrä",
+    "votes_by_idea": "Ideoiden äänimäärä",
+
+    "votes": "Äänet",
+    "ideas": "Ideat"
 }

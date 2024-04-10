@@ -25,7 +25,6 @@ export const Logo = () => {
 			</Link>
 			<div className={cn("hidden lg:block")}>
 				<p className="text-lg font-semibold">Innoduel Dashboard</p>
-				<p className="text-xs text-muted-foreground">Motto</p>
 				<p>
 					{isLoggedIn ? currentUser?.username : "Not logged in"}{" "}
 					{currentUser?.email} / {currentCompanyName}

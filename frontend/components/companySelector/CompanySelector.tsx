@@ -3,8 +3,10 @@ import { useAppDispatch } from "@/store/hooks";
 import { setCompany } from "@/store/userSlice";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Company, companyService } from "@/src/services/companies";
+import { useTranslation } from 'react-i18next';
 
 const CompanySelector = () => {
+	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
 		[]
@@ -30,7 +32,7 @@ const CompanySelector = () => {
 					aria-label="Customise options"
 					style={{ width: "100%" }}
 				>
-					Select company
+					{t("select_company")}
 				</button>
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Portal>
