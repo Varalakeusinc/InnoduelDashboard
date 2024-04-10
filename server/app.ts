@@ -12,7 +12,8 @@ import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
-import cookieParser from "cookie-parser"; import exportRoutes from "./routes/exports";
+import cookieParser from "cookie-parser";
+import exportRoutes from "./routes/exports";
 
 import { middleware } from "./utils/middleware";
 
