@@ -12,14 +12,15 @@ import companyRoutes from "./routes/companies";
 import ideaRoutes from "./routes/ideas";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
-import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser"; import exportRoutes from "./routes/exports";
+
 import { middleware } from "./utils/middleware";
 
 const app: Application = express();
 
 app.use(cors({
-  credentials: true,
-  origin: "http://localhost:5173",
+    credentials: true,
+    origin: "http://localhost:5173",
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -48,6 +49,9 @@ app.use("/api/votes", voteRoutes);
 
 // Auth
 app.use("/api/auth", authRoutes);
+
+// Export
+app.use("/api/exports", exportRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
