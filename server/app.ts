@@ -13,7 +13,7 @@ import ideaRoutes from "./routes/ideas";
 import voteRoutes from "./routes/votes";
 import authRoutes from "./routes/auth";
 import cookieParser from "cookie-parser";
-import exportRoutes from "./routes/exports";
+import exportRoutes from "./routes/reports";
 
 import { middleware } from "./utils/middleware";
 
@@ -52,7 +52,7 @@ app.use("/api/votes", voteRoutes);
 app.use("/api/auth", authRoutes);
 
 // Export
-app.use("/api/exports", exportRoutes);
+app.use("/api/reports", exportRoutes);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

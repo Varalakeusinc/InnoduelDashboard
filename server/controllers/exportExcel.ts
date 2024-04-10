@@ -36,11 +36,11 @@ export const exportExcel = async (req: Request, res: Response) => {
         const sheet = workbook.addWorksheet('Arenas');
 
         sheet.columns = [
-            { header: 'Arena Name', key: 'name', width: 20 },
-            { header: 'Info Text', key: 'info_text', width: 40 },
-            { header: 'Idea Text', key: 'idea_text', width: 30 },
-            { header: 'Win Rate', key: 'win_rate', width: 20 },
-            { header: 'Vote Count', key: 'vote_count', width: 20 },
+            { header: 'Arena Name', key: 'name', width: 40 },
+            { header: 'Info Text', key: 'info_text', width: 60 },
+            { header: 'Idea Text', key: 'idea_text', width: 60 },
+            { header: 'Win Rate', key: 'win_rate', width: 10 },
+            { header: 'Vote Count', key: 'vote_count', width: 10 },
         ];
 
         arenas.forEach(arena => {
@@ -58,7 +58,7 @@ export const exportExcel = async (req: Request, res: Response) => {
         });
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="export.xlsx"`);
+        res.setHeader('Content-Disposition', `attachment; filename="report.xlsx"`);
 
         await workbook.xlsx.write(res);
         res.status(200).end();

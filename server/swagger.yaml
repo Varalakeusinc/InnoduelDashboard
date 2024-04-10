@@ -54,11 +54,11 @@ paths:
                     type: string
                     example: Email and password are required
 
-  /api/exports/{company_id}/excel:
+  /api/reports/{company_id}/excel:
     get:
       tags:
         - Exports
-      summary: Export Company information to Excel
+      summary: Export Company information as report to Excel
       description: Exports detailed information about arenas associated with a specific company ID to an Excel file.
       parameters:
         - in: path
@@ -80,7 +80,7 @@ paths:
             Content-Disposition:
               schema:
                 type: string
-                example: attachment; filename="export.xlsx"
+                example: attachment; filename="report.xlsx"
         404:
           description: No arenas found for the specified company ID.
           content:
