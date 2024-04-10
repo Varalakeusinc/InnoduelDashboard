@@ -4,7 +4,10 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authenticateUser } from "../src/services/login-auth";
+import { useAppDispatch } from "@/store/hooks";
+import { setCompany, setUser } from "@/store/userSlice";
+import { authenticateUser } from "@/src/services/login-auth";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -14,21 +17,25 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault();
 		setIsLoading(true);
 		setError(null);
 
 		try {
-			// Call for authenticateUser-function
 			const isAuthenticated = await authenticateUser(email, password);
 
-			if (isAuthenticated) {
-				console.log("Authentication success");
-				// Do something
-			} else {
-				setError("Sign in failed");
+			if (!isAuthenticated) {
+				throw Error();
 			}
+
+			dispatch(setUser(isAuthenticated.user));
+			dispatch(setCompany(isAuthenticated.company));
+
+			// This navigates to homepage
+			navigate("/");
 		} catch (error) {
 			console.error("Error during authentication:", error);
 			setError("An error occurred during authentication.");

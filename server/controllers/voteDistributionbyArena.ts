@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import prisma from '../utils/db';
 
 export const getVoteDistributionByCompanyAndArena = async (req: Request, res: Response) => {
-  const { company_id: companyId, arena_id: arenaId } = req.params;
+  const { companyId, arena_id: arenaId } = req.params;
 
   try {
     const ideas = await prisma.idea.findMany({

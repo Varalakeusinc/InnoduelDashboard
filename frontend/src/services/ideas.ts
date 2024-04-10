@@ -24,13 +24,15 @@ export type Idea = {
 	vote_count: number;
 };
 
-async function getAllIdeas(): Promise<Idea[]> {
+async function getCompanyIdeas(companyId: number): Promise<Idea[]> {
 	try {
-		const response: AxiosResponse = await axios.get("/api/ideas");
+		const response: AxiosResponse = await axios.get(
+			`/api/ideas/${companyId}/all`
+		);
 		return response.data;
 	} catch (error) {
 		throw error;
 	}
 }
 
-export const ideaService = { getAllIdeas };
+export const ideaService = { getCompanyIdeas };

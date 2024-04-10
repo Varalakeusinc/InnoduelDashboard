@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import prisma from '../utils/db';
 
 export const getVoteDistributionCompare = async (req: Request, res: Response) => {
-  const { company_id: companyId } = req.params;
+  const { companyId } = req.params;
   const { arena_ids: arenaIdsAll } = req.query;
 
   let arenaIds: number[] = [];

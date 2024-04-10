@@ -9,16 +9,34 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppSelector } from "@/store/hooks";
-import { selectIsLoggedIn, selectUser } from "@/store/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectIsLoggedIn, selectUser, setUser } from "@/store/userSlice";
 import CompanySelector from "../companySelector/CompanySelector";
 import LanguageSwitcher from "../language-switcher";
 import { useTranslation } from 'react-i18next';
+import { logOutUser } from "@/src/services/login-auth";
 
 export function UserNav() {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	const currentUser = useAppSelector(selectUser);
 	const { t } = useTranslation();
+
+	const dispatch = useAppDispatch();
+
+	const logOut = () => {
+		logOutUser().then((success: boolean) => {
+			if (success) {
+				dispatch(
+					setUser({
+						email: "",
+						isAdmin: false,
+						companyId: -1,
+						username: "",
+					})
+				);
+			}
+		});
+	};
 
 	return (
 		<DropdownMenu>
@@ -108,7 +126,9 @@ export function UserNav() {
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem>Log out</DropdownMenuItem>
+					<DropdownMenuItem onClick={logOut}>
+						Log out
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</div>
