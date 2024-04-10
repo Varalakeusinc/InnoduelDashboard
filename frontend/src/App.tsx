@@ -5,10 +5,8 @@ import LoginPage from "./pages/login";
 import Arenas from "./pages/Arenas";
 import ArenaPage from "./pages/Arena";
 import Compare from "./pages/Compare";
-import { useTranslation } from "react-i18next";
 
-function App() {
-	const { t } = useTranslation();
+const App = () => {
 	return (
 		<>
 			<Layout>
@@ -24,6 +22,6 @@ function App() {
 			</Layout>
 		</>
 	);
-}
+};
 
 export default App;

@@ -36,6 +36,7 @@ export const getById = async (req: Request, res: Response) => {
 
     let totalWinRate = 0;
     let ideasCounted = 0;
+    let totalArenaVotes = 0;
     const totalIdeas = arena.idea.length;
 
     arena.idea.forEach(idea => {
@@ -51,9 +52,17 @@ export const getById = async (req: Request, res: Response) => {
           ideasCounted++;
         }
       }
+      totalArenaVotes += idea.vote.length;
     });
 
     const overallWinRate = ideasCounted > 0 ? (totalWinRate / ideasCounted) : 0;
+
+    const ideaList = arena.idea.map(idea => ({
+      id: idea.id,
+      idea_text: idea.idea_text,
+      win_rate: idea.win_rate !== null ? idea.win_rate : 0,
+      vote_count: idea.vote.length,
+    }));
 
     const arenaWithDetails = {
       id: arena.id,
@@ -61,6 +70,8 @@ export const getById = async (req: Request, res: Response) => {
       info_text: arena.info_text,
       total_ideas: totalIdeas,
       overall_win_rate: overallWinRate.toFixed(2) + '%',
+      total_votes: totalArenaVotes,
+      ideas: ideaList,
     };
 
     res.status(200).json(arenaWithDetails);
