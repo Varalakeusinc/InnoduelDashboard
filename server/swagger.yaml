@@ -54,6 +54,54 @@ paths:
                     type: string
                     example: Email and password are required
 
+  /api/exports/{company_id}/excel:
+    get:
+      tags:
+        - Exports
+      summary: Export Company information to Excel
+      description: Exports detailed information about arenas associated with a specific company ID to an Excel file.
+      parameters:
+        - in: path
+          name: company_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the company to fetch arenas for.
+      responses:
+        200:
+          description: Successfully generated and returned the Excel file containing arenas data.
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+              example: <binary data>
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: attachment; filename="export.xlsx"
+        404:
+          description: No arenas found for the specified company ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No arenas found
+        500:
+          description: Internal server error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Something went wrong
+
   /api/companies:
     get:
       tags:
