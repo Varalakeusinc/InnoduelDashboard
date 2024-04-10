@@ -1,12 +1,9 @@
-import * as React from "react";
 import { cn } from "@/lib/utils";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import {
 	selectCompanyName,
 	selectIsLoggedIn,
 	selectUser,
-	setIsLoggedIn,
-	setUser,
 } from "@/store/userSlice";
 import { Link } from "react-router-dom";
 
@@ -14,25 +11,6 @@ export const Logo = () => {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	const currentUser = useAppSelector(selectUser);
 	const currentCompanyName = useAppSelector(selectCompanyName);
-
-	const dispatch = useAppDispatch();
-
-	// This is deleted after log in is done but functionality remains
-	const defaultUser = React.useCallback(() => {
-		dispatch(
-			setUser({
-				userId: 123,
-				username: "Bob Smith",
-				email: "any@any.com",
-				isAdmin: false,
-			})
-		);
-		dispatch(setIsLoggedIn(true));
-	}, []);
-
-	React.useEffect(() => {
-		defaultUser();
-	}, []);
 
 	return (
 		<div className="flex items-center gap-x-4">

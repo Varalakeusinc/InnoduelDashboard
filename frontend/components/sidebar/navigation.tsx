@@ -26,6 +26,8 @@ export const Navigation = () => {
 		},
 	];
 
+	const isActive = (path : string) => window.location.pathname === path;
+
 	if (!user?.username)
 		return (
 			<ul className="space-y-2">
@@ -37,14 +39,13 @@ export const Navigation = () => {
 
 	return (
 		<ul className="space-y-2 px-2 pt-4 lg:pt-0">
-			{routes.map(route => (
-				<div data-test-id={route.dataTestId}>
+			{routes.map((route) => (
+				<div key={route.href} data-test-id={route.dataTestId}>
 					<NavItem
-						key={route.href}
 						label={route.label}
 						icon={route.icon}
 						href={route.href}
-						isActive={false}
+						isActive={isActive(route.href)}
 					/>
 				</div>
 			))}

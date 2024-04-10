@@ -2,8 +2,15 @@ import { type Request, type Response } from "express";
 import prisma from "../utils/db";
 
 export const getIdeas = async (req: Request, res: Response) => {
+	const { companyId } = req.params;
+
 	try {
 		const ideas = await prisma.idea.findMany({
+			where: {
+				arena: {
+					company_id: parseInt(companyId),
+				},
+			},
 			select: {
 				id: true,
 				idea_text: true,
