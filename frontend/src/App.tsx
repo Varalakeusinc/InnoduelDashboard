@@ -18,7 +18,7 @@ const App = () => {
 				<Route path="/arena/:id" element={<PrivateRoutes><ArenaPage /></PrivateRoutes>} />
 				<Route path="/login" element={<LoginPage />} />
 				{/* Add not found component later */}
-				<Route path="*" element={<PrivateRoutes><h1>Not found</h1></PrivateRoutes>}
+				<Route path="*" element={<PrivateRoutes><h1>{t("not_found")}</h1></PrivateRoutes>}
 				/>
 			</Routes>
         </>

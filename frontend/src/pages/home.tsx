@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from 'react-i18next';
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { arenaService, Arena } from "../services/arena";
@@ -29,6 +30,8 @@ import {
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
+
+	const { t } = useTranslation();
 
 	const [arenas, setArenas] = React.useState<Arena[]>([]);
 	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
@@ -193,7 +196,7 @@ const HomePage = () => {
 			}}
 		  >
 			<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
-			  Total Arenas:{" "}
+			  {t('total_arenas')}:{" "}
 			  {summary.totalArenas === 0 ? (
 				<LoadingIndicator />
 			  ) : (
@@ -201,7 +204,7 @@ const HomePage = () => {
 			  )}
 			</div>
 			<div className="p-7 w-1/4 mx-5 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
-			  Total Ideas:{" "}
+			  {t('total_ideas')}:{" "}
 			  {summary.totalIdeas === 0 ? (
 				<LoadingIndicator />
 			  ) : (
@@ -209,7 +212,7 @@ const HomePage = () => {
 			  )}
 			</div>
 			<div className="p-7 w-1/4 mx-5 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
-			  Total Votes:{" "}
+			  {t('total_votes')}:{" "}
 			  {summary.totalVotes === 0 ? (
 				<LoadingIndicator />
 			  ) : (
@@ -217,7 +220,7 @@ const HomePage = () => {
 			  )}
 			</div>
 			<div className="p-7 w-1/4 mx-5 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
-			  Average Win Rate:{" "}
+			  {t('avg_winrate')}:{" "}
 			  {summary.averageWinRate === 0 ? (
 				<LoadingIndicator />
 			  ) : (

@@ -1,6 +1,7 @@
 import * as React from "react";
 import Chart from "chart.js/auto";
 import { Idea } from "@/src/services/ideas";
+import { useTranslation } from 'react-i18next';
 
 type ChartBarHorizontalProps = {
 	ideas: Idea[];
@@ -8,6 +9,7 @@ type ChartBarHorizontalProps = {
 
 const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 	const chartRef = React.useRef<HTMLCanvasElement>(null);
+	const { t } = useTranslation();
 
 	React.useEffect(() => {
 		if (chartRef && chartRef.current) {
@@ -24,7 +26,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 					labels: labels,
 					datasets: [
 						{
-							label: "Votes",
+							label: t("votes"),
 							data: data,
 							backgroundColor: "#4371CD",
 							hoverBackgroundColor: "#185592",
@@ -36,7 +38,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
 					plugins: {
 						title: {
 							display: true,
-							text: "Votes by Idea",
+							text: t("votes_by_idea"),
 							font: {
 								size: 18,
 							},
