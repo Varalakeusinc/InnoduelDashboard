@@ -27,6 +27,7 @@ import {
 	SelectContent,
 	SelectItem,
 } from "@/components/ui/select";
+import ReportButton from "./ReportButton";
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
@@ -257,6 +258,7 @@ const HomePage = () => {
 					<SelectItem value="year">Year</SelectItem>
 				</SelectContent>
 			</Select>
+			<ReportButton companyId={companyId.toString()} /> {/* Use report button component */}
 		  </div>
 	  
 		  <div className="chart-container"
