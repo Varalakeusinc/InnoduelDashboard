@@ -18,11 +18,11 @@ const ReportButton = ({ companyId }: { companyId: string }) => {
 
   return (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      style={{ width: "200px" }} // Set width to make the button longer
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded min-w-[200px]"
+      style={{ width: "200px" }} 
       onClick={handleExportButtonClick}
     >
-      Export All Data
+      Export all data
     </button>
   );
 };
