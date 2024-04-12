@@ -252,9 +252,9 @@ const HomePage = () => {
 					<SelectValue placeholder="Select mode" />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="week">Week</SelectItem>
-					<SelectItem value="month">Month</SelectItem>
-					<SelectItem value="year">Year</SelectItem>
+					<SelectItem value="week">{t("week")}</SelectItem>
+					<SelectItem value="month">{t("month")}</SelectItem>
+					<SelectItem value="year">{t("year")}</SelectItem>
 				</SelectContent>
 			</Select>
 		  </div>
@@ -276,7 +276,7 @@ const HomePage = () => {
 					borderRadius: "10px",
 					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
 				}}>
-				  <h2 className="mx-10 my-5 p-2 font-semibold">Ideas Distribution</h2>
+				  <h2 className="mx-10 my-5 p-2 font-semibold">{t("ideas_distribution")}</h2>
 				  <BarChart
 					width={750}
 					height={500}
@@ -297,7 +297,7 @@ const HomePage = () => {
 					borderRadius: "10px",
 					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
 				}}>
-				  <h2 className="mx-10 my-5 p-2 font-semibold">Votes per Arena</h2>
+				  <h2 className="mx-10 my-5 p-2 font-semibold">{t("votes_per_arena")}</h2>
 				  <BarChart
 					width={750}
 					height={500}
