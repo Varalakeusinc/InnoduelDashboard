@@ -27,6 +27,7 @@ import {
 	SelectContent,
 	SelectItem,
 } from "@/components/ui/select";
+import {Notification, NotificationType} from "@/components/notification/Notification";
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
@@ -51,6 +52,16 @@ const HomePage = () => {
 		totalVotes: 0,
 		averageWinRate: 0,
 	});
+	const [notification, setNotification] = React.useState<
+		{
+			id?: string;
+			notificationType: NotificationType;
+			title: string;
+			description: string;
+			actionText?: string;
+			onActionClick?: () => void;
+		}[]
+	>([]);
 
 	React.useEffect(() => {
 		arenaService
@@ -81,10 +92,11 @@ const HomePage = () => {
 							? parseFloat(averageWinRate.toFixed(2))
 							: 0,
 				});
+				
 			})
 			.catch(error => {
-				console.error("Error fetching arenas:", error);
-				// Handle error here
+				console.log(error);
+				handleNotification(error);
 			});
 
 		// All companies
@@ -96,6 +108,22 @@ const HomePage = () => {
 		// All votes
 		voteService.getAllVotes(companyId).then(setVotes);
 	}, [companyId]);
+
+	const handleNotification = (errorMsg: string) => {
+		setNotification([
+			{
+				id: new Date().getTime().toString(),
+				notificationType: NotificationType.Error,
+				title: "Error!",
+				description: errorMsg || "",
+				actionText: "Retry",
+				onActionClick: () => {
+					window.location.reload();
+					setNotification([]);
+				},
+			},
+		]);
+	};
 
 	const barData = arenas.map(arena => ({
 		name: arena.name,
@@ -315,6 +343,7 @@ const HomePage = () => {
 			  </>
 			)}
 		  </div>
+		  {notification && <Notification notifications={notification} />}
 		</div>
 	  );
 	  
