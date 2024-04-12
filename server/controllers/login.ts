@@ -38,13 +38,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const isAdmin = user.user_role_link.some((role) => role.role_id === 3);
     const token = jwt.sign({ userId: user.id, isAdmin, companyId: user.company_id }, process.env.JWT_SECRET as string, {
-        expiresIn: '1h',
+        expiresIn: '365d',
     });
 
     res.cookie('token', token, {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: 60 * 60 * 1000 // 1h
+        maxAge: 60 * 60 * 1000 * 24 * 365 // 365 days
     });
 
     res.status(201).json({ 
