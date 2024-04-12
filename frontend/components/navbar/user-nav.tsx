@@ -25,16 +25,15 @@ export function UserNav() {
 
 	const logOut = () => {
 		logOutUser().then((success: boolean) => {
-			if (success) {
-				dispatch(
-					setUser({
-						email: "",
-						isAdmin: false,
-						companyId: -1,
-						username: "",
-					})
-				);
-			}
+			// If only on success strange limbo state when you cannot log out but are not logged in can happen
+			dispatch(
+				setUser({
+					email: "",
+					isAdmin: false,
+					companyId: -1,
+					username: "",
+				})
+			);
 		});
 	};
 
