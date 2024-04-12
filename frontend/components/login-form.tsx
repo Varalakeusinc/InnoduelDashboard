@@ -77,13 +77,15 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 							onChange={e => setPassword(e.target.value)}
 						/>
 					</div>
-					<Button disabled={isLoading} id="loginButton">
+					<Button disabled={isLoading} id="loginButton" className="bg-orange-950">
 						{isLoading && (
 							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 						)}
 						Login
 					</Button>
-					{error && <p className="text-red-500">{error}</p>}
+					{error && (
+                        <p className="bg-red-600 text-white p-2 rounded-md">{error}</p>
+                    )}
 				</div>
 			</form>
 		</div>
