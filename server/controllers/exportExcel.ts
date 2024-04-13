@@ -14,7 +14,7 @@ function getFormattedTimestamp () {
 }
 
 export const exportExcel = async (req: Request, res: Response) => {
-    const { company_id: companyId } = req.params;
+    const { companyId } = req.params;
 
     try {
         const company = await prisma.company.findUnique({

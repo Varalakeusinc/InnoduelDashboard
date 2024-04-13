@@ -5,7 +5,7 @@ import { middleware } from "../utils/middleware";
 const router = Router();
 
 // Excel export
-router.get("/:company_id/excel",
+router.get("/:companyId/excel",
     middleware.requireAuth,
     middleware.requireAdmin,
     exportExcel,
