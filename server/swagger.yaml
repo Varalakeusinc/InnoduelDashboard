@@ -57,7 +57,7 @@ paths:
   /api/reports/{company_id}/excel:
     get:
       tags:
-        - Exports
+        - Reports
       summary: Export Company information as report to Excel
       description: Exports detailed information about arenas associated with a specific company ID to an Excel file.
       parameters:
