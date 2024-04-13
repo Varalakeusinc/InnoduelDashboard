@@ -4,7 +4,7 @@ import ExcelJS from 'exceljs';
 
 function getFormattedTimestamp () {
     const date = new Date();
-    const year = date.getFullYear().toString().substr(-2);
+    const year = date.getFullYear().toString().substring(-2);
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const hours = date.getHours().toString().padStart(2, '0');
@@ -66,6 +66,19 @@ export const exportExcel = async (req: Request, res: Response) => {
             { header: 'Win Rate', key: 'win_rate', width: 10 },
             { header: 'Vote Count', key: 'vote_count', width: 10 },
         ];
+
+        const row = sheet.getRow(1);
+        row.eachCell((cell) => {
+            cell.font = {
+                bold: true,
+                color: { argb: 'FFFF0000' },
+            };
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFFFFF00' },
+            };
+        });
 
         arenas.forEach(arena => {
             arena.idea.forEach(idea => {
