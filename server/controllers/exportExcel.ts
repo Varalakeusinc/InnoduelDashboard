@@ -6,6 +6,19 @@ export const exportExcel = async (req: Request, res: Response) => {
     const { company_id: companyId } = req.params;
 
     try {
+        const company = await prisma.company.findUnique({
+            where: {
+                id: parseInt(companyId),
+            },
+            select: {
+                name: true,
+            },
+        });
+
+        if (company === null) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+
         const arenas = await prisma.arena.findMany({
             where: {
                 company_id: parseInt(companyId),
@@ -57,8 +70,9 @@ export const exportExcel = async (req: Request, res: Response) => {
             });
         });
 
+        const filename = `innoduel_dashboard_${company.name}.xlsx`;
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="report.xlsx"`);
+        res.setHeader('Content-Disposition', `attachment; filename="innoduel_dashboard_${filename}"`);
 
         await workbook.xlsx.write(res);
         res.status(200).end();
