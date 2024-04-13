@@ -2,6 +2,17 @@ import { type Request, type Response } from 'express';
 import prisma from '../utils/db';
 import ExcelJS from 'exceljs';
 
+function getFormattedTimestamp () {
+    const date = new Date();
+    const year = date.getFullYear().toString().substr(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+}
+
 export const exportExcel = async (req: Request, res: Response) => {
     const { company_id: companyId } = req.params;
 
@@ -59,7 +70,6 @@ export const exportExcel = async (req: Request, res: Response) => {
         arenas.forEach(arena => {
             arena.idea.forEach(idea => {
                 const winRate = idea.win_rate !== null ? `${idea.win_rate}%` : 'N/A';
-
                 sheet.addRow({
                     name: arena.name,
                     info_text: arena.info_text,
@@ -70,9 +80,10 @@ export const exportExcel = async (req: Request, res: Response) => {
             });
         });
 
-        const filename = `innoduel_dashboard_${company.name}.xlsx`;
+        const timestamp = getFormattedTimestamp();
+        const filename = `innoduel_dashboard_${company.name}_${timestamp}.xlsx`;
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="innoduel_dashboard_${filename}"`);
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
 
         await workbook.xlsx.write(res);
         res.status(200).end();
