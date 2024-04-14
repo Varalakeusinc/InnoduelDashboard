@@ -92,7 +92,7 @@ const HomePage = () => {
 							? parseFloat(averageWinRate.toFixed(2))
 							: 0,
 				});
-				
+				setNotification([]);
 			})
 			.catch(error => {
 				console.log(error);
