@@ -32,6 +32,31 @@
 
     "votes": "Äänet",
     "ideas": "Ideat",
-    "select_arena": "Valitse Areena"
+    "select_arena": "Valitse Areena",
+
+    "Error!": "Virhe!",
+    "Retry": "Yritä uudelleen",
+
+    "Something went wrong": "Jokin meni vikaan",
+
+    "No arenas found": "Areenoja ei löytynyt",
+    "Arena not found": "Areenaa ei löytynyt",
+    "Arena not found or does not belong to the specified company": "Areenaa ei löytynyt tai se ei kuulu valitulle yritykselle",
+    "No companies found": "Yriyksiä ei löytnyt",
+    "At least two arena IDs are required for comparison": "Vertailua varten vaaditaan vähintään kaksi areenatunnusta",
+    "One or more arenas not found": "Yhtä tai useampaa areenaa ei löytynyt",
+    "Both arenaId1 and arenaId2 must be valid integers.": "Sekä areeenaTunnus1 että arenaenaTunnus2 on oltava kelvollisia kokonaislukuja.",
+    "One or both arenas not found": "Yhtä tai molempia areenoita ei löytynyt",
+    "Target arena not found": "Kohdeareenaa ei löytynyt",
+    "Selected arena has no ideas": "Valitulla areenalla ei ole ideoita",
+    "No arenas with similar ideas found": "Areenoita samankaltaisilla ideoilla ei löytynyt",
+    "No ideas found": "Yhtään ideaa ei löytynyt",
+    "No ideas found for the given company_id": "Yhtään ideaa ei löytynyt annetulle yritystunnukselle",
+    "No users found": "Käyttäjiä ei löytynyt",
+    "No ideas found for the given company_id and arena_id": "Yhtään ideaa ei löytynyt annetulle yritystunnukselle ja areenatunnukselle",
+
+    "Network Error": "Yhteysvirhe"
+
+
 
 }

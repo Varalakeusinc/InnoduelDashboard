@@ -7,6 +7,7 @@ import {
     ToastTitle,
     ToastAction
 } from "@/components/ui/toast";
+import { useTranslation } from "react-i18next";
 
 export enum NotificationType {
     Success = 'success',
@@ -27,6 +28,7 @@ interface NotificationProps {
 }
 
 export const Notification: React.FC<NotificationProps> = ({ notifications }) => {
+    const { t } = useTranslation();
 
     const mapTypeToColor = (type: NotificationType): string => {
         switch (type) {
@@ -48,11 +50,11 @@ export const Notification: React.FC<NotificationProps> = ({ notifications }) => 
                 {notifications.map(notification => (
                     <Toast key={notification.id || new Date().getTime().toString()} style={{ backgroundColor: mapTypeToColor(notification.notificationType) }}>
                         <div className="grid gap-1">
-                            <ToastTitle>{notification.title}</ToastTitle>
-                            <ToastDescription>{notification.description}</ToastDescription>
+                            <ToastTitle>{t(notification.title)}</ToastTitle>
+                            <ToastDescription>{t(notification.description)}</ToastDescription>
                         </div>
                         {notification.actionText && notification.onActionClick && (
-                            <ToastAction onClick={notification.onActionClick} altText={notification.actionText}>{notification.actionText}</ToastAction>
+                            <ToastAction onClick={notification.onActionClick} altText={t(notification.actionText)}>{t(notification.actionText)}</ToastAction>
                         )}
                     </Toast>
                 ))}
