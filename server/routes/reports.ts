@@ -7,7 +7,7 @@ const router = Router();
 // Excel export
 router.get("/:companyId/excel",
     middleware.requireAuth,
-    middleware.requireAdmin,
+    middleware.checkCompany,
     exportExcel,
 );
 
