@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 const ReportButton = ({ companyId }: { companyId: string }) => {
+  const { t } = useTranslation();
   const handleExportButtonClick = () => {
     fetch(`/api/reports/${companyId}/excel`)
       .then((response) => response.blob())
@@ -22,7 +25,7 @@ const ReportButton = ({ companyId }: { companyId: string }) => {
       style={{ width: "200px" }} 
       onClick={handleExportButtonClick}
     >
-      Export all data
+      {t('export_all_data')}
     </button>
   );
 };
