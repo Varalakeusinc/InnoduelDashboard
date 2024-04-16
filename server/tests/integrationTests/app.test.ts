@@ -206,3 +206,69 @@ describe('Find similar arenas: /:companyId/find_matching_arenas/:arenaId', () =>
     });
   });
 });
+
+describe('Get Compare Win Rates: /:companyId/compare_win_rate/:arenaId1/:arenaId2', () => {
+  let companyId = 6;
+  let validArenaId1 = 35;
+  let validArenaId2 = 123;
+  let invalidArenaId = 7;
+  let adminToken = generateToken(1, true, companyId);
+  let nonAdminToken = generateToken(2, false, companyId);
+  let userTypes = [
+    ['admin', adminToken],
+    ['non-admin', nonAdminToken]
+  ];
+
+  userTypes.forEach(([userType, token]) => {
+    test(`should return compare win rates for ${userType} user`, async () => {
+      const res = await request(app)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${validArenaId2}`)
+        .set('Cookie', `token=${token}`);
+
+      expect(res.status).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body.length).toBeGreaterThan(0);
+      res.body.forEach((comparison: any) => {
+        expect(comparison).toHaveProperty('idea_text');
+        expect(comparison).toHaveProperty('arena1_winRate');
+        expect(comparison).toHaveProperty('arena2_winRate');
+        expect(typeof comparison.idea_text).toBe('string');
+        expect(typeof comparison.arena1_winRate).toBe('number');
+        expect(typeof comparison.arena2_winRate).toBe('number');
+      });
+    });
+
+    test(`should return 400 if arenaId1 or arenaId2 are not valid integers for ${userType} user`, async () => {
+      const response = await request(app)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/validArenaId2`)
+        .set('Cookie', `token=${token}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ error: 'Both arenaId1 and arenaId2 must be valid integers.' });
+    });
+
+    test(`should return 404 if one or both arenas are not found for ${userType} user`, async () => {
+      jest.spyOn(prisma.arena, 'findFirst').mockResolvedValueOnce(null);
+
+      const response = await request(app)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${invalidArenaId}`)
+        .set('Cookie', `token=${token}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: 'One or both arenas not found' });
+    });
+
+    test('should return 500 if an error occurs', async () => {
+      jest.spyOn(prisma.arena, 'findFirst').mockImplementationOnce(() => {
+        throw new Error('Database connection failed');
+      });
+      const res = await request(app)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${validArenaId2}`)
+        .set('Cookie', `token=${token}`);
+
+      expect(res.status).toBe(500);
+      expect(res.body).toHaveProperty('message', 'Something went wrong');
+    });
+  });
+});
+
