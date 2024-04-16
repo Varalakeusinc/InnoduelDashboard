@@ -10,15 +10,15 @@ jest.mock('../../utils/logger', () => ({
   }
 }));
 
-const companyId = 3;
-const validArenaId = 70;
-const invalidArenaId = 6;
-const adminToken = generateToken(1, true, companyId);
-const nonAdminToken = generateToken(2, false, companyId);
-const userTypes = [
-  ['admin', adminToken],
-  ['non-admin', nonAdminToken]
-];
+const generateTestVariables = (companyId: number, validArenaId: number, invalidArenaId: number) => {
+  const adminToken = generateToken(1, true, companyId);
+  const nonAdminToken = generateToken(2, false, companyId);
+  const userTypes = [
+    ['admin', adminToken],
+    ['non-admin', nonAdminToken]
+  ];
+  return { companyId, validArenaId, invalidArenaId, userTypes };
+};
 
 function generateToken(userId: number, isAdmin = false, companyId?: number) {
   const payload = { userId, isAdmin, companyId };
@@ -40,6 +40,8 @@ describe('Integration Tests for the Root Endpoint', () => {
 });
 
 describe('Get Arenas: /:companyId/arenas', () => {
+  const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(3, 70, 6);
+
   userTypes.forEach(([userType, token]) => {
     test(`should return a list of arenas for ${userType} user`, async () => {
       const res = await request(app)
@@ -93,6 +95,8 @@ describe('Get Arenas: /:companyId/arenas', () => {
 });
 
 describe('Get Arena By ID: /:companyId/:id', () => {
+  const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(3, 70, 6);
+
   userTypes.forEach(([userType, token]) => {
     test(`should return selected arena for ${userType} user`, async () => {
       const res = await request(app)
@@ -140,15 +144,7 @@ describe('Get Arena By ID: /:companyId/:id', () => {
 });
 
 describe('Find similar arenas: /:companyId/find_matching_arenas/:arenaId', () => {
-  let companyId = 6;
-  let validArenaId = 35;
-  let invalidArenaId = 7;
-  let adminToken = generateToken(1, true, companyId);
-  let nonAdminToken = generateToken(2, false, companyId);
-  let userTypes = [
-    ['admin', adminToken],
-    ['non-admin', nonAdminToken]
-  ];
+  const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(6, 35, 7);
 
   userTypes.forEach(([userType, token]) => {
     test(`should return similar arenas for ${userType} user`, async () => {
@@ -208,21 +204,13 @@ describe('Find similar arenas: /:companyId/find_matching_arenas/:arenaId', () =>
 });
 
 describe('Get Compare Win Rates: /:companyId/compare_win_rate/:arenaId1/:arenaId2', () => {
-  let companyId = 6;
-  let validArenaId1 = 35;
-  let validArenaId2 = 123;
-  let invalidArenaId = 7;
-  let adminToken = generateToken(1, true, companyId);
-  let nonAdminToken = generateToken(2, false, companyId);
-  let userTypes = [
-    ['admin', adminToken],
-    ['non-admin', nonAdminToken]
-  ];
+  const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(6, 35, 7);
+  const validArenaId2 = 123;
 
   userTypes.forEach(([userType, token]) => {
     test(`should return compare win rates for ${userType} user`, async () => {
       const res = await request(app)
-        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${validArenaId2}`)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId}/${validArenaId2}`)
         .set('Cookie', `token=${token}`);
 
       expect(res.status).toBe(200);
@@ -240,7 +228,7 @@ describe('Get Compare Win Rates: /:companyId/compare_win_rate/:arenaId1/:arenaId
 
     test(`should return 400 if arenaId1 or arenaId2 are not valid integers for ${userType} user`, async () => {
       const response = await request(app)
-        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/validArenaId2`)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId}/validArenaId2`)
         .set('Cookie', `token=${token}`);
 
       expect(response.status).toBe(400);
@@ -251,19 +239,19 @@ describe('Get Compare Win Rates: /:companyId/compare_win_rate/:arenaId1/:arenaId
       jest.spyOn(prisma.arena, 'findFirst').mockResolvedValueOnce(null);
 
       const response = await request(app)
-        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${invalidArenaId}`)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId}/${invalidArenaId}`)
         .set('Cookie', `token=${token}`);
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'One or both arenas not found' });
     });
 
-    test('should return 500 if an error occurs', async () => {
+    test(`should return 500 if an error occurs for ${userType} user`, async () => {
       jest.spyOn(prisma.arena, 'findFirst').mockImplementationOnce(() => {
         throw new Error('Database connection failed');
       });
       const res = await request(app)
-        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId1}/${validArenaId2}`)
+        .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId}/${validArenaId2}`)
         .set('Cookie', `token=${token}`);
 
       expect(res.status).toBe(500);
