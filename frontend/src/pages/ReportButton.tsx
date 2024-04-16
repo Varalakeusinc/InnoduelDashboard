@@ -1,12 +1,13 @@
+import axios from 'axios'; 
 import { useTranslation } from 'react-i18next';
 
 const ReportButton = ({ companyId }: { companyId: string }) => {
   const { t } = useTranslation();
+
   const handleExportButtonClick = () => {
-    fetch(`/api/reports/${companyId}/excel`)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
+    axios.get(`/api/reports/${companyId}/excel`, { responseType: 'blob' }) 
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data])); 
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", "report.xlsx");
