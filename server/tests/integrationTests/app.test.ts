@@ -36,14 +36,10 @@ describe('Integration Tests for the Root Endpoint', () => {
 });
 
 describe('Get Arenas: /:companyId/arenas', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   test.each([
-    [true, adminToken],
-    [false, nonAdminToken]
-  ])('should return a list of arenas for %s user', async (isAdmin, token) => {
+    ['admin', adminToken],
+    ['non-admin', nonAdminToken]
+  ])('should return a list of arenas for %s user', async (userType, token) => {
     const res = await request(app)
       .get(`/api/arenas/${companyId}/arenas`)
       .set('Cookie', `token=${token}`);
@@ -86,6 +82,54 @@ describe('Get Arenas: /:companyId/arenas', () => {
     });
     const res = await request(app)
       .get(`/api/arenas/${companyId}/arenas`)
+      .set('Cookie', `token=${nonAdminToken}`);
+
+    expect(res.status).toBe(500);
+    expect(res.body).toHaveProperty('message', 'Something went wrong');
+  });
+});
+
+describe('Get Arena By ID: /:companyId/:id', () => {
+  test.each([
+    ['admin', adminToken],
+    ['non-admin', nonAdminToken]
+  ])('should return the arena for %s user', async (userType, token) => {
+    const res = await request(app)
+      .get(`/api/arenas/${companyId}/${validArenaId}`)
+      .set('Cookie', `token=${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('id');
+    expect(res.body).toHaveProperty('name');
+    expect(res.body).toHaveProperty('info_text');
+    expect(res.body).toHaveProperty('total_ideas');
+    expect(res.body).toHaveProperty('total_votes');
+    expect(res.body).toHaveProperty('overall_win_rate');
+    expect(Array.isArray(res.body.ideas)).toBe(true);
+
+    res.body.ideas.forEach((idea: any) => {
+      expect(idea).toHaveProperty('id');
+      expect(idea).toHaveProperty('idea_text');
+      expect(idea).toHaveProperty('vote_count');
+      expect(idea).toHaveProperty('win_rate');
+    });
+  });
+
+  test('should return 404 when no arenas are found', async () => {
+    const res = await request(app)
+      .get(`/api/arenas/${companyId}/${invalidArenaId}`)
+      .set('Cookie', `token=${nonAdminToken}`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty('message', 'Arena not found or does not belong to the specified company');
+  });
+
+  test('should return 500 when there is an internal server error', async () => {
+    jest.spyOn(prisma.arena, 'findUnique').mockImplementationOnce(() => {
+      throw new Error('Database connection failed');
+    });
+    const res = await request(app)
+      .get(`/api/arenas/${companyId}/${invalidArenaId}`)
       .set('Cookie', `token=${nonAdminToken}`);
 
     expect(res.status).toBe(500);
