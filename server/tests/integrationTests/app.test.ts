@@ -260,3 +260,59 @@ describe('Get Compare Win Rates: /:companyId/compare_win_rate/:arenaId1/:arenaId
   });
 });
 
+describe('Get All Ideas: "/:companyId/all"', () => {
+  const { companyId, userTypes } = generateTestVariables(3, 70, 6);
+
+  userTypes.forEach(([userType, token]) => {
+    test(`should return compare win rates for ${userType} user`, async () => {
+      const res = await request(app)
+        .get(`/api/ideas/${companyId}/all`)
+        .set('Cookie', `token=${token}`);
+
+      if (userType === 'admin') {
+        expect(res.status).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        res.body.forEach((idea: any) => {
+          expect(idea).toHaveProperty('id');
+          expect(idea).toHaveProperty('idea_text');
+          expect(idea).toHaveProperty('user_id');
+          expect(idea).toHaveProperty('arena_id');
+        })
+      } else {
+        expect(res.status).toBe(401);
+        expect(res.text).toBe('Unauthorized');
+      }
+    });
+
+    test(`should return 404 if no ideas are found for ${userType} user`, async () => {
+      jest.spyOn(prisma.idea, 'findMany').mockResolvedValueOnce([]);
+
+      const res = await request(app)
+        .get(`/api/ideas/${companyId}/all`)
+        .set('Cookie', `token=${token}`);
+
+      if (userType === 'admin') {
+        expect(res.status).toBe(404);
+        expect(res.body).toHaveProperty('message', 'No ideas found');
+      } else {
+        expect(res.status).toBe(401);
+        expect(res.text).toBe('Unauthorized');
+      }
+    });
+
+    test(`should return 500 if an error occurs for ${userType} user`, async () => {
+      jest.spyOn(prisma.idea, 'findMany').mockRejectedValueOnce(new Error('Database connection failed'));
+
+      const res = await request(app)
+        .get(`/api/ideas/${companyId}/all`)
+        .set('Cookie', `token=${token}`);
+
+      if (userType === 'admin') {
+        expect(res.status).toBe(500);
+        expect(res.body).toHaveProperty('message', 'Something went wrong');
+      } else {
+        expect(res.status).toBe(401);
+      }
+    });
+  });
+});
