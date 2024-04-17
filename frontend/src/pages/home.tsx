@@ -258,7 +258,7 @@ const HomePage = () => {
 					<SelectItem value="year">{t("year")}</SelectItem>
 				</SelectContent>
 			</Select>
-			<ReportButton companyId={companyId.toString()} /> {/* Use report button component */}
+			<ReportButton companyId={companyId} /> {/* Use report button component */}
 		  </div>
 	  
 		  <div className="chart-container"
