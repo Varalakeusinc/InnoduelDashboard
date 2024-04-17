@@ -10,15 +10,28 @@ jobs:
       - run: echo "Run tests for backend"
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Set up Docker Compose
+        run: docker-compose up --build -d
+
+      - name: Wait for Docker services to be ready
+        run: docker-compose exec backend sh -c 'while ! nc -z db 5432; do sleep 1; done;'
+
       - name: Install dependencies
         run: npm install
         working-directory: ./server
-      - name: Run tests
-        run: npm test
-        working-directory: ./server
+
+      - name: Run backend tests inside Docker
+        run: |
+          docker-compose exec -e CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }} backend npm test
+
+      - name: Shut down Docker Compose
+        run: docker-compose down
+        
       - run: echo "Backend tests completed successfully! 🎉"
 
