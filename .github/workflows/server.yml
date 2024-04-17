@@ -6,6 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      CURRENT_DATABASE_URL: ${{ secrets.CURRENT_DATABASE_URL }}
     steps:
       - run: echo "Run tests for backend"
       - name: Check out repository code
@@ -17,21 +21,25 @@ jobs:
           node-version: '20'
 
       - name: Set up Docker Compose
-        run: docker-compose up --build -d
+        run: |
+          docker-compose up --build -d \
+            -e POSTGRES_PASSWORD=$DB_PASSWORD \
+            -e POSTGRES_USER=$DB_USER \
+            -e POSTGRES_DB=$DB_NAME \
+            -e CURRENT_DATABASE_URL=$CURRENT_DATABASE_URL
 
       - name: Wait for Docker services to be ready
-        run: docker-compose exec backend sh -c 'while ! nc -z db 5432; do sleep 1; done;'
+        run: docker-compose exec -T backend sh -c 'while ! nc -z db 5432; do sleep 1; done;'
 
       - name: Install dependencies
         run: npm install
         working-directory: ./server
 
       - name: Run backend tests inside Docker
-        run: |
-          docker-compose exec -e CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }} backend npm test
+        run: docker-compose exec backend npm test
 
       - name: Shut down Docker Compose
         run: docker-compose down
-        
+
       - run: echo "Backend tests completed successfully! 🎉"
 
