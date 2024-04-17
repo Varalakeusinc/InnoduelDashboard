@@ -1,10 +1,13 @@
 import axios from "@/lib/axios";
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from "@/store/hooks";
+import { selectCompanyName } from '@/store/userSlice';
 
 const ReportButton = ({ companyId }: { companyId: number }) => {
   const { t } = useTranslation();
+	const currentCompanyName = useAppSelector(selectCompanyName);
 
-  function getFormattedTimestamp() {
+  const getFormattedTimestamp = () => {
     const date = new Date();
     const year = date.getFullYear().toString().substring(2);
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -13,7 +16,7 @@ const ReportButton = ({ companyId }: { companyId: number }) => {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-  }
+  };
 
   const handleExportButtonClick = () => {
     axios.get(`/api/reports/${companyId}/excel`, { 
@@ -24,11 +27,7 @@ const ReportButton = ({ companyId }: { companyId: number }) => {
         const link = document.createElement('a');
 
         const timestamp = getFormattedTimestamp();
-
-        //const currentCompanyName = useAppSelector(selectCompanyName);
-
-        const filename = `innoduel_dashboard_${timestamp}.xlsx`;
-
+        const filename = `innoduel_dashboard_${currentCompanyName}_${timestamp}.xlsx`; // Use current company name
 
         link.href = url;
         link.setAttribute('download', filename);
