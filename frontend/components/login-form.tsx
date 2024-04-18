@@ -53,6 +53,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 							Email
 						</Label>
 						<Input
+							data-test-id="logInEmailField"
 							id="email"
 							placeholder="name@example.com"
 							type="email"
@@ -67,6 +68,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 							Password
 						</Label>
 						<Input
+							data-test-id="logInPasswordField"
 							id="password"
 							placeholder="Password"
 							type="password"
@@ -77,7 +79,11 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 							onChange={e => setPassword(e.target.value)}
 						/>
 					</div>
-					<Button disabled={isLoading} id="loginButton">
+					<Button
+						data-test-id="logInButton"
+						disabled={isLoading}
+						id="loginButton"
+					>
 						{isLoading && (
 							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
 						)}
