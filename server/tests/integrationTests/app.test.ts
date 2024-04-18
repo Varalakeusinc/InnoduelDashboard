@@ -380,3 +380,61 @@ describe('Company API Endpoints', () => {
   });
 });
 
+describe('Export Excel Endpoint', () => {
+  describe('GET Excel Reports: /api/reports/:companyId/excel', () => {
+    const { companyId, userTypes } = generateTestVariables(3, 70, 6);
+
+    app.use((req, res, next) => {
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', 'attachment;');
+      next();
+    });
+
+    userTypes.forEach(([userType, token]) => {
+      test(`should successfully export excel file for ${userType} user`, async () => {
+        const res = await request(app)
+          .get(`/api/reports/${companyId}/excel`)
+          .set('Cookie', `token=${token}`);
+
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        expect(res.headers['content-disposition']).toContain('attachment;');
+      });
+
+      test(`should return 404 if company is not found for ${userType} user`, async () => {
+        jest.spyOn(prisma.company, 'findUnique').mockResolvedValueOnce(null);
+
+        const res = await request(app)
+          .get(`/api/reports/${companyId}/excel`)
+          .set('Cookie', `token=${token}`);
+
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ message: 'Company not found' });
+      });
+
+      test(`should return 404 if no arenas are found for the company for ${userType} user`, async () => {
+        jest.spyOn(prisma.arena, 'findMany').mockResolvedValueOnce([]);
+
+        const res = await request(app)
+          .get(`/api/reports/${companyId}/excel`)
+          .set('Cookie', `token=${token}`);
+
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ message: 'No arenas found' });
+      });
+
+      test(`should return 500 if an error occurs while exporting arenas for ${userType} user`, async () => {
+        jest.spyOn(prisma.company, 'findUnique').mockImplementationOnce(() => {
+          throw new Error('Failed to fetch company');
+        });
+
+        const res = await request(app)
+          .get(`/api/reports/${companyId}/excel`)
+          .set('Cookie', `token=${token}`);
+
+        expect(res.status).toBe(500);
+        expect(res.body).toHaveProperty('message', 'Something went wrong');
+      });
+    });
+  });
+});
