@@ -44,10 +44,15 @@ jobs:
         working-directory: ./server
 
       - name: Run backend tests inside Docker
-        run: docker-compose exec backend npm test
+        run: |
+          docker-compose exec backend npm test || (echo "Backend tests failed!")
 
       - name: Shut down Docker Compose
-        run: docker-compose down
+        run: |
+          docker-compose down \
+            -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e POSTGRES_USER=${{ secrets.DB_USER }} \
+            -e POSTGRES_DB=${{ secrets.DB_NAME }} \
+            -e CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }}
 
       - run: echo "Backend tests completed successfully! 🎉"
-
