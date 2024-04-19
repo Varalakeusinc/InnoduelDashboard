@@ -215,12 +215,17 @@ const HomePage = () => {
 			className="homepage-container"
 			style={{
 				color: "#333",
-				height: "100%",
+				minHeight: "calc(100vh - 4rem)", 
 				backgroundColor: "#f5f5f5",
 				borderRadius: "10px",
+				padding: "2rem", 
+				boxSizing: "border-box", // Ensure padding is included in the element's total width and height
+				display: "flex", 
+				flexDirection: "column", 
+				justifyContent: "space-between",
 			}}
 		>
-			<div
+            <div className="info-container"
 				style={{
 					width: "100%",
 					height: "100px",
@@ -264,6 +269,8 @@ const HomePage = () => {
 					)}
 				</div>
 			</div>
+			<div className="datepicker-container">
+
 
 			<div className="flex space-x-4 w-1/3 my-5">
 				<ReactDatePicker
@@ -294,7 +301,8 @@ const HomePage = () => {
 					</SelectContent>
 				</Select>
 				<ReportButton companyId={companyId} />{" "}
-				{/* Use report button component */}
+			</div>
+
 			</div>
 
 			<div
@@ -303,7 +311,8 @@ const HomePage = () => {
 					display: "flex",
 					justifyContent: "space-around",
 					flexWrap: "wrap",
-					padding: "20px",
+					gap: "5px",
+					padding: "10px",
 				}}
 			>
 				{arenas.length === 0 ? (
