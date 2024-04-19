@@ -20,32 +20,44 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create .env file
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/server
+          echo "POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}" > $GITHUB_WORKSPACE/server/.env
+          echo "POSTGRES_USER=${{ secrets.DB_USER }}" >> $GITHUB_WORKSPACE/server/.env
+          echo "POSTGRES_DB=${{ secrets.DB_NAME }}" >> $GITHUB_WORKSPACE/server/.env
+          echo "CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }}" >> $GITHUB_WORKSPACE/server/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_WORKSPACE/server/.env
+          echo ".env file created at: $GITHUB_WORKSPACE/.env"
+
       - name: Set up Docker Compose
         run: |
-          docker-compose up --build -d \
-            -e POSTGRES_PASSWORD=$DB_PASSWORD \
-            -e POSTGRES_USER=$DB_USER \
-            -e POSTGRES_DB=$DB_NAME \
-            -e CURRENT_DATABASE_URL=$CURRENT_DATABASE_URL
+          docker-compose --file $GITHUB_WORKSPACE/docker-compose.yml up --build -d
+
+      - name: Check Docker Compose logs
+        run: docker-compose logs
+
+      - name: Verify Docker containers are running
+        run: docker ps
 
       - name: Wait for Docker services to be ready
         run: |
           for i in {1..30}; do
-            if nc -z db 5432; then
+            if docker ps -qf name='*db*' | xargs -I {} docker inspect --format='{{.NetworkSettings.IPAddress}}' {} | xargs -I {} nc -z {} 5432; then
               echo "Database is ready!"
               break
             fi
             echo "Waiting for database... (attempt $i)"
-            sleep 5
+            sleep 10
           done
 
       - name: Install dependencies
-        run: npm install
+        run: sudo npm install
         working-directory: ./server
 
       - name: Run backend tests inside Docker
         run: |
-          docker-compose exec backend npm test || (echo "Backend tests failed!")
+          docker-compose exec -T backend npm test -- --detectOpenHandles || (echo "Backend tests failed!")
 
       - name: Shut down Docker Compose
         run: |
