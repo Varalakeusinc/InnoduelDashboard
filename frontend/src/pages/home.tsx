@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { arenaService, Arena } from "../services/arena";
@@ -28,6 +28,10 @@ import {
 	SelectItem,
 } from "@/components/ui/select";
 import ReportButton from "./ReportButton";
+import {
+	Notification,
+	NotificationType,
+} from "@/components/notification/Notification";
 
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
@@ -52,6 +56,16 @@ const HomePage = () => {
 		totalVotes: 0,
 		averageWinRate: 0,
 	});
+	const [notification, setNotification] = React.useState<
+		{
+			id?: string;
+			notificationType: NotificationType;
+			title: string;
+			description: string;
+			actionText?: string;
+			onActionClick?: () => void;
+		}[]
+	>([]);
 
 	React.useEffect(() => {
 		arenaService
@@ -82,10 +96,11 @@ const HomePage = () => {
 							? parseFloat(averageWinRate.toFixed(2))
 							: 0,
 				});
+				setNotification([]);
 			})
 			.catch(error => {
-				console.error("Error fetching arenas:", error);
-				// Handle error here
+				console.log(error);
+				handleNotification(error);
 			});
 
 		// All companies
@@ -97,6 +112,22 @@ const HomePage = () => {
 		// All votes
 		voteService.getAllVotes(companyId).then(setVotes);
 	}, [companyId]);
+
+	const handleNotification = (errorMsg: string) => {
+		setNotification([
+			{
+				id: new Date().getTime().toString(),
+				notificationType: NotificationType.Error,
+				title: "Error!",
+				description: errorMsg || "",
+				actionText: "Retry",
+				onActionClick: () => {
+					window.location.reload();
+					setNotification([]);
+				},
+			},
+		]);
+	};
 
 	const barData = arenas.map(arena => ({
 		name: arena.name,
@@ -173,153 +204,187 @@ const HomePage = () => {
 	}, [ideas, startDate, endDate, mode]);
 
 	const customFormatter = (value: any) => {
-		const maxLength = 7; 
-		return value.length > maxLength ? `${value.substring(0, maxLength)}...` : value;
-	  };
+		const maxLength = 7;
+		return value.length > maxLength
+			? `${value.substring(0, maxLength)}...`
+			: value;
+	};
 
 	return (
-		<div className="homepage-container"
-		style={{
-			color: "#333",
-			height: "100%",
-			backgroundColor: "#f5f5f5",
-			borderRadius: "10px"
-		}}>
-		  <div
+		<div
+			className="homepage-container"
 			style={{
-				width: "100%",
-				height: "100px",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "space-around",
-				fontWeight: "bold",
-				color: "white"
+				color: "#333",
+				height: "100%",
+				backgroundColor: "#f5f5f5",
+				borderRadius: "10px",
 			}}
-		  >
-			<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
-			  {t('total_arenas')}:{" "}
-			  {summary.totalArenas === 0 ? (
-				<LoadingIndicator />
-			  ) : (
-				summary.totalArenas
-			  )}
-			</div>
-			<div className="p-7 w-1/4 mx-5 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
-			  {t('total_ideas')}:{" "}
-			  {summary.totalIdeas === 0 ? (
-				<LoadingIndicator />
-			  ) : (
-				summary.totalIdeas
-			  )}
-			</div>
-			<div className="p-7 w-1/4 mx-5 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
-			  {t('total_votes')}:{" "}
-			  {summary.totalVotes === 0 ? (
-				<LoadingIndicator />
-			  ) : (
-				summary.totalVotes
-			  )}
-			</div>
-			<div className="p-7 w-1/4 mx-5 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
-			  {t('avg_winrate')}:{" "}
-			  {summary.averageWinRate === 0 ? (
-				<LoadingIndicator />
-			  ) : (
-				`${summary.averageWinRate}%`
-			  )}
-			</div>
-		  </div>
-	  
-		  <div className="flex space-x-4 w-1/3 my-5">
-			<ReactDatePicker
-			  selected={startDate}
-			  onChange={(date: any) => setStartDate(date)}
-			  selectsStart
-			  startDate={startDate}
-			  endDate={endDate}
-			  className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-			/>
-			<ReactDatePicker
-			  selected={endDate}
-			  onChange={(date: any) => setEndDate(date)}
-			  selectsEnd
-			  startDate={startDate}
-			  endDate={endDate}
-			  minDate={startDate}
-			  className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-			/>
-			<Select onValueChange={setMode} value={mode}>
-				<SelectTrigger aria-label="Mode">
-					<SelectValue placeholder="Select mode" />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectItem value="week">{t("week")}</SelectItem>
-					<SelectItem value="month">{t("month")}</SelectItem>
-					<SelectItem value="year">{t("year")}</SelectItem>
-				</SelectContent>
-			</Select>
-			<ReportButton companyId={companyId} /> {/* Use report button component */}
-		  </div>
-	  
-		  <div className="chart-container"
-		   style={{
-				display: "flex",
-				justifyContent: "space-around",
-				flexWrap: "wrap",
-				padding: "20px"
-			}}>
-			{arenas.length === 0 ? (
-			  <LoadingIndicator />
-			) : (
-			  <>
-				<div 
-				 style={{
-					backgroundColor: "#fff",
-					borderRadius: "10px",
-					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
-				}}>
-				  <h2 className="mx-10 my-5 p-2 font-semibold">{t("ideas_distribution")}</h2>
-				  <BarChart
-					width={750}
-					height={500}
-					data={aggregatedData}
-					margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-				  >
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="name" tickFormatter={(value) => customFormatter(value)} />
-					<YAxis />
-					<Tooltip />
-					<Legend />
-					<Bar dataKey="Ideas" fill="#8884d8" />
-				  </BarChart>
+		>
+			<div
+				style={{
+					width: "100%",
+					height: "100px",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "space-around",
+					fontWeight: "bold",
+					color: "white",
+				}}
+			>
+				<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
+					{t("total_arenas")}:{" "}
+					{summary.totalArenas === 0 ? (
+						<LoadingIndicator />
+					) : (
+						summary.totalArenas
+					)}
 				</div>
-	  
-				<div style={{
-					backgroundColor: "#fff",
-					borderRadius: "10px",
-					boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
-				}}>
-				  <h2 className="mx-10 my-5 p-2 font-semibold">{t("votes_per_arena")}</h2>
-				  <BarChart
-					width={750}
-					height={500}
-					data={barData}
-					margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
-				  >
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="name" tickFormatter={(value) => customFormatter(value)} />
-					<YAxis />
-					<Tooltip />
-					<Legend />
-					<Bar dataKey="votes" fill="#82ca9d" />
-				  </BarChart>
+				<div className="p-7 w-1/4 mx-5 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
+					{t("total_ideas")}:{" "}
+					{summary.totalIdeas === 0 ? (
+						<LoadingIndicator />
+					) : (
+						summary.totalIdeas
+					)}
 				</div>
-			  </>
-			)}
-		  </div>
+				<div className="p-7 w-1/4 mx-5 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
+					{t("total_votes")}:{" "}
+					{summary.totalVotes === 0 ? (
+						<LoadingIndicator />
+					) : (
+						summary.totalVotes
+					)}
+				</div>
+				<div className="p-7 w-1/4 mx-5 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
+					{t("avg_winrate")}:{" "}
+					{summary.averageWinRate === 0 ? (
+						<LoadingIndicator />
+					) : (
+						`${summary.averageWinRate}%`
+					)}
+				</div>
+			</div>
+
+			<div className="flex space-x-4 w-1/3 my-5">
+				<ReactDatePicker
+					selected={startDate}
+					onChange={(date: any) => setStartDate(date)}
+					selectsStart
+					startDate={startDate}
+					endDate={endDate}
+					className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+				/>
+				<ReactDatePicker
+					selected={endDate}
+					onChange={(date: any) => setEndDate(date)}
+					selectsEnd
+					startDate={startDate}
+					endDate={endDate}
+					minDate={startDate}
+					className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+				/>
+				<Select onValueChange={setMode} value={mode}>
+					<SelectTrigger aria-label="Mode">
+						<SelectValue placeholder="Select mode" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="week">{t("week")}</SelectItem>
+						<SelectItem value="month">{t("month")}</SelectItem>
+						<SelectItem value="year">{t("year")}</SelectItem>
+					</SelectContent>
+				</Select>
+				<ReportButton companyId={companyId} />{" "}
+				{/* Use report button component */}
+			</div>
+
+			<div
+				className="chart-container"
+				style={{
+					display: "flex",
+					justifyContent: "space-around",
+					flexWrap: "wrap",
+					padding: "20px",
+				}}
+			>
+				{arenas.length === 0 ? (
+					<LoadingIndicator />
+				) : (
+					<>
+						<div
+							style={{
+								backgroundColor: "#fff",
+								borderRadius: "10px",
+								boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+							}}
+						>
+							<h2 className="mx-10 my-5 p-2 font-semibold">
+								{t("ideas_distribution")}
+							</h2>
+							<BarChart
+								width={750}
+								height={500}
+								data={aggregatedData}
+								margin={{
+									top: 5,
+									right: 20,
+									left: 20,
+									bottom: 5,
+								}}
+							>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis
+									dataKey="name"
+									tickFormatter={value =>
+										customFormatter(value)
+									}
+								/>
+								<YAxis />
+								<Tooltip />
+								<Legend />
+								<Bar dataKey="Ideas" fill="#8884d8" />
+							</BarChart>
+						</div>
+
+						<div
+							style={{
+								backgroundColor: "#fff",
+								borderRadius: "10px",
+								boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+							}}
+						>
+							<h2 className="mx-10 my-5 p-2 font-semibold">
+								{t("votes_per_arena")}
+							</h2>
+							<BarChart
+								width={750}
+								height={500}
+								data={barData}
+								margin={{
+									top: 5,
+									right: 20,
+									left: 20,
+									bottom: 5,
+								}}
+							>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis
+									dataKey="name"
+									tickFormatter={value =>
+										customFormatter(value)
+									}
+								/>
+								<YAxis />
+								<Tooltip />
+								<Legend />
+								<Bar dataKey="votes" fill="#82ca9d" />
+							</BarChart>
+						</div>
+					</>
+				)}
+			</div>
+			{notification && <Notification notifications={notification} />}
 		</div>
-	  );
-	  
+	);
 };
 
 export default HomePage;

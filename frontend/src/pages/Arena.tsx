@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ChartBarHorizontal from "@/components/charts/bar-chart-horizontal";
 import { Arena, arenaService } from "../services/arena";
 import { useAppSelector } from "@/store/hooks";
@@ -9,8 +9,18 @@ import { useTranslation } from 'react-i18next';
 import { Notification, NotificationType } from "@/components/notification/Notification";
 import IdeaWinRateChart from "@/components/charts/idea-win-rate-chart";
 
+const ReturnButton = () => {
+    return (
+        <Link to="/arenas" className="text-blue-600 hover:underline mb-4 block">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="black" className="w-6 h-6 inline-block align-middle mr-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+            </svg>
+        </Link>
+    );
+};
+
 const ArenaPage = () => {
-	const { t } = useTranslation();
+    const { t } = useTranslation();
     const { id } = useParams();
     const companyId = useAppSelector(selectCompanyId);
     const [notification, setNotification] = React.useState<{
@@ -62,6 +72,7 @@ const ArenaPage = () => {
 
     return (
         <div className="mt-8">
+            <ReturnButton />
             {selectedArena && (
                 <>
                     <h1 className="text-3xl font-semibold mb-4">
