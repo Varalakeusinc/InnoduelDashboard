@@ -43,10 +43,6 @@ describe('Arena API Endpoints', () => {
   describe('Get Arenas: api/arenas/:companyId/arenas', () => {
     const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(3, 70, 6);
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     userTypes.forEach(([userType, token]) => {
       test(`should return a list of arenas for ${userType} user`, async () => {
         const res = await request(app)
@@ -86,8 +82,9 @@ describe('Arena API Endpoints', () => {
       });
 
       test(`should return 500 when there is an internal server error for ${userType} user`, async () => {
-        jest.spyOn(prisma.arena, 'findMany').mockRejectedValueOnce(new Error('Database connection failed'));
-
+        jest.spyOn(prisma.arena, 'findMany').mockImplementationOnce(() => {
+          throw new Error('Database connection failed');
+        });
         const res = await request(app)
           .get(`/api/arenas/${companyId}/arenas`)
           .set('Cookie', `token=${token}`);
@@ -100,10 +97,6 @@ describe('Arena API Endpoints', () => {
 
   describe('Get Arena By ID: api/arenas/:companyId/:id', () => {
     const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(3, 70, 6);
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
 
     userTypes.forEach(([userType, token]) => {
       test(`should return selected arena for ${userType} user`, async () => {
@@ -138,8 +131,9 @@ describe('Arena API Endpoints', () => {
       });
 
       test(`should return 500 when there is an internal server error for ${userType} user`, async () => {
-        jest.spyOn(prisma.arena, 'findUnique').mockRejectedValueOnce(new Error('Database connection failed'));
-
+        jest.spyOn(prisma.arena, 'findUnique').mockImplementationOnce(() => {
+          throw new Error('Database connection failed');
+        });
         const res = await request(app)
           .get(`/api/arenas/${companyId}/${invalidArenaId}`)
           .set('Cookie', `token=${token}`);
@@ -152,10 +146,6 @@ describe('Arena API Endpoints', () => {
 
   describe('Find similar arenas: api/arenas/:companyId/find_matching_arenas/:arenaId', () => {
     const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(6, 35, 7);
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
 
     userTypes.forEach(([userType, token]) => {
       test(`should return similar arenas for ${userType} user`, async () => {
@@ -201,8 +191,9 @@ describe('Arena API Endpoints', () => {
       });
 
       test(`should return 500 when there is an internal server error for ${userType} user`, async () => {
-        jest.spyOn(prisma.arena, 'findUnique').mockRejectedValueOnce(new Error('Database connection failed'));
-
+        jest.spyOn(prisma.arena, 'findUnique').mockImplementationOnce(() => {
+          throw new Error('Database connection failed');
+        });
         const res = await request(app)
           .get(`/api/arenas/${companyId}/find_matching_arenas/${validArenaId}`)
           .set('Cookie', `token=${token}`);
@@ -216,10 +207,6 @@ describe('Arena API Endpoints', () => {
   describe('Get Compare Win Rates: api/arenas/:companyId/compare_win_rate/:arenaId1/:arenaId2', () => {
     const { companyId, validArenaId, invalidArenaId, userTypes } = generateTestVariables(6, 35, 7);
     const validArenaId2 = 123;
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
 
     userTypes.forEach(([userType, token]) => {
       test(`should return compare win rates for ${userType} user`, async () => {
@@ -261,8 +248,9 @@ describe('Arena API Endpoints', () => {
       });
 
       test(`should return 500 if an error occurs for ${userType} user`, async () => {
-        jest.spyOn(prisma.arena, 'findFirst').mockRejectedValueOnce(new Error('Database connection failed'));
-
+        jest.spyOn(prisma.arena, 'findFirst').mockImplementationOnce(() => {
+          throw new Error('Database connection failed');
+        });
         const res = await request(app)
           .get(`/api/arenas/${companyId}/compare_win_rate/${validArenaId}/${validArenaId2}`)
           .set('Cookie', `token=${token}`);
@@ -277,10 +265,6 @@ describe('Arena API Endpoints', () => {
 describe('Idea API Endpoints', () => {
   describe('Get All Ideas: api/ideas/:companyId/all', () => {
     const { companyId, userTypes } = generateTestVariables(3, 70, 6);
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
 
     userTypes.forEach(([userType, token]) => {
       test(`${userType !== 'admin' ? 'should not' : 'should'} return all ideas for ${userType} user`, async () => {
@@ -342,10 +326,6 @@ describe('Company API Endpoints', () => {
   describe('Get All Companies: api/companies/', () => {
     const { userTypes } = generateTestVariables(3, 70, 6);
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     userTypes.forEach(([userType, token]) => {
       test(`${userType !== 'admin' ? 'should not' : 'should'} return all companies for ${userType} user`, async () => {
         const res = await request(app)
@@ -404,10 +384,6 @@ describe('Export Excel Endpoint', () => {
   describe('GET Excel Reports: /api/reports/:companyId/excel', () => {
     const { companyId, userTypes } = generateTestVariables(3, 70, 6);
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-    
     app.use((req, res, next) => {
       res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', 'attachment;');
@@ -448,7 +424,9 @@ describe('Export Excel Endpoint', () => {
       });
 
       test(`should return 500 if an error occurs while exporting arenas for ${userType} user`, async () => {
-        jest.spyOn(prisma.company, 'findUnique').mockRejectedValueOnce(new Error('Failed to fetch company'));
+        jest.spyOn(prisma.company, 'findUnique').mockImplementationOnce(() => {
+          throw new Error('Failed to fetch company');
+        });
 
         const res = await request(app)
           .get(`/api/reports/${companyId}/excel`)
