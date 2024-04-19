@@ -32,6 +32,6 @@
 
     "votes": "Votes",
     "ideas": "Ideas",
-    "select_arena": "Select Arena"
-    
+    "select_arena": "Select Arena",
+    "export_all_data": "Export all data"
 }
