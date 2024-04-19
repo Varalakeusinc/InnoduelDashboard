@@ -27,7 +27,6 @@ services:
             - /app/node_modules
         ports:
             - "8000:8000"
-        restart: always
 
     frontend:
         build: ./frontend
