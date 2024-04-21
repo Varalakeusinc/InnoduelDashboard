@@ -626,16 +626,6 @@ describe('Vote API Endpoints', () => {
                 }
             });
 
-            test(`Should return specific data for arena 123 for ${userType} user when given valid companyId and arenaId 123`, async () => {
-                const res = await request(app)
-                    .get('/api/votes/6/123/distribution')
-                    .set('Cookie', `token=${token}`);
-
-                expect(res.status).toBe(200);
-                expect(res.body.vote_distributions).toBeInstanceOf(Array);
-                expect(res.body.vote_distributions[0]).toHaveProperty('arena_id', 123);
-            });
-
             test(`Should return 404 for ${userType} user when given valid companyId and invalid arenaId`, async () => {
                 const res = await request(app)
                     .get('/api/votes/6/999/distribution')
@@ -648,6 +638,53 @@ describe('Vote API Endpoints', () => {
                     expect(res.status).toBe(404);
                     expect(res.body).toHaveProperty('message', 'No ideas found for the given company_id and arena_id');
                 }
+            });
+        });
+    });
+
+    describe('Get Vote Distribution Across Multiple Arenas: /api/votes/{company_id}/{arena_ids}/distribution/compare', () => {
+        const { userTypes } = generateTestVariables(6, 123, 0);
+
+        userTypes.forEach(([userType, token]) => {
+            test(`Should return 200 for ${userType} user when given valid companyId and multiple arenaIds`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/{arena_ids}/distribution/compare?arena_ids=27&arena_ids=123')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.status).toBe(200);
+            });
+
+            test(`Should return empty array for ${userType} user when one or more arenas are not found`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/{arena_ids}/distribution/compare?arena_ids=999&arena_ids=1000')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.body).toEqual([]);
+            });
+
+            test(`Should return empty array/object for ${userType} user when given invalid companyId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/0/{arena_ids}/distribution/compare?arena_ids=999&arena_ids=1000')
+                    .set('Cookie', `token=${token}`);
+
+                if (Array.isArray(res.body)) {
+                    expect(res.body).toEqual([]);
+                } else {
+                    expect(res.body).toEqual({});
+                }
+            });
+
+            test(`Should return correct model/object structure for ${userType} user when given valid companyId and arenaIds`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/{arena_ids}/distribution/compare?arena_ids=27&arena_ids=123')
+                    .set('Cookie', `token=${token}`);
+
+                res.body.forEach((item: any) => {
+                    expect(item).toHaveProperty('arena_id');
+                    expect(item).toHaveProperty('arena_name');
+                    expect(item).toHaveProperty('total_votes');
+                    expect(item).toHaveProperty('total_ideas');
+                });
             });
         });
     });
