@@ -438,3 +438,73 @@ describe('Export Excel Endpoint', () => {
         });
     });
 });
+
+describe('Vote API Endpoints', () => {
+    describe('Get All Votes: /api/votes/{company_id}/all', () => {
+        const { userTypes } = generateTestVariables(6, 28, 0);
+
+        userTypes.forEach(([userType, token]) => {
+            test(`Should return status 200 for ${userType} user when given valid companyId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/all')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.status).toBe(200);
+            });
+
+            test(`Should return correct model/object structure for ${userType} user when given valid companyId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/all')
+                    .set('Cookie', `token=${token}`);
+
+                expect(Array.isArray(res.body)).toBe(true);
+                res.body.forEach((vote: any) => {
+                    expect(vote).toHaveProperty('id');
+                    expect(vote).toHaveProperty('user_id');
+                    expect(vote).toHaveProperty('idea_id');
+                    expect(vote).toHaveProperty('win');
+                    expect(vote).toHaveProperty('created');
+                    expect(vote).toHaveProperty('idea');
+                    expect(vote.idea).toHaveProperty('id');
+                    expect(vote.idea).toHaveProperty('idea_text');
+                    expect(vote.idea).toHaveProperty('arena');
+                    expect(vote.idea.arena).toHaveProperty('id');
+                    expect(vote.idea.arena).toHaveProperty('name');
+                    expect(vote).toHaveProperty('user_info');
+                    expect(vote.user_info).toHaveProperty('id');
+                    expect(vote.user_info).toHaveProperty('name');
+                });
+            });
+
+            test(`Should not return any votes for ${userType} user when given invalid companyId`, async () => {
+                const invalidCompanyId = 0;
+                const res = await request(app)
+                    .get(`/api/votes/${invalidCompanyId}/all`)
+                    .set('Cookie', `token=${token}`);
+
+                if (res.status === 401) {
+                    console.log(`Unauthorized access for ${userType}, check token validity and permissions.`);
+                    expect(res.status).toBe(401);
+                } else {
+                    expect(res.status).toBe(404);
+                    expect(res.body).toHaveProperty('message', 'No votes found for the given company_id');
+                }
+            });
+
+            test(`Should return 404 for ${userType} user when given invalid companyId`, async () => {
+                const invalidCompanyId = 0;
+                const res = await request(app)
+                    .get(`/api/votes/${invalidCompanyId}/all`)
+                    .set('Cookie', `token=${token}`);
+
+                if (res.status === 401) {
+                    console.log(`Unauthorized access for ${userType}, check token validity and permissions.`);
+                    expect(res.status).toBe(401);
+                } else {
+                    expect(res.status).toBe(404);
+                    expect(res.body).toHaveProperty('message', 'No votes found for the given company_id');
+                }
+            });
+        });
+    });
+});
