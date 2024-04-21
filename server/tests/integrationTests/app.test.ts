@@ -568,4 +568,87 @@ describe('Vote API Endpoints', () => {
             });
         });
     });
+
+    describe('Get Vote Distribution by Arena: /api/votes/{company_id}/{arena_id}/distribution', () => {
+        const { userTypes } = generateTestVariables(6, 123, 0);
+
+        userTypes.forEach(([userType, token]) => {
+            test(`Should return status 200 for ${userType} user when given valid companyId and arenaId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/123/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.status).toBe(200);
+            });
+
+            test(`Should return correct model/object structure for ${userType} user when given valid companyId and arenaId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/123/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.body).toHaveProperty('total_votes');
+                expect(res.body).toHaveProperty('vote_distributions');
+                expect(Array.isArray(res.body.vote_distributions)).toBe(true);
+                res.body.vote_distributions.forEach((distribution: any) => {
+                    expect(distribution).toHaveProperty('idea_id');
+                    expect(distribution).toHaveProperty('idea_text');
+                    expect(distribution).toHaveProperty('arena_id');
+                    expect(distribution).toHaveProperty('arena_name');
+                    expect(distribution).toHaveProperty('total_votes');
+                });
+            });
+
+            test(`Should not return any vote distribution data for ${userType} user when given invalid companyId or arenaId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/999/999/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                if (res.status === 401) {
+                    console.log(`Unauthorized access for ${userType}, check token validity and permissions.`);
+                    expect(res.status).toBe(401);
+                } else {
+                    expect(res.status).toBe(404);
+                    expect(res.body).toHaveProperty('message', 'No ideas found for the given company_id and arena_id');
+                }
+            });
+
+            test(`Should return 404 for ${userType} user when given invalid companyId or arenaId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/999/999/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                if (res.status === 401) {
+                    console.log(`Unauthorized access for ${userType}, check token validity and permissions.`);
+                    expect(res.status).toBe(401);
+                } else {
+                    expect(res.status).toBe(404);
+                    expect(res.body).toHaveProperty('message', 'No ideas found for the given company_id and arena_id');
+                }
+            });
+
+            test(`Should return specific data for arena 123 for ${userType} user when given valid companyId and arenaId 123`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/123/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                expect(res.status).toBe(200);
+                expect(res.body.vote_distributions).toBeInstanceOf(Array);
+                expect(res.body.vote_distributions[0]).toHaveProperty('arena_id', 123);
+            });
+
+            test(`Should return 404 for ${userType} user when given valid companyId and invalid arenaId`, async () => {
+                const res = await request(app)
+                    .get('/api/votes/6/999/distribution')
+                    .set('Cookie', `token=${token}`);
+
+                if (res.status === 401) {
+                    console.log(`Unauthorized access for ${userType}, check token validity and permissions.`);
+                    expect(res.status).toBe(401);
+                } else {
+                    expect(res.status).toBe(404);
+                    expect(res.body).toHaveProperty('message', 'No ideas found for the given company_id and arena_id');
+                }
+            });
+        });
+    });
 });
