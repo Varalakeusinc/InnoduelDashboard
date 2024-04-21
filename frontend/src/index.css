@@ -67,14 +67,14 @@ body,
         justify-content: space-around; 
 		align-items: center;
     	margin-top: 0.5rem;
-		font-size: 20px;
+		/*font-size: 20px;*/
     }
 
     .info-container > div {
-        width: calc(46% - 1rem);
+        width: 100%;
         margin-bottom: 1rem; 
 		height: 98px;
-		max-width: 400px;
+		max-width: 550px;
   		min-width: 100px;
 		text-align: center;
 
@@ -84,10 +84,16 @@ body,
     }
 
 	.datepicker-container {
+		margin-top: 22rem; /* Adds space from the info-container */
+	}
+
+	.datepicker-container > * {
 		width: 100%;
-		margin-top: 8rem; /* Adds space from the info-container */
-		display: flex; 
-	    font-size: 18px;
+		margin-bottom: 1rem;
+	}
+
+	.chart-container > BarChart {
+		max-width: 630px;
 	}
 }
 

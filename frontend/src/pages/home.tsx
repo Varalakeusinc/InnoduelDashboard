@@ -234,6 +234,7 @@ const HomePage = () => {
 					justifyContent: "space-around",
 					fontWeight: "bold",
 					color: "white",
+					flexDirection: "row", 
 				}}
 			>
 				<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
@@ -272,7 +273,7 @@ const HomePage = () => {
 			<div className="datepicker-container">
 
 
-			<div className="flex space-x-4 w-1/3 my-5">
+			<div id="dates"className="flex space-x-4 w-1/3 my-5">
 				<ReactDatePicker
 					selected={startDate}
 					onChange={(date: any) => setStartDate(date)}
@@ -365,7 +366,7 @@ const HomePage = () => {
 								{t("votes_per_arena")}
 							</h2>
 							<BarChart
-								width={750}
+								width={750} 
 								height={500}
 								data={barData}
 								margin={{
