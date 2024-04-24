@@ -80,8 +80,9 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 						/>
 					</div>
 					<Button
-						disabled={isLoading}
+						data-test-id="logInButton"
 						id="loginButton"
+						disabled={isLoading}
 						className="bg-orange-950"
 					>
 						{isLoading && (
