@@ -11,6 +11,10 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ArenaSelector from "@/components/arena/arena-selector";
 
+export const getRandomColor = () => {
+	return "#" + Math.floor(Math.random() * 16777215).toString(16);
+};
+
 const ArenaCompare = ({
 	onClose,
 	isCloseDisabled,
@@ -105,9 +109,7 @@ const ArenaCompare = ({
 		return selectedArena || null;
 	};
 
-	const getRandomColor = () => {
-		return "#" + Math.floor(Math.random() * 16777215).toString(16);
-	};
+	
 
 	const handleNotification = (errorMsg: string) => {
 		setNotification([
