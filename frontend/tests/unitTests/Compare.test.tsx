@@ -22,5 +22,3 @@ describe("getRandomColor", () => {
     expect(uniqueColors.size).toBeGreaterThan(1);
     });
 }); 
-
-
