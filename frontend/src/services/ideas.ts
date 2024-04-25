@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import axios from "@/lib/axios";
 import { Arena } from "./arena";
-import { UserInfo } from "./users";
+
 import { Vote } from "./vote";
 
 export type Idea = {
@@ -18,8 +18,7 @@ export type Idea = {
 	is_deleted_by_user_id?: number | null;
 	is_seed?: boolean | null;
 	arena: Arena;
-	user_info_idea_is_deleted_by_user_idTouser_info?: UserInfo | null;
-	user_info_idea_user_idTouser_info: UserInfo;
+
 	vote: Vote[];
 	vote_count: number;
 };
