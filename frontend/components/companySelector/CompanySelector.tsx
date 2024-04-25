@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { setCompany } from "@/store/userSlice";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Company, companyService } from "@/src/services/companies";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const CompanySelector = () => {
 	const { t } = useTranslation();
@@ -27,7 +27,8 @@ const CompanySelector = () => {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>
-				<button //
+				<button
+					data-test-id="company-selector-button"
 					className="IconButton"
 					aria-label="Customise options"
 					style={{ width: "100%" }}
