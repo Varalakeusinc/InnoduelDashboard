@@ -139,20 +139,20 @@ const ArenaCompare = ({
 	return (
 		<div className="mt-4 ml-1">
 			<div className="flex flex-col space-y-4">
-				<div className="flex justify-center">
-					<div className="w-1/3 pr-2">
+				<div className="flex justify-center md:flex-row flex-col gap-4">
+					<div className="md:w-1/3 w-36">
 						<ArenaSelector
 							arenas={arenaList1}
 							onChange={onArena1Change}
 						/>
 					</div>
-					<div className="w-1/3 pl-2 pr-2">
+					<div className="md:w-1/3 w-36">
 						<ArenaSelector
 							arenas={arenaList2}
 							onChange={onArena2Change}
 						/>
 					</div>
-					<div className="w-1/3 pl-2">
+					<div className="md:w-1/3 w-36">
 						{!isCloseDisabled && (
 							<Button
 								variant="outline"
