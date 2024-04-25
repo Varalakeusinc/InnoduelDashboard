@@ -209,7 +209,7 @@ const HomePage = () => {
 			? `${value.substring(0, maxLength)}...`
 			: value;
 	};
-	
+
 	return (
 		<div
 			className="homepage-container flex-col w-full h-full p-2 md:p-8"
@@ -217,11 +217,12 @@ const HomePage = () => {
 				color: "#333",
 				borderRadius: "10px",
 				boxSizing: "border-box", // Ensure padding is included in the element's total width and height
-				display: "flex", 
+				display: "flex",
 				justifyContent: "space-between",
 			}}
 		>
-            <div className="info-container flex-col md:flex-row gap-2"
+			<div
+				className="info-container flex-col md:flex-row gap-2"
 				style={{
 					display: "flex",
 					alignItems: "center",
@@ -264,44 +265,42 @@ const HomePage = () => {
 				</div>
 			</div>
 			<div className="datepicker-container">
-
-
-			<div id="dates"className="flex space-x-4 w-3/4 gap-2 md:w-1/3 my-5 flex-col md:flex-row">
-				<ReactDatePicker
-					selected={startDate}
-					onChange={(date: any) => setStartDate(date)}
-					selectsStart
-					startDate={startDate}
-					endDate={endDate}
-					className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-				/>
-				<ReactDatePicker
-					selected={endDate}
-					onChange={(date: any) => setEndDate(date)}
-					selectsEnd
-					startDate={startDate}
-					endDate={endDate}
-					minDate={startDate}
-					className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-				/>
-				<Select onValueChange={setMode} value={mode}>
-					<SelectTrigger aria-label="Mode">
-						<SelectValue placeholder="Select mode" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="week">{t("week")}</SelectItem>
-						<SelectItem value="month">{t("month")}</SelectItem>
-						<SelectItem value="year">{t("year")}</SelectItem>
-					</SelectContent>
-				</Select>
-				<ReportButton companyId={companyId} />{" "}
+				<div
+					id="dates"
+					className="flex space-x-4 w-3/4 gap-2 md:w-1/3 my-5 flex-col md:flex-row"
+				>
+					<ReactDatePicker
+						selected={startDate}
+						onChange={(date: any) => setStartDate(date)}
+						selectsStart
+						startDate={startDate}
+						endDate={endDate}
+						className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+					/>
+					<ReactDatePicker
+						selected={endDate}
+						onChange={(date: any) => setEndDate(date)}
+						selectsEnd
+						startDate={startDate}
+						endDate={endDate}
+						minDate={startDate}
+						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+					/>
+					<Select onValueChange={setMode} value={mode}>
+						<SelectTrigger aria-label="Mode">
+							<SelectValue placeholder="Select mode" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="week">{t("week")}</SelectItem>
+							<SelectItem value="month">{t("month")}</SelectItem>
+							<SelectItem value="year">{t("year")}</SelectItem>
+						</SelectContent>
+					</Select>
+					<ReportButton companyId={companyId} />{" "}
+				</div>
 			</div>
 
-			</div>
-
-			<div
-				className="chart-container flex gap-4 flex-col p-2 justify-around"
-			>
+			<div className="chart-container flex gap-4 p-2 justify-around">
 				{arenas.length === 0 ? (
 					<LoadingIndicator />
 				) : (
@@ -354,7 +353,7 @@ const HomePage = () => {
 								{t("votes_per_arena")}
 							</h2>
 							<BarChart
-								width={750} 
+								width={750}
 								height={500}
 								data={barData}
 								margin={{
