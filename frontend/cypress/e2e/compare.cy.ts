@@ -19,6 +19,10 @@ describe("Compare Component", () => {
         cy.get(".fixed.top-40.right-4 > Button").should("have.length", 2);
     });
 
+    it("minus button should be disabled", () => {
+        cy.get(".fixed.top-40.right-4 > Button:nth-child(2)").should('be.disabled');
+    });
+
     it("adds a new view and removes it when clicking Plus and then Minus buttons", () => {
         cy.get(".fixed.top-40.right-4 > Button:first-child").click();
         cy.get(".fixed.top-40.right-4 > Button:nth-child(2)").click();
