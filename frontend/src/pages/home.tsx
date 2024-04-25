@@ -87,6 +87,10 @@ const HomePage = () => {
 							acc + parseFloat(arena.overall_win_rate),
 						0
 					) / totalArenas;
+				
+				if (totalIdeas === 0 || totalVotes === 0) {
+					handleWarning("No data found for ideas or votes."); 
+				}
 				setSummary({
 					totalArenas,
 					totalIdeas,
@@ -100,7 +104,7 @@ const HomePage = () => {
 			})
 			.catch(error => {
 				console.log(error);
-				handleNotification(error);
+				handleNotification(error.toString());
 			});
 
 		// All companies
@@ -113,20 +117,19 @@ const HomePage = () => {
 		voteService.getAllVotes(companyId).then(setVotes);
 	}, [companyId]);
 
-	const handleNotification = (errorMsg: string) => {
-		setNotification([
-			{
-				id: new Date().getTime().toString(),
-				notificationType: NotificationType.Error,
-				title: "Error!",
-				description: errorMsg || "",
-				actionText: "Retry",
-				onActionClick: () => {
-					window.location.reload();
-					setNotification([]);
-				},
-			},
-		]);
+	const handleNotification = (message: any, type = NotificationType.Error, actionText = "Retry") => {
+		setNotification([{
+			id: new Date().getTime().toString(),
+			notificationType: type,
+			title: type === NotificationType.Error ? "Error!" : "Warning",
+			description: message,
+			actionText: type === NotificationType.Error ? actionText : undefined,
+			onActionClick: type === NotificationType.Error ? () => window.location.reload() : undefined,
+		}]);
+	};
+
+	const handleWarning = (message: any) => {
+		handleNotification(message, NotificationType.Warning);
 	};
 
 	const barData = arenas.map(arena => ({
@@ -240,20 +243,12 @@ const HomePage = () => {
 					)}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
-					{t("total_ideas")}:{" "}
-					{summary.totalIdeas === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.totalIdeas
-					)}
+					{t("total_ideas")}: 
+					{summary.totalIdeas === 0 ? " 0 found" : summary.totalIdeas}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
-					{t("total_votes")}:{" "}
-					{summary.totalVotes === 0 ? (
-						<LoadingIndicator />
-					) : (
-						summary.totalVotes
-					)}
+					{t("total_votes")}: 
+					{summary.totalVotes === 0 ? " 0 found" : summary.totalVotes}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("avg_winrate")}:{" "}
