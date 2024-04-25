@@ -38,15 +38,7 @@ describe("Translation", () => {
 	});
 });
 
-describe("Company", () => {
-	it("Select company", () => {
-		logInHelper();
-
-		selectCompany();
-	});
-});
-
-const logInHelper = () => {
+const logInHelper = (url: string, email: string, password: string) => {
 	cy.visit(url);
 	// Type into email field
 	cy.get("[data-test-id=logInEmailField]").type(email);
@@ -62,16 +54,4 @@ const logInHelper = () => {
 	cy.get("[data-test-id=logInButton]").click();
 };
 
-const selectCompany = () => {
-	const dropDown = cy.get("[data-test-id='userNav-dropdown']");
-	dropDown.click();
-
-	// Wait for 1 second
-	cy.wait(1000);
-
-	const companySelector = cy
-		.get("[data-test-id='company-selector-button']")
-		.click();
-
-	cy.contains("compare_win_dummy").click();
-};
+export default logInHelper;
