@@ -73,5 +73,5 @@ const selectCompany = () => {
 		.get("[data-test-id='company-selector-button']")
 		.click();
 
-	cy.contains("Default company").click();
+	cy.contains("compare_win_dummy").click();
 };
