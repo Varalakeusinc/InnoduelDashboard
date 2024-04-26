@@ -97,7 +97,6 @@
       "^@/(.*)$": "<rootDir>/$1"
     }
   }
-=======
 	"name": "frontend",
 	"private": true,
 	"version": "0.0.0",
