@@ -24,6 +24,12 @@ const Arenas = () => {
     >([]);
 
     useEffect(() => {
+        const fetchArenas = async () => {
+            const response = await fetch(`/api/arenas/${companyId}`);
+            const data = await response.json();
+            setArenas(data);
+        };
+    
         setCurrentPage(1);
         fetchArenas();
     }, [companyId]);
