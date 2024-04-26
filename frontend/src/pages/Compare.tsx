@@ -32,7 +32,7 @@ const Compare = () => {
 					<Minus className="h-4 w-4" />
 				</Button>
 			</div>
-			<div className="mt-20 grid grid-flow-col gap-4">
+			<div className="mt-20 grid grid-flow-row md:grid-flow-col gap-4">
 				{views.map((viewId, index) => (
 					<div
 						key={viewId}
