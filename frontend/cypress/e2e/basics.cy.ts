@@ -3,7 +3,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 	return false;
 });
 
-const url = "http://localhost:5173";
+const url = "http://localhost:5173/login";
 
 // Make sure .env files contains same email and password
 const email = "a@a.com";
@@ -11,24 +11,24 @@ const password = "admin";
 
 describe("Navigation works", () => {
 	it("Home", () => {
-		logInHelper();
+		logInHelper(url, email, password);
 		cy.get("[data-test-id='navigation-home']").should("exist").click();
 	});
 
 	it("Arenas", () => {
-		logInHelper();
+		logInHelper(url, email, password);
 		cy.get("[data-test-id='navigation-arenas']").should("exist").click();
 	});
 
 	it("Compare", () => {
-		logInHelper();
+		logInHelper(url, email, password);
 		cy.get("[data-test-id='navigation-compare']").should("exist").click();
 	});
 });
 
 describe("Translation", () => {
 	it("Language dropdown exist", () => {
-		logInHelper();
+		logInHelper(url, email, password);
 
 		const dropDown = cy.get("[data-test-id='userNav-dropdown']");
 
@@ -40,13 +40,13 @@ describe("Translation", () => {
 
 describe("Company", () => {
 	it("Select company", () => {
-		logInHelper();
+		logInHelper(url, email, password);
 
 		selectCompany();
 	});
 });
 
-const logInHelper = () => {
+export const logInHelper = (url: string, email: string, password: string) => {
 	cy.visit(url);
 	// Type into email field
 	cy.get("[data-test-id=logInEmailField]").type(email);
@@ -73,5 +73,5 @@ const selectCompany = () => {
 		.get("[data-test-id='company-selector-button']")
 		.click();
 
-	cy.contains("compare_win_dummy").click();
+	cy.contains("Default company").click();
 };
