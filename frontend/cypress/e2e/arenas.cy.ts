@@ -1,4 +1,4 @@
-import { logInHelper } from "./basics.cy";
+import { logInHelper } from "../support/commands";
 
 const url = "http://localhost:5173";
 
