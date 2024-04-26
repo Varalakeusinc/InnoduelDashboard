@@ -233,11 +233,11 @@ const HomePage = () => {
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_ideas")}: 
-					{summary.totalIdeas === 0 ? " 0 found" : summary.totalIdeas}
+					{summary.totalIdeas === 0 ? " 0" : summary.totalIdeas}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_votes")}: 
-					{summary.totalVotes === 0 ? " 0 found" : summary.totalVotes}
+					{summary.totalVotes === 0 ? " 0" : summary.totalVotes}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("avg_winrate")}:{" "}
