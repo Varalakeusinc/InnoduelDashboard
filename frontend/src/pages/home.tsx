@@ -212,18 +212,18 @@ const HomePage = () => {
 
 	return (
 		<div
-			className="homepage-container flex-col w-full h-full p-2 md:p-8"
+			className="homepage-container"
 			style={{
 				color: "#333",
+				height: "100%",
+				backgroundColor: "#f5f5f5",
 				borderRadius: "10px",
-				boxSizing: "border-box", // Ensure padding is included in the element's total width and height
-				display: "flex",
-				justifyContent: "space-between",
 			}}
 		>
 			<div
-				className="info-container flex-col md:flex-row gap-2"
 				style={{
+					width: "100%",
+					height: "100px",
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "space-around",
@@ -231,7 +231,7 @@ const HomePage = () => {
 					color: "white",
 				}}
 			>
-				<div className="p-7 w-3/4 md:w-1/4 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
+				<div className="p-7 w-1/4 mx-5 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_arenas")}:{" "}
 					{summary.totalArenas === 0 ? (
 						<LoadingIndicator />
@@ -239,7 +239,7 @@ const HomePage = () => {
 						summary.totalArenas
 					)}
 				</div>
-				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
+				<div className="p-7 w-1/4 mx-5 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_ideas")}:{" "}
 					{summary.totalIdeas === 0 ? (
 						<LoadingIndicator />
@@ -247,7 +247,7 @@ const HomePage = () => {
 						summary.totalIdeas
 					)}
 				</div>
-				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
+				<div className="p-7 w-1/4 mx-5 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_votes")}:{" "}
 					{summary.totalVotes === 0 ? (
 						<LoadingIndicator />
@@ -255,7 +255,7 @@ const HomePage = () => {
 						summary.totalVotes
 					)}
 				</div>
-				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
+				<div className="p-7 w-1/4 mx-5 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("avg_winrate")}:{" "}
 					{summary.averageWinRate === 0 ? (
 						<LoadingIndicator />
@@ -264,49 +264,53 @@ const HomePage = () => {
 					)}
 				</div>
 			</div>
-			<div className="datepicker-container">
-				<div
-					id="dates"
-					className="flex space-x-4 w-3/4 gap-2 md:w-1/3 my-5 flex-col md:flex-row"
-				>
-					<ReactDatePicker
-						selected={startDate}
-						onChange={(date: any) => setStartDate(date)}
-						selectsStart
-						startDate={startDate}
-						endDate={endDate}
-						className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<ReactDatePicker
-						selected={endDate}
-						onChange={(date: any) => setEndDate(date)}
-						selectsEnd
-						startDate={startDate}
-						endDate={endDate}
-						minDate={startDate}
-						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<Select onValueChange={setMode} value={mode}>
-						<SelectTrigger aria-label="Mode">
-							<SelectValue placeholder="Select mode" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="week">{t("week")}</SelectItem>
-							<SelectItem value="month">{t("month")}</SelectItem>
-							<SelectItem value="year">{t("year")}</SelectItem>
-						</SelectContent>
-					</Select>
-					<ReportButton companyId={companyId} />{" "}
-				</div>
+
+			<div className="flex space-x-4 w-1/3 my-5">
+				<ReactDatePicker
+					selected={startDate}
+					onChange={(date: any) => setStartDate(date)}
+					selectsStart
+					startDate={startDate}
+					endDate={endDate}
+					className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+				/>
+				<ReactDatePicker
+					selected={endDate}
+					onChange={(date: any) => setEndDate(date)}
+					selectsEnd
+					startDate={startDate}
+					endDate={endDate}
+					minDate={startDate}
+					className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+				/>
+				<Select onValueChange={setMode} value={mode}>
+					<SelectTrigger aria-label="Mode">
+						<SelectValue placeholder="Select mode" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="week">{t("week")}</SelectItem>
+						<SelectItem value="month">{t("month")}</SelectItem>
+						<SelectItem value="year">{t("year")}</SelectItem>
+					</SelectContent>
+				</Select>
+				<ReportButton companyId={companyId} />{" "}
+				{/* Use report button component */}
 			</div>
 
-			<div className="chart-container flex gap-4 p-2 justify-around">
+			<div
+				className="chart-container"
+				style={{
+					display: "flex",
+					justifyContent: "space-around",
+					flexWrap: "wrap",
+					padding: "20px",
+				}}
+			>
 				{arenas.length === 0 ? (
 					<LoadingIndicator />
 				) : (
 					<>
 						<div
-							className="overflow-x-auto lg:overflow-hidden w-[60vw] md:max-w-max"
 							style={{
 								backgroundColor: "#fff",
 								borderRadius: "10px",
@@ -342,7 +346,6 @@ const HomePage = () => {
 						</div>
 
 						<div
-							className="overflow-x-auto lg:overflow-hidden w-[60vw] md:max-w-max"
 							style={{
 								backgroundColor: "#fff",
 								borderRadius: "10px",

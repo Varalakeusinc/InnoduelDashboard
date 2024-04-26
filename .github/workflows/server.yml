@@ -4,67 +4,19 @@ on: [push]
 jobs:
   run_backend_tests:
     runs-on: ubuntu-latest
-    env:
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      CURRENT_DATABASE_URL: ${{ secrets.CURRENT_DATABASE_URL }}
     steps:
       - run: echo "Run tests for backend"
       - name: Check out repository code
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Create .env file
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/server
-          echo "POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}" > $GITHUB_WORKSPACE/server/.env
-          echo "POSTGRES_USER=${{ secrets.DB_USER }}" >> $GITHUB_WORKSPACE/server/.env
-          echo "POSTGRES_DB=${{ secrets.DB_NAME }}" >> $GITHUB_WORKSPACE/server/.env
-          echo "CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }}" >> $GITHUB_WORKSPACE/server/.env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_WORKSPACE/server/.env
-          echo ".env file created at: $GITHUB_WORKSPACE/.env"
-
-      - name: Set up Docker Compose
-        run: |
-          docker-compose --file $GITHUB_WORKSPACE/docker-compose.yml up --build -d
-
-      - name: Check Docker Compose logs
-        run: docker-compose logs
-
-      - name: Verify Docker containers are running
-        run: docker ps
-
-      - name: Wait for Docker services to be ready
-        run: |
-          for i in {1..30}; do
-            if docker ps -qf name='*db*' | xargs -I {} docker inspect --format='{{.NetworkSettings.IPAddress}}' {} | xargs -I {} nc -z {} 5432; then
-              echo "Database is ready!"
-              break
-            fi
-            echo "Waiting for database... (attempt $i)"
-            sleep 10
-          done
-
       - name: Install dependencies
-        run: sudo npm install
+        run: npm install
         working-directory: ./server
-
-      - name: Run backend tests inside Docker
-        run: |
-          docker-compose exec -T backend npm test -- --detectOpenHandles || (echo "Backend tests failed!")
-
-      - name: Shut down Docker Compose
-        run: |
-          docker-compose down \
-            -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e POSTGRES_USER=${{ secrets.DB_USER }} \
-            -e POSTGRES_DB=${{ secrets.DB_NAME }} \
-            -e CURRENT_DATABASE_URL=${{ secrets.CURRENT_DATABASE_URL }}
-
+      - name: Run tests
+        run: npm test
+        working-directory: ./server
       - run: echo "Backend tests completed successfully! 🎉"
+

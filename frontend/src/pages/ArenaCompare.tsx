@@ -11,6 +11,10 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ArenaSelector from "@/components/arena/arena-selector";
 
+export const getRandomColor = () => {
+	return "#" + Math.floor(Math.random() * 16777215).toString(16);
+};
+
 const ArenaCompare = ({
 	onClose,
 	isCloseDisabled,
@@ -105,9 +109,7 @@ const ArenaCompare = ({
 		return selectedArena || null;
 	};
 
-	const getRandomColor = () => {
-		return "#" + Math.floor(Math.random() * 16777215).toString(16);
-	};
+	
 
 	const handleNotification = (errorMsg: string) => {
 		setNotification([
@@ -139,20 +141,20 @@ const ArenaCompare = ({
 	return (
 		<div className="mt-4 ml-1">
 			<div className="flex flex-col space-y-4">
-				<div className="flex justify-center md:flex-row flex-col gap-4">
-					<div className="md:w-1/3 w-36">
+				<div className="flex justify-center">
+					<div className="w-1/3 pr-2">
 						<ArenaSelector
 							arenas={arenaList1}
 							onChange={onArena1Change}
 						/>
 					</div>
-					<div className="md:w-1/3 w-36">
+					<div className="w-1/3 pl-2 pr-2">
 						<ArenaSelector
 							arenas={arenaList2}
 							onChange={onArena2Change}
 						/>
 					</div>
-					<div className="md:w-1/3 w-36">
+					<div className="w-1/3 pl-2">
 						{!isCloseDisabled && (
 							<Button
 								variant="outline"
