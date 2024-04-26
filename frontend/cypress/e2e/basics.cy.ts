@@ -10,18 +10,19 @@ const email = "a@a.com";
 const password = "admin";
 
 describe("Navigation works", () => {
-	it("Home", () => {
+	beforeEach(() => {
 		logInHelper(url, email, password);
+	});
+
+	it("Home", () => {
 		cy.get("[data-test-id='navigation-home']").should("exist").click();
 	});
 
 	it("Arenas", () => {
-		logInHelper(url, email, password);
 		cy.get("[data-test-id='navigation-arenas']").should("exist").click();
 	});
 
 	it("Compare", () => {
-		logInHelper(url, email, password);
 		cy.get("[data-test-id='navigation-compare']").should("exist").click();
 	});
 });
