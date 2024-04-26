@@ -216,6 +216,8 @@ const HomePage = () => {
 			style={{
 				color: "#333",
 				borderRadius: "10px",
+				height: "100%",
+				backgroundColor: "#f5f5f5",
 				boxSizing: "border-box", // Ensure padding is included in the element's total width and height
 				display: "flex",
 				justifyContent: "space-between",
