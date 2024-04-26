@@ -80,10 +80,10 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 						/>
 					</div>
 					<Button
-						disabled={isLoading}
-						id="loginButton"
-						className="bg-orange-950"
 						data-test-id="logInButton"
+						id="loginButton"
+						disabled={isLoading}
+						className="bg-orange-950"
 					>
 						{isLoading && (
 							<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

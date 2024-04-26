@@ -32,7 +32,7 @@ const ComparisonPlotGraph: React.FC<ComparisonPlotGraphProps> = ({
 
 	return (
 		<div className="relative">
-			<div className="flex justify-end">
+			<div className="flex flex-row md:flex-row justify-end">
 				<div className="flex-grow">
 					<ScatterChart
 						width={800}
