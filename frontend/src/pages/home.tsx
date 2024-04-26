@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { arenaService, Arena } from "../services/arena";
 import { Idea } from "../services/ideas";
-import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
-import { Vote, voteService } from "../services/vote";
 import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
@@ -39,11 +36,7 @@ const HomePage = () => {
 	const { t } = useTranslation();
 
 	const [arenas, setArenas] = React.useState<Arena[]>([]);
-	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
-		[]
-	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
-	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
 	const [startDate, setStartDate] = React.useState(
 		// 18 months back from now
 		new Date(new Date().setMonth(new Date().getMonth() - 18))
@@ -107,14 +100,8 @@ const HomePage = () => {
 				handleNotification(error.toString());
 			});
 
-		// All companies
-		companyService.getAllCompanies().then(setCompanies);
-
-		// All ideas
 		ideaService.getCompanyIdeas(companyId).then(setIdeas);
-
-		// All votes
-		voteService.getAllVotes(companyId).then(setVotes);
+	
 	}, [companyId]);
 
 	const handleNotification = (message: any, type = NotificationType.Error, actionText = "Retry") => {
