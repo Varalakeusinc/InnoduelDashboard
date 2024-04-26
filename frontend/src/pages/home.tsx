@@ -271,15 +271,15 @@ const HomePage = () => {
 					id="dates"
 					className="flex space-x-4 w-3/4 gap-2 md:w-1/3 my-5 flex-col md:flex-row"
 				>
-					<ReactDatePicker
+					<div data-test-id="startDate"><ReactDatePicker
 						selected={startDate}
 						onChange={(date: any) => setStartDate(date)}
 						selectsStart
 						startDate={startDate}
 						endDate={endDate}
 						className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<ReactDatePicker
+					/></div>
+					<div data-test-id="endDate"><ReactDatePicker
 						selected={endDate}
 						onChange={(date: any) => setEndDate(date)}
 						selectsEnd
@@ -287,7 +287,7 @@ const HomePage = () => {
 						endDate={endDate}
 						minDate={startDate}
 						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
+					/></div>
 					<Select onValueChange={setMode} value={mode}>
 						<SelectTrigger aria-label="Mode">
 							<SelectValue placeholder="Select mode" />
