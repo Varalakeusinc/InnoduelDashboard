@@ -45,7 +45,7 @@ const ArenaCompare = ({
 	useEffect(() => {
 		fetchArenas();
 		setPlotColor(getRandomColor());
-	}, []);
+	}, [companyId]);
 
 	const fetchArenas = () => {
 		arenaService
