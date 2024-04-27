@@ -7,6 +7,7 @@ import { ideaService } from "@/src/services/ideas";
 const { expect, describe, it } = require("@jest/globals");
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
+import { initI18n } from "@/src/i18n";
 
 jest.mock("@/src/services/arena", () => ({
 	arenaService: {
@@ -49,6 +50,7 @@ describe("HomePage", () => {
 	});
 
 	it("loads arenas without crashing", async () => {
+		initI18n();
 		render(
 			<Provider store={store}>
 				<HomePage />
