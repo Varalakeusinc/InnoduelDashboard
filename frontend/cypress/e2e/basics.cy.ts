@@ -48,5 +48,3 @@ describe("Company", () => {
 		selectCompany();
 	});
 });
-
-export { logInHelper };
