@@ -20,7 +20,7 @@ export interface ArenaIdeaCompareData {
 	arena2_winRate: number;
 }
 
-const getArenas = async (companyId: number): Promise<Arena[]> => {
+export const getArenas = async (companyId: number): Promise<Arena[]> => {
 	try {
 		const response: AxiosResponse = await axios.get(
 			`/api/arenas/${companyId}/arenas`
