@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { arenaService, Arena } from "../services/arena";
 import { Idea } from "../services/ideas";
-import { Company, companyService } from "../services/companies";
 import { ideaService } from "../services/ideas";
-import { Vote, voteService } from "../services/vote";
 import LoadingIndicator from "@/components/loadingIndicator/LoadingIndicator";
 import { useAppSelector } from "@/store/hooks";
 import { selectCompanyId } from "@/store/userSlice";
@@ -39,11 +36,7 @@ const HomePage = () => {
 	const { t } = useTranslation();
 
 	const [arenas, setArenas] = React.useState<Arena[]>([]);
-	const [companies, setCompanies] = React.useState<ReadonlyArray<Company>>(
-		[]
-	);
 	const [ideas, setIdeas] = React.useState<ReadonlyArray<Idea>>([]);
-	const [votes, setVotes] = React.useState<ReadonlyArray<Vote>>([]);
 	const [startDate, setStartDate] = React.useState(
 		// 18 months back from now
 		new Date(new Date().setMonth(new Date().getMonth() - 18))
@@ -107,14 +100,8 @@ const HomePage = () => {
 				handleNotification(error.toString());
 			});
 
-		// All companies
-		companyService.getAllCompanies().then(setCompanies);
-
-		// All ideas
 		ideaService.getCompanyIdeas(companyId).then(setIdeas);
-
-		// All votes
-		voteService.getAllVotes(companyId).then(setVotes);
+	
 	}, [companyId]);
 
 	const handleNotification = (message: any, type = NotificationType.Error, actionText = "Retry") => {
@@ -219,6 +206,8 @@ const HomePage = () => {
 			style={{
 				color: "#333",
 				borderRadius: "10px",
+				height: "100%",
+				backgroundColor: "#f5f5f5",
 				boxSizing: "border-box", // Ensure padding is included in the element's total width and height
 				display: "flex",
 				justifyContent: "space-between",
@@ -244,11 +233,11 @@ const HomePage = () => {
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_ideas")}: 
-					{summary.totalIdeas === 0 ? " 0 found" : summary.totalIdeas}
+					{summary.totalIdeas === 0 ? " 0" : summary.totalIdeas}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_votes")}: 
-					{summary.totalVotes === 0 ? " 0 found" : summary.totalVotes}
+					{summary.totalVotes === 0 ? " 0" : summary.totalVotes}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("avg_winrate")}:{" "}
