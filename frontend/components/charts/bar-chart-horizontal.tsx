@@ -7,6 +7,10 @@ type ChartBarHorizontalProps = {
     ideas: Idea[];
 };
 
+export const sortIdeasByVotesDescending = (ideas: Idea[]): Idea[] => {
+    return [...ideas].sort((a, b) => b.vote_count - a.vote_count);
+};
+
 const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
     const chartRef = React.useRef<HTMLCanvasElement>(null);
 	const { t } = useTranslation();
@@ -52,7 +56,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
                         },
                         tooltip: {
                             callbacks: {
-                                title: function (tooltipItems: any) {
+                                title: function () {
                                     return '';
                                 },
                                 label: function (context: any) {
@@ -110,7 +114,7 @@ const ChartBarHorizontal: React.FC<ChartBarHorizontalProps> = ({ ideas }) => {
         }
     }, [ideas]); // Re-render chart when arena changes
 
-    return <canvas ref={chartRef} />;
+    return <canvas ref={chartRef} data-testid="bar-chart"/>;
 };
 
 export default ChartBarHorizontal;

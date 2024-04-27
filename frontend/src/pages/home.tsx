@@ -80,9 +80,9 @@ const HomePage = () => {
 							acc + parseFloat(arena.overall_win_rate),
 						0
 					) / totalArenas;
-				
+
 				if (totalIdeas === 0 || totalVotes === 0) {
-					handleWarning("No data found for ideas or votes."); 
+					handleWarning("No data found for ideas or votes.");
 				}
 				setSummary({
 					totalArenas,
@@ -101,18 +101,27 @@ const HomePage = () => {
 			});
 
 		ideaService.getCompanyIdeas(companyId).then(setIdeas);
-	
 	}, [companyId]);
 
-	const handleNotification = (message: any, type = NotificationType.Error, actionText = "Retry") => {
-		setNotification([{
-			id: new Date().getTime().toString(),
-			notificationType: type,
-			title: type === NotificationType.Error ? "Error!" : "Warning",
-			description: message,
-			actionText: type === NotificationType.Error ? actionText : undefined,
-			onActionClick: type === NotificationType.Error ? () => window.location.reload() : undefined,
-		}]);
+	const handleNotification = (
+		message: any,
+		type = NotificationType.Error,
+		actionText = "Retry"
+	) => {
+		setNotification([
+			{
+				id: new Date().getTime().toString(),
+				notificationType: type,
+				title: type === NotificationType.Error ? "Error!" : "Warning",
+				description: message,
+				actionText:
+					type === NotificationType.Error ? actionText : undefined,
+				onActionClick:
+					type === NotificationType.Error
+						? () => window.location.reload()
+						: undefined,
+			},
+		]);
 	};
 
 	const handleWarning = (message: any) => {
@@ -232,11 +241,11 @@ const HomePage = () => {
 					)}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
-					{t("total_ideas")}: 
+					{t("total_ideas")}:
 					{summary.totalIdeas === 0 ? " 0" : summary.totalIdeas}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
-					{t("total_votes")}: 
+					{t("total_votes")}:
 					{summary.totalVotes === 0 ? " 0" : summary.totalVotes}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
@@ -253,38 +262,53 @@ const HomePage = () => {
 					id="dates"
 					className="flex space-x-4 w-3/4 gap-2 md:w-1/3 my-5 flex-col md:flex-row"
 				>
-					<ReactDatePicker
-						selected={startDate}
-						onChange={(date: any) => setStartDate(date)}
-						selectsStart
-						startDate={startDate}
-						endDate={endDate}
-						className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<ReactDatePicker
-						selected={endDate}
-						onChange={(date: any) => setEndDate(date)}
-						selectsEnd
-						startDate={startDate}
-						endDate={endDate}
-						minDate={startDate}
-						className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
-					/>
-					<Select onValueChange={setMode} value={mode}>
-						<SelectTrigger aria-label="Mode">
-							<SelectValue placeholder="Select mode" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="week">{t("week")}</SelectItem>
-							<SelectItem value="month">{t("month")}</SelectItem>
-							<SelectItem value="year">{t("year")}</SelectItem>
-						</SelectContent>
-					</Select>
+					<div data-test-id="startDate">
+						<ReactDatePicker
+							selected={startDate}
+							onChange={(date: any) => setStartDate(date)}
+							selectsStart
+							startDate={startDate}
+							endDate={endDate}
+							className="bg-white border mx-5 border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+						/>
+					</div>
+					<div data-test-id="endDate">
+						<ReactDatePicker
+							selected={endDate}
+							onChange={(date: any) => setEndDate(date)}
+							selectsEnd
+							startDate={startDate}
+							endDate={endDate}
+							minDate={startDate}
+							className="bg-white border border-gray-300 rounded-md shadow-sm p-2 text-base leading-6 text-gray-700 focus:outline-none"
+						/>
+					</div>
+					<div data-test-id="modeSelector">
+						<Select onValueChange={setMode} value={mode}>
+							<SelectTrigger aria-label="Mode">
+								<SelectValue placeholder="Select mode" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="week">
+									{t("week")}
+								</SelectItem>
+								<SelectItem value="month">
+									{t("month")}
+								</SelectItem>
+								<SelectItem value="year">
+									{t("year")}
+								</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
 					<ReportButton companyId={companyId} />{" "}
 				</div>
 			</div>
 
-			<div className="chart-container flex gap-4 p-2 justify-around">
+			<div
+				id="chart-container"
+				className="chart-container flex gap-4 p-2 justify-around"
+			>
 				{arenas.length === 0 ? (
 					<LoadingIndicator />
 				) : (
