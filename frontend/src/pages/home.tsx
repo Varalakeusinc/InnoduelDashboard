@@ -43,11 +43,16 @@ const HomePage = () => {
 	);
 	const [endDate, setEndDate] = React.useState(new Date());
 	const [mode, setMode] = React.useState("week");
-	const [summary, setSummary] = React.useState({
-		totalArenas: 0,
-		totalIdeas: 0,
-		totalVotes: 0,
-		averageWinRate: 0,
+	const [summary, setSummary] = React.useState<{
+		totalArenas: number | null;
+		totalIdeas: number | null;
+		totalVotes: number | null;
+		averageWinRate: number | null;
+	}>({
+		totalArenas: null,
+		totalIdeas: null,
+		totalVotes: null,
+		averageWinRate: null,
 	});
 	const [notification, setNotification] = React.useState<
 		{
@@ -84,7 +89,7 @@ const HomePage = () => {
 				if (totalIdeas === 0 || totalVotes === 0) {
 					handleWarning("No data found for ideas or votes.");
 				}
-				setSummary({
+				const newSummary = {
 					totalArenas,
 					totalIdeas,
 					totalVotes,
@@ -92,12 +97,21 @@ const HomePage = () => {
 						!isNaN(averageWinRate) && isFinite(averageWinRate)
 							? parseFloat(averageWinRate.toFixed(2))
 							: 0,
-				});
+				};
+				setSummary(newSummary);
 				setNotification([]);
 			})
 			.catch(error => {
 				console.log(error);
 				handleNotification(error.toString());
+				// If there is an error, reset the summary
+				// Basically error is thrown when the company has no arenas
+				setSummary({
+					totalArenas: 0,
+					totalIdeas: 0,
+					totalVotes: 0,
+					averageWinRate: 0,
+				});
 			});
 
 		ideaService.getCompanyIdeas(companyId).then(setIdeas);
@@ -234,7 +248,7 @@ const HomePage = () => {
 			>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-900 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_arenas")}:{" "}
-					{summary.totalArenas === 0 ? (
+					{summary.totalArenas === null ? (
 						<LoadingIndicator />
 					) : (
 						summary.totalArenas
@@ -242,18 +256,26 @@ const HomePage = () => {
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-cyan-700 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_ideas")}:
-					{summary.totalIdeas === 0 ? " 0" : summary.totalIdeas}
+					{summary.totalIdeas === null ? (
+						<LoadingIndicator />
+					) : (
+						` ${summary.totalIdeas}`
+					)}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-orange-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("total_votes")}:
-					{summary.totalVotes === 0 ? " 0" : summary.totalVotes}
+					{!summary.totalVotes === null ? (
+						<LoadingIndicator />
+					) : (
+						` ${summary.totalVotes}`
+					)}
 				</div>
 				<div className="p-7 w-3/4 md:w-1/4 bg-sky-500 rounded-xl shadow-md flex flex-col items-center">
 					{t("avg_winrate")}:{" "}
-					{summary.averageWinRate === 0 ? (
+					{summary.averageWinRate === null ? (
 						<LoadingIndicator />
 					) : (
-						`${summary.averageWinRate}%`
+						` ${summary.averageWinRate}%`
 					)}
 				</div>
 			</div>
