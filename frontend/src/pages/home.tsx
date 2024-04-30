@@ -29,7 +29,7 @@ import {
 	Notification,
 	NotificationType,
 } from "@/components/notification/Notification";
-
+import "react-datepicker/dist/react-datepicker.css";
 const HomePage = () => {
 	const companyId = useAppSelector(selectCompanyId);
 
